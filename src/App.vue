@@ -148,7 +148,7 @@ import { RouterLink, RouterView } from 'vue-router'
     </footer>
 </template>
 
-<style>
+<style scope>
 * {
     font-family: "Noto Serif TC", serif;
     color: #070707;
