@@ -29,7 +29,9 @@ window.addEventListener("DOMContentLoaded", () => {
       }
       scrollPos = currentTop;
     });
-  });
+});
+
+
 // import './assets/navbar.css'
 
 const app = createApp(App)

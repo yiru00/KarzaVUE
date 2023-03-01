@@ -4,12 +4,19 @@ import HomeView from "../views/HomeView.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    
+    //首頁
     {
       path: "/",
       name: "home",
-
       //適合一般靜態網頁
       component: HomeView,
+    },
+    {
+      path: "/Login",
+      name: "Login",
+      //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
+      component: () => import("../views/Login.vue"),
     },
     {
       path: "/Activity",
@@ -25,12 +32,13 @@ const router = createRouter({
       name: "activityDetails",
       component: ()=>import("../views/Activity/[id].vue"),
     },
-//
+    //活動搜尋
     {
       path: "/Activity/Search",
       name: "activitySearch",
       component: () => import("../views/Activity/Search.vue"),
     },
+
 //我的紀錄
 {
   path: "/Record",
@@ -40,6 +48,7 @@ const router = createRouter({
     //預設顯示活動收藏
     {
       path:"",
+      name:'ActivitySaveRecord',
       component:import("../views/Record/ActivitySave.vue")
     },
     {

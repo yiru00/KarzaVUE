@@ -35,7 +35,7 @@ import { RouterLink, RouterView } from 'vue-router'
           <!-- 登入 -->
           <div class="btn-group">
             <button type="button" class="loginBtn">
-              <RouterLink  to="">登入</RouterLink>
+              <RouterLink  to="/Login">登入</RouterLink>
             </button>
           </div>
           
@@ -99,7 +99,7 @@ import { RouterLink, RouterView } from 'vue-router'
             <!-- 登入(沒登入前顯示) -->
             <div class="btn-group">
               <button type="button" class="loginBtn">
-                <RouterLink  to="">登入</RouterLink>
+                <RouterLink  to="/Login">登入</RouterLink>
               </button>
             </div>
 
@@ -133,7 +133,7 @@ import { RouterLink, RouterView } from 'vue-router'
         </div>
       </div>
     </nav>
-<div class="container">
+<div class="container ">
   <RouterView /> 
 </div>
   
