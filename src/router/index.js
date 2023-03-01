@@ -19,11 +19,17 @@ const router = createRouter({
     },
 
     
-    //動態router
+    //活動詳細頁面(動態router
     {
-      path: "/activity/:id",
+      path: "/Activity/:id",
       name: "activityDetails",
       component: ()=>import("../views/Activity/[id].vue"),
+    },
+//
+    {
+      path: "/Activity/Search",
+      name: "activitySearch",
+      component: () => import("../views/Activity/Search.vue"),
     },
 //我的紀錄
 {

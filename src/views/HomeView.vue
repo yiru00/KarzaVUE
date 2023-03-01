@@ -5,6 +5,6 @@
 <template>
   <main>
     <!-- <TheWelcome /> -->
-    this home
+    home
   </main>
 </template>
