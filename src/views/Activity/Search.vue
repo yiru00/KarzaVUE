@@ -70,7 +70,7 @@
       <div class="card-body">
         <h5>{{ card.activityName }}</h5>
         <p><i class="fa-solid fa-calendar-days"></i>{{card.gatheringTime}}</p>
-        <p><i class="fa-solid fa-map-pin"></i><a class="addressTag" :city="city">{{ card.city }}</a></p>
+        <p><i class="fa-solid fa-map-pin"></i><a @click="tag(card.city)" class="addressTag" :city="card.city">{{ card.city }}</a></p>
         <span class="tag"
           ><a class="categoryTag" :categoryId="card.categoryId">{{card.categoryName}}</a>
         </span>
@@ -86,9 +86,9 @@
             <!-- 未登入 -->
           <button v-if="this.input.memberId==0" data-bs-toggle="modal" data-bs-target="#loginModal" type="button" class="saveBtn1" :activityId="card.activityId"><i class="fa-regular fa-bookmark"></i></button>
           <!-- 登入沒收藏 -->
-          <button   v-else-if="card.statusId == 3 && this.input.memberId != 0" type="button" class="saveBtn" :activityId="card.activityId" :memberId="memberId"><i class="fa-regular fa-bookmark"></i></button>
+          <button   v-else-if="card.statusId == 3 && this.input.memberId != 0" type="button" class="saveBtn" :activityId="card.activityId" :memberId="this.input.memberId"><i class="fa-regular fa-bookmark"></i></button>
           <!-- 登入有收藏 -->
-          <button  v-else-if="card.statusId == 4 && this.input.memberId != 0" type="button" class="unsaveBtn" :activityId="card.activityId" :memberId="this.input.memberId" :unSaveId="card.unSaveId"><i class="fa-solid fa-bookmark"></i></button>
+          <button  v-else-if="card.statusId == 4 && this.input.memberId != 0" type="button" class="unsaveBtn" :activityId="card.activityId" :memberId="this.input.memberId" :deleteId="card.unSaveId"><i class="fa-solid fa-bookmark"></i></button>
           
           <p class="num">{{card.numOfCollections}}</p>
         </div>
@@ -102,12 +102,13 @@
 </div>
 </template>
 <script>
- 
+
  import loginModal from  '../../components/loginModal.vue'
 export default {
   
+  
  components:{
-  resultCard,loginModal
+  loginModal
  },
 
   data() {
@@ -134,8 +135,77 @@ export default {
     // 获取 JSON 数据
     this.fetchActivityData();
     
-   
+    $("body").on("click", ".saveBtn", function (e) {
+  //有登入會員才能按
+    let numOfCollection = Number($(this).next().text());
+    $(this)
+      .next()
+      .text(`${numOfCollection + 1}`);
+    let activityId = $(this).attr("activityId");
+    let memberId=$(this).attr("memberId");
+    $(this)[0].innerHTML = `<i style="width: 16px;
+  color: #444444;
+  margin-right: 10px;" class="fa-solid fa-bookmark"></i>`;
+    //$(this).attr("deleteId", 0); //避免還沒跑完（按鈕還沒變取消收藏鈕）又按一次
+    //console.log(activityId);
+    let saveData = {
+      memberId: memberId,
+      activityId: activityId,
+    };
+    fetch("https://localhost:7259/api/ActivitySave/Save", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(saveData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        $(this).attr("deleteId", data.activityCollectionId);
+        $(this).attr("class", "unsaveBtn");
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+    //console.log(saveData);
   
+});
+    $("body").on("click", ".unsaveBtn", function (e) {
+  //有登入會員才能按
+    $(this)[0].innerHTML = `<i style="width: 16px;
+  color: #444444;
+  margin-right: 10px;" class="fa-regular fa-bookmark"></>`;
+    let deleteId = $(this).attr("deleteId");
+    let numOfCollection = Number($(this).next().text());
+    $(this)
+      .next()
+      .text(numOfCollection - 1);
+    // console.log(deleteId);
+    fetch("https://localhost:7259/api/ActivitySave/UnSave/" + deleteId, {
+      method: "Delete",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        $(this).attr("class", "saveBtn");
+        $(this).attr("deleteId", 0);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  
+});
+  //卡片上的address tag點到時
+    this.$nextTick(()=>{
+      this.result.forEach(city => {
+        const button=this.$el.querySelector(".addressTag")
+        button.addEventListener('click',()=>{
+          this.tag(city)
+        })
+      });
+    })
+
   },
   methods: {
     
@@ -161,11 +231,7 @@ async fetchActivityData() {
   console.log(queryStr)
     const response = await fetch(queryStr)
     const data = await response.json()
-    // data.forEach(element => {
-    //   let date=editDate(element.gatheringTime)
-    //   console.log(date)
-    // });
-    // console.log(data)
+   
     this.result = data
   },
 setTime() {
@@ -188,6 +254,13 @@ setTime() {
   this.input.time=timeStr
   this.minDate=timeStr
 },
+tag(city){
+      this.input.address=city;
+      this.input.activityName="";
+      this.input.categoryId=0;
+      this.setTime()
+      this.fetchActivityData();
+    },
  getMemberId(){
   let memberId=0
   $.ajax({
