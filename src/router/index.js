@@ -49,12 +49,17 @@ const router = createRouter({
     {
       path:"",
       name:'ActivitySaveRecord',
-      component:import("../views/Record/ActivitySave.vue")
+      component:import("../views/Record/ActivitySaved.vue")
     },
     {
-      path: "/ActivitySave",
+      path: "/ActivitySaved",
       name: "ActivitySaveRecord",
-      component: import("../views/Record/ActivitySave.vue"),
+      component: import("../views/Record/ActivitySaved.vue"),
+    },
+    {
+      path: "/ActivityEnrolled",
+      name: "ActivityEnrolledRecord",
+      component: import("../views/Record/ActivityEnrolled.vue"),
     },
   ],
 },
