@@ -21,11 +21,11 @@
         <div class="save" >
           
             <!-- 未登入 -->
-          <button data-bs-toggle="modal" data-bs-target="#loginModal" type="button" class="saveBtn1" :activityId="activityId"><i class="fa-regular fa-bookmark"></i></button>
+          <button v-if="memberId==0" data-bs-toggle="modal" data-bs-target="#loginModal" type="button" class="saveBtn1" :activityId="activityId"><i class="fa-regular fa-bookmark"></i></button>
           <!-- 登入沒收藏 -->
-          <button type="button" class="saveBtn" :activityId="activityId"><i class="fa-regular fa-bookmark"></i></button>
+          <button v-else-if="statusId == 3 && memberId != 0" type="button" class="saveBtn" :activityId="activityId"><i class="fa-regular fa-bookmark"></i></button>
           <!-- 登入有收藏 -->
-          <button type="button" class="unsaveBtn" :activityId="activityId" :unSaveId="unSaveId"><i class="fa-solid fa-bookmark"></i></button>
+          <button v-else-if="statusId == 4 && memberId != 0" type="button" class="unsaveBtn" :activityId="activityId" :unSaveId="unSaveId"><i class="fa-solid fa-bookmark"></i></button>
           
           <p>{{numOfCollections}}</p>
         </div>
@@ -37,7 +37,9 @@
 <script>
 
 export default {
+  
     props: {
+        
         route:String,
         activityId: Number,
         categoryId: Number,
@@ -49,7 +51,8 @@ export default {
         numOfEnrolment:Number,
         numOfCollections:Number,
         statusId:Number,
-        unSaveId:Number
+        unSaveId:Number,
+        memberId:Number,
   }
 
 }

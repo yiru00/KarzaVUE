@@ -62,17 +62,20 @@
           </div>
         </form>
         <div class="row" id="resultCard">
-          <resultCard  v-for="(card, index) in result" :key="index" :route="card.route"   :activityId="card.activityId" :categoryId="card.categoryId"
-        :categoryName="card.categoryName" :coverImage="card.coverImage" :activityName="card.activityName" :gatheringTime="card.gatheringTime" :city="card.city" :numOfEnrolment="card.numOfEnrolment" :numOfCollections="card.numOfCollections"  :unSaveId="card.unSaveId" :statusId="card.statusId"/>
+          <resultCard  v-for="(card, index) in result" :key="index" :route="card.route" :activityId="card.activityId" :categoryId="card.categoryId"
+        :categoryName="card.categoryName" :coverImage="card.coverImage" :activityName="card.activityName" :gatheringTime="card.gatheringTime" :city="card.city" :numOfEnrolment="card.numOfEnrolment" :numOfCollections="card.numOfCollections"  :unSaveId="card.unSaveId" :statusId="card.statusId" :memberId="input.memberId"/>
         </div>
+
+        <loginModal/>
 </div>
 </template>
 <script>
- import  resultCard  from '../../components/resultCard.vue'
+ import  resultCard  from '../../components/activity/resultCard.vue'
+ import loginModal from  '../../components/loginModal.vue'
 export default {
   
  components:{
-  resultCard
+  resultCard,loginModal
  },
 
   data() {
@@ -86,11 +89,15 @@ export default {
   mounted() {
     
     //取得memberId
-this.getMemberId();
+    this.getMemberId();
+    
+   
     //取得分類選單
-this.getCategory();
+    this.getCategory();
+
     //設定日期最小值和預設值
     this.setTime();
+    
     // 获取 JSON 数据
     this.fetchActivityData();
     
