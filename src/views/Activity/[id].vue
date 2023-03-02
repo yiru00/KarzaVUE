@@ -1,11 +1,12 @@
 <template>
-  {{route.path}}
+  {{activityId}}
 </template>
 
 <script setup>
 import{useRoute} from "vue-router";
 const route=useRoute();
-console.log(route.path);//取得網址
+let activityId=route.path.slice(10)
+console.log(activityId);//取得網址
 
 </script>
 
