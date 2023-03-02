@@ -62,15 +62,47 @@
           </div>
         </form>
         <div class="row" id="resultCard">
-          <resultCard  v-for="(card, index) in result" :key="index" :route="card.route" :activityId="card.activityId" :categoryId="card.categoryId"
-        :categoryName="card.categoryName" :coverImage="card.coverImage" :activityName="card.activityName" :gatheringTime="card.gatheringTime" :city="card.city" :numOfEnrolment="card.numOfEnrolment" :numOfCollections="card.numOfCollections"  :unSaveId="card.unSaveId" :statusId="card.statusId" :memberId="input.memberId"/>
+          <div  v-for="(card, index) in result" :key="index" class="col-12 col-sm-6 col-md-4 col-xl-3">
+    <div class="card" :activityId="card.activityId">
+      <div class="card-header">
+        <router-link :to="card.route" ><img :src="card.coverImage" alt="cover"/></router-link>
+      </div>
+      <div class="card-body">
+        <h5>{{ card.activityName }}</h5>
+        <p><i class="fa-solid fa-calendar-days"></i>{{card.gatheringTime}}</p>
+        <p><i class="fa-solid fa-map-pin"></i><a class="addressTag" :city="city">{{ card.city }}</a></p>
+        <span class="tag"
+          ><a class="categoryTag" :categoryId="card.categoryId">{{card.categoryName}}</a>
+        </span>
+      </div>
+      <div class="info">
+        <div class="enroll">
+          <i class="fa-solid fa-user"></i>
+          <p class="num">{{card.numOfEnrolment}}</p>
+        </div>
+
+        <div class="save" >
+          
+            <!-- 未登入 -->
+          <button v-if="this.input.memberId==0" data-bs-toggle="modal" data-bs-target="#loginModal" type="button" class="saveBtn1" :activityId="card.activityId"><i class="fa-regular fa-bookmark"></i></button>
+          <!-- 登入沒收藏 -->
+          <button   v-else-if="card.statusId == 3 && this.input.memberId != 0" type="button" class="saveBtn" :activityId="card.activityId" :memberId="memberId"><i class="fa-regular fa-bookmark"></i></button>
+          <!-- 登入有收藏 -->
+          <button  v-else-if="card.statusId == 4 && this.input.memberId != 0" type="button" class="unsaveBtn" :activityId="card.activityId" :memberId="this.input.memberId" :unSaveId="card.unSaveId"><i class="fa-solid fa-bookmark"></i></button>
+          
+          <p class="num">{{card.numOfCollections}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+         
         </div>
 
         <loginModal/>
 </div>
 </template>
 <script>
- import  resultCard  from '../../components/activity/resultCard.vue'
+ 
  import loginModal from  '../../components/loginModal.vue'
 export default {
   
@@ -83,7 +115,8 @@ export default {
       input:{activityName:"",categoryId:0,address:"",time:new Date(),memberId:0},
       result: [],
       minDate: new Date(),
-      categoryOption:[]
+      categoryOption:[],
+      
     };
   },
   mounted() {
@@ -106,7 +139,6 @@ export default {
   },
   methods: {
     
-
 async fetchActivityData() {
       let queryParams={
         activityName:this.input.activityName,
@@ -179,7 +211,7 @@ setTime() {
 async getCategory(){
 let response=await fetch("https://localhost:7259/api/Activity/Category");
 let data=await response.json();
-this.categoryOption=data;
+this.categoryOption=data
 }
 
 }
@@ -188,6 +220,85 @@ this.categoryOption=data;
 
 
 <style scoped>
+.card {
+  margin: 10px;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 15px #00000033;
+  /* height: 300px; */
+}
+.card-header {
+  width: 100%;
+  height: 200px;
+}
+.card-header img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.card-header {
+  padding: 0px;
+}
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 10px;
+  overflow: auto;
+  /* min-height: 200px;
+  max-height:250px ; */
+}
+.card-body a {
+  color: #070707;
+  text-decoration: none;
+  cursor: pointer;
+}
+.tag {
+  background: #a6b6b0;
+  border-radius: 20px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  color: #fff;
+  padding: 1px 5px;
+  cursor: pointer;
+}
+.tag a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 10px;
+}
+.info .enroll,
+.info .save {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+p {
+  padding: 0px;
+  margin: 0%;
+}
+
+.saveBtn,
+.unsaveBtn,
+.saveBtn1 {
+  padding: 0px;
+  border: 0px;
+  background-color: transparent;
+}
+i {
+  width: 16px;
+  color: #444444;
+  margin-right: 10px;
+}
+
 
 /* search bar */
 .inputSearch {

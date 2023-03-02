@@ -15,7 +15,7 @@
       <div class="info">
         <div class="enroll">
           <i class="fa-solid fa-user"></i>
-          <p>{{numOfEnrolment}}</p>
+          <p class="num">{{numOfEnrolment}}</p>
         </div>
 
         <div class="save" >
@@ -23,11 +23,11 @@
             <!-- 未登入 -->
           <button v-if="memberId==0" data-bs-toggle="modal" data-bs-target="#loginModal" type="button" class="saveBtn1" :activityId="activityId"><i class="fa-regular fa-bookmark"></i></button>
           <!-- 登入沒收藏 -->
-          <button v-else-if="statusId == 3 && memberId != 0" type="button" class="saveBtn" :activityId="activityId"><i class="fa-regular fa-bookmark"></i></button>
+          <button @click="save"  v-else-if="statusId == 3 && memberId != 0" type="button" class="saveBtn" :activityId="activityId" :memberId="memberId"><i class="fa-regular fa-bookmark"></i></button>
           <!-- 登入有收藏 -->
-          <button v-else-if="statusId == 4 && memberId != 0" type="button" class="unsaveBtn" :activityId="activityId" :unSaveId="unSaveId"><i class="fa-solid fa-bookmark"></i></button>
+          <button @click="unsave" v-else-if="statusId == 4 && memberId != 0" type="button" class="unsaveBtn" :activityId="activityId" :memberId="memberId" :unSaveId="unSaveId"><i class="fa-solid fa-bookmark"></i></button>
           
-          <p>{{numOfCollections}}</p>
+          <p class="num">{{newCollect}}</p>
         </div>
       </div>
     </div>
@@ -52,7 +52,28 @@ export default {
         numOfCollections:Number,
         statusId:Number,
         unSaveId:Number,
-        memberId:Number,
+        memberId:String,
+        newCollect:Number
+  },
+  data(){
+    return{
+      
+    }
+  },
+  mounted(){
+   
+  },
+  methods:{
+   save(){
+    this.$emit('save')
+   },
+    unsave(){
+      this.collect=this.collect-1
+      let unSaveBtn=this.$el.querySelector('.unsaveBtn');
+      unSaveBtn.innerHTML=`<i style="width: 16px;
+  color: #444444;
+  margin-right: 10px;" class="fa-regular fa-bookmark"></i>`
+    }
   }
 
 }
