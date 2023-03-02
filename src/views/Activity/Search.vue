@@ -205,7 +205,7 @@ export default {
         })
       });
     })
-
+    // 卡片上的categoryTag tag點到時
     this.$nextTick(()=>{
       this.result.forEach(categoryId => {
         const button=this.$el.querySelector(".categoryTag")
