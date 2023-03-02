@@ -87,7 +87,7 @@ export default {
     </div>
 </template>
 
-<style scope>
+<style scoped>
 /* modal start */
 .modal-content {
   display: flex;

@@ -15,13 +15,15 @@
           </div>
           <div class="col-lg-2 col-md-4 col-6">
             <select v-model="input.categoryId" class="inputCategory" name="categoryId" id="categoryId">
+              <option value="" disabled >選擇拍攝類型</option>
               <option value="0" >所有拍攝類型</option>
+              <option  v-for="option in categoryOption" :key="option.categoryName" :value="option.id">{{ option.categoryName }}</option>
             </select>
           </div>
           <div class="col-lg-2 col-md-4 col-6">
             <select v-model="input.address" class="inputAddress" name="address" id="adress">
-              <option value="" selected disabled>選擇地區</option>
-              <option value="">所有地區</option>
+              <option disabled>選擇地區</option>
+              <option value="" selected>所有地區</option>
               <option value="基隆市">基隆市</option>
               <option value="台北市">台北市</option>
               <option value="新北市">新北市</option>
@@ -72,10 +74,15 @@ export default {
     return {
       input:{activityName:"",categoryId:0,address:"",time:new Date(),memberId:0},
       result: [],
-      minDate: new Date()  // 最小值为当前日期
+      minDate: new Date(),
+      categoryOption:[]
     };
   },
   mounted() {
+    //取得memberId
+this.getMemberId();
+    //取得分類選單
+this.getCategory();
     //設定日期最小值和預設值
     this.setTime();
     // 获取 JSON 数据
@@ -129,7 +136,31 @@ setTime() {
   this.input.time=timeStr
   this.minDate=timeStr
 },
+ getMemberId(){
+  let memberId=0
+  $.ajax({
+    url: 'https://localhost:7259/api/Members/Read',
+    type: 'GET',
+    async:false,
+    beforeSend: function(xhr) {
+        let token = $.cookie("token")
+        xhr.setRequestHeader('Authorization', 'bearer ' + token); //將token包在header裡&解碼
+    },
+    success: function(data) {
+      console.log(data)
+      memberId=data
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+    }
 
+  });
+  this.input.memberId=memberId;
+},
+async getCategory(){
+let response=await fetch("https://localhost:7259/api/Activity/Category");
+let data=await response.json();
+this.categoryOption=data;
+}
 
 }
 }
