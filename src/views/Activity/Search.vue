@@ -70,9 +70,9 @@
       <div class="card-body">
         <h5>{{ card.activityName }}</h5>
         <p><i class="fa-solid fa-calendar-days"></i>{{card.gatheringTime}}</p>
-        <p><i class="fa-solid fa-map-pin"></i><a @click="tag(card.city)" class="addressTag" :city="card.city">{{ card.city }}</a></p>
+        <p><i class="fa-solid fa-map-pin"></i><a @click="Citytag(card.city)" class="addressTag" :city="card.city">{{ card.city }}</a></p>
         <span class="tag"
-          ><a class="categoryTag" :categoryId="card.categoryId">{{card.categoryName}}</a>
+          ><a @click="Categorytag(card.categoryId)" class="categoryTag" :categoryId="card.categoryId">{{card.categoryName}}</a>
         </span>
       </div>
       <div class="info">
@@ -201,7 +201,16 @@ export default {
       this.result.forEach(city => {
         const button=this.$el.querySelector(".addressTag")
         button.addEventListener('click',()=>{
-          this.tag(city)
+          this.Citytag(city)
+        })
+      });
+    })
+
+    this.$nextTick(()=>{
+      this.result.forEach(categoryId => {
+        const button=this.$el.querySelector(".categoryTag")
+        button.addEventListener('click',()=>{
+          this.Categorytag(categoryId)
         })
       });
     })
@@ -254,10 +263,17 @@ setTime() {
   this.input.time=timeStr
   this.minDate=timeStr
 },
-tag(city){
+Citytag(city){
       this.input.address=city;
       this.input.activityName="";
       this.input.categoryId=0;
+      this.setTime()
+      this.fetchActivityData();
+    },
+    Categorytag(categoryId){
+      this.input.address="";
+      this.input.activityName="";
+      this.input.categoryId=categoryId;
       this.setTime()
       this.fetchActivityData();
     },
