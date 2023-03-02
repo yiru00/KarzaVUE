@@ -1,7 +1,7 @@
 <template @load="fetchData">
   <div > 
-  {{result}}
-  <router-link to="/Activity/12">go</router-link>
+  <!-- {{result}} -->
+  <!-- <router-link to="/Activity/12">go</router-link> -->
   <form @change="fetchActivityData" class="row inputSearch">
           <div class="col-lg-3 col-md-4 col-12">
             <input
@@ -62,14 +62,19 @@
           </div>
         </form>
         <div class="row" id="resultCard">
-          
+          <resultCard  v-for="(card, index) in result" :key="index" :route="card.route"   :activityId="card.activityId" :categoryId="card.categoryId"
+        :categoryName="card.categoryName" :coverImage="card.coverImage" :activityName="card.activityName" :gatheringTime="card.gatheringTime" :city="card.city" :numOfEnrolment="card.numOfEnrolment" :numOfCollections="card.numOfCollections"  :unSaveId="card.unSaveId" :statusId="card.statusId"/>
         </div>
 </div>
 </template>
 <script>
-
+ import  resultCard  from '../../components/resultCard.vue'
 export default {
- 
+  
+ components:{
+  resultCard
+ },
+
   data() {
     return {
       input:{activityName:"",categoryId:0,address:"",time:new Date(),memberId:0},
@@ -79,6 +84,7 @@ export default {
     };
   },
   mounted() {
+    
     //取得memberId
 this.getMemberId();
     //取得分類選單
@@ -87,10 +93,12 @@ this.getCategory();
     this.setTime();
     // 获取 JSON 数据
     this.fetchActivityData();
+    
    
   
   },
   methods: {
+    
 
 async fetchActivityData() {
       let queryParams={
@@ -114,6 +122,11 @@ async fetchActivityData() {
   console.log(queryStr)
     const response = await fetch(queryStr)
     const data = await response.json()
+    // data.forEach(element => {
+    //   let date=editDate(element.gatheringTime)
+    //   console.log(date)
+    // });
+    // console.log(data)
     this.result = data
   },
 setTime() {
