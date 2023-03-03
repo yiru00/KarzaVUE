@@ -69,15 +69,15 @@
         <h5>查看路線</h5>
         <div class="d-flex justify-content-between">
           <div id="floating-panel">
-            <label for="mode">移動方式</label>
-            <select id="mode" class="mode">
+            <label for="mode">移動方式：</label>
+            <select v-model="map.selectedMode" id="mode" class="mode">
               <option value="DRIVING">開車</option>
               <option value="WALKING">走路</option>
               <option value="BICYCLING">腳踏車</option>
               <option value="TRANSIT">大眾運輸</option>
             </select>
-            <label for="origin">出發地</label>
-            <input type="text" id="origin" class="origin" value="" />
+            <label for="origin">出發地點：</label>
+            <input v-model="map.destination" type="text" id="origin" class="origin"  />
           </div>
           <span class="routes"></span>
         </div>
@@ -89,7 +89,9 @@
       <div class="col">
         <h5>問與答</h5>
 
-        <div class="QandA" id="question"></div>
+        <div class="QandA" id="question">
+
+        </div>
 
         <div class="askInput d-flex mt-4">
           <textarea
@@ -143,6 +145,10 @@ export default {
   data() {
     return {
       details: {},
+      map:{
+        selectedMode:"DRIVING",
+        destination:" ",
+      },
       saveStatus: {},
       enrollStatus: {},
     };
@@ -166,11 +172,37 @@ export default {
       this.details = details;
       
     },
-    calculateAndDisplayRoute(directionsService, directionsRenderer) {
-      const selectedMode = document.querySelector("#mode").value;
-      let origin = document.querySelector("#origin").value;
+    
+    initMap() {
+      // 載入路線服務與路線顯示圖層
+      const directionsRenderer = new google.maps.DirectionsRenderer();
+      const directionsService = new google.maps.DirectionsService();
 
-      const destination = document.querySelector("#destination").textContent;
+      // 初始化地圖
+      const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 7,
+        center: { lat: 23.5, lng: 121 },
+      });
+
+      directionsRenderer.setMap(map);
+      this.calculateAndDisplayRoute(directionsService, directionsRenderer);
+
+
+
+      document
+        .getElementById("floating-panel")
+        .addEventListener("change", () => {
+          this.calculateAndDisplayRoute(directionsService, directionsRenderer);
+        });
+      
+    },
+    calculateAndDisplayRoute(directionsService, directionsRenderer) {
+      // const selectedMode = document.querySelector("#mode").value;
+      // let origin = document.querySelector("#origin").value;
+      //const destination = document.querySelector("#destination").textContent;
+      const destination = this.map.destination
+      let selectedMode=this.map.selectedMode
+      let origin=this.details.address
       //let destination = $("#destination").text();
 
       // 繪製路線
@@ -195,32 +227,6 @@ export default {
           console.log("Directions request failed due to " + status)
         );
     },
-    initMap() {
-      // 載入路線服務與路線顯示圖層
-      const directionsRenderer = new google.maps.DirectionsRenderer();
-      const directionsService = new google.maps.DirectionsService();
-
-      // 初始化地圖
-      const map = new google.maps.Map(document.getElementById("map"), {
-        zoom: 7,
-        center: { lat: 23.5, lng: 121 },
-      });
-
-      directionsRenderer.setMap(map);
-      this.calculateAndDisplayRoute(directionsService, directionsRenderer);
-
-
-
-      document
-        .getElementById("floating-panel")
-        .addEventListener("change", () => {
-          this.calculateAndDisplayRoute(directionsService, directionsRenderer);
-        });
-      // $(body).on("change","#floating-panel",function(){
-      //   calculateAndDisplayRoute(directionsService, directionsRenderer);
-      // })
-    },
-
     
   },
 };
