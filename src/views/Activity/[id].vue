@@ -77,7 +77,12 @@
               <option value="TRANSIT">大眾運輸</option>
             </select>
             <label for="origin">出發地點：</label>
-            <input v-model="map.destination" type="text" id="origin" class="origin"  />
+            <input
+              v-model="map.destination"
+              type="text"
+              id="origin"
+              class="origin"
+            />
           </div>
           <span class="routes"></span>
         </div>
@@ -89,9 +94,7 @@
       <div class="col">
         <h5>問與答</h5>
 
-        <div class="QandA" id="question">
-
-        </div>
+        <div class="QandA" id="question"></div>
 
         <div class="askInput d-flex mt-4">
           <textarea
@@ -145,22 +148,54 @@ export default {
   data() {
     return {
       details: {},
-      map:{
-        selectedMode:"DRIVING",
-        destination:" ",
+      map: {
+        selectedMode: "DRIVING",
+        destination: " ",
+      },
+      post: {
+        memberId: 0,
+        activityId: 0,
       },
       saveStatus: {},
       enrollStatus: {},
+      QandA: [],
     };
   },
   mounted() {
     console.log(this.data.activityId);
-
+    this.getPost();
+    console.log(this.post);
     this.fetchDetails();
     this.initMap();
+    this.getEnroll();
+    this.getSave();
+    this.getQandA();
     //this.calculateAndDisplayRoute(directionsService, directionsRenderer)
   },
   methods: {
+    //#region 取得memberId&activityId
+    getPost() {
+      let memberId = 0;
+      $.ajax({
+        url: "https://localhost:7259/api/Members/Read",
+        type: "GET",
+        async: false,
+        beforeSend: function (xhr) {
+          let token = $.cookie("token");
+          xhr.setRequestHeader("Authorization", "bearer " + token); //將token包在header裡&解碼
+        },
+        success: function (data) {
+          console.log(data);
+          memberId = data;
+        },
+        error: function (jqXHR, textStatus, errorThrown) {},
+      });
+      this.post.memberId = memberId;
+      this.post.activityId = this.data.activityId;
+    },
+    //#endregion
+
+    //#region 取得活動資訊
     async fetchDetails() {
       let activityId = this.data.activityId;
       let response = await fetch(
@@ -170,9 +205,10 @@ export default {
 
       console.log(details);
       this.details = details;
-      
     },
-    
+    //#endregion
+
+    //#region 地圖
     initMap() {
       // 載入路線服務與路線顯示圖層
       const directionsRenderer = new google.maps.DirectionsRenderer();
@@ -186,25 +222,16 @@ export default {
 
       directionsRenderer.setMap(map);
       this.calculateAndDisplayRoute(directionsService, directionsRenderer);
-
-
-
       document
         .getElementById("floating-panel")
         .addEventListener("change", () => {
           this.calculateAndDisplayRoute(directionsService, directionsRenderer);
         });
-      
     },
     calculateAndDisplayRoute(directionsService, directionsRenderer) {
-      // const selectedMode = document.querySelector("#mode").value;
-      // let origin = document.querySelector("#origin").value;
-      //const destination = document.querySelector("#destination").textContent;
-      const destination = this.map.destination
-      let selectedMode=this.map.selectedMode
-      let origin=this.details.address
-      //let destination = $("#destination").text();
-
+      const destination = this.map.destination;
+      let selectedMode = this.map.selectedMode;
+      let origin = this.details.address;
       // 繪製路線
       directionsService
         .route({
@@ -227,7 +254,64 @@ export default {
           console.log("Directions request failed due to " + status)
         );
     },
-    
+    //#endregion
+
+    //#region 取得報名狀態
+    getEnroll() {
+      const enrolldata = this.post;
+
+      fetch("https://localhost:7259/api/ActivityEnroll/EnrollStatus", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(enrolldata),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("報名狀態:", data);
+          this.enrollStatus = data;
+        })
+        .catch((error) => {
+          console.log("Error:", error);
+        });
+    },
+    //#endregion
+
+    //#region 取得收藏狀態
+    getSave() {
+      const savedata = this.post;
+
+      fetch("https://localhost:7259/api/ActivitySave/SaveStatus", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(savedata),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Success:", data);
+          this.saveStatus = data;
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    },
+    //#endregion
+
+    //#region 取得問與答
+    getQandA() {
+      fetch(
+        "https://localhost:7259/api/ActivityQnA/Get/" + this.post.activityId
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("問與答", data);
+          this.QandA = data;
+        });
+    },
+    //#endregion
   },
 };
 </script>
