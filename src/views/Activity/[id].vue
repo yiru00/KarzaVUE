@@ -130,10 +130,7 @@
 <script>
 import { useRoute } from "vue-router";
 import { reactive } from "vue";
-// import { ref } from "vue";
-// const route = useRoute();
-// let activityId = route.path.slice(10);
-// console.log(activityId); //取得網址
+
 export default {
   setup() {
     const route = useRoute();
@@ -159,18 +156,20 @@ export default {
       saveStatus: {},
       enrollStatus: {},
       QandA: [],
+      sameCategory: [],
     };
   },
   mounted() {
     console.log(this.data.activityId);
     this.getPost();
     console.log(this.post);
-    this.fetchDetails();
+    this.fetchDetails()
     this.initMap();
     this.getEnroll();
     this.getSave();
     this.getQandA();
-    //this.calculateAndDisplayRoute(directionsService, directionsRenderer)
+    this.getSameCategory();
+    
   },
   methods: {
     //#region 取得memberId&activityId
@@ -202,9 +201,12 @@ export default {
         "https://localhost:7259/api/Activity/Details/?activityId=" + activityId
       );
       let details = await response.json();
-
-      console.log(details);
+      let categoryId =parseInt(details.categoryId) ;
+      //console.log(categoryId);
       this.details = details;
+      return categoryId;
+
+      //console.log(this.categoryId)
     },
     //#endregion
 
@@ -257,59 +259,81 @@ export default {
     //#endregion
 
     //#region 取得報名狀態
-    getEnroll() {
+    async getEnroll() {
       const enrolldata = this.post;
 
-      fetch("https://localhost:7259/api/ActivityEnroll/EnrollStatus", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(enrolldata),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("報名狀態:", data);
-          this.enrollStatus = data;
-        })
-        .catch((error) => {
-          console.log("Error:", error);
-        });
+      let response = await fetch(
+        "https://localhost:7259/api/ActivityEnroll/EnrollStatus",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(enrolldata),
+        }
+      );
+      let data = await response.json();
+
+      console.log("報名狀態:", data);
+      this.enrollStatus = data;
     },
     //#endregion
 
     //#region 取得收藏狀態
-    getSave() {
+    async getSave() {
       const savedata = this.post;
+      let response = await fetch(
+        "https://localhost:7259/api/ActivitySave/SaveStatus",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(savedata),
+        }
+      );
+      let data = await response.json();
 
-      fetch("https://localhost:7259/api/ActivitySave/SaveStatus", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(savedata),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Success:", data);
-          this.saveStatus = data;
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+      console.log("Success:", data);
+      this.saveStatus = data;
     },
     //#endregion
 
     //#region 取得問與答
-    getQandA() {
-      fetch(
+   async getQandA() {
+     let response=await fetch(
         "https://localhost:7259/api/ActivityQnA/Get/" + this.post.activityId
       )
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("問與答", data);
-          this.QandA = data;
-        });
+      let data=await response.json();
+      console.log("問與答", data);
+        
+    },
+    //#endregion
+
+    //#region 取得同類活動推薦
+    async getSameCategory() {
+     
+      let categoryId=await this.fetchDetails()
+      let categoryData = {
+        memberId: this.post.memberId,
+        categoryId: categoryId,
+        activityId: this.post.activityId,
+      };
+
+      console.log(categoryId);
+      let response = await fetch(
+        "https://localhost:7259/api/Activity/SameCategory",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(categoryData),
+        }
+      );
+      let data = await response.json();
+      this.sameCategory = data;
+      console.log("相同類別的活動", data);
     },
     //#endregion
   },
