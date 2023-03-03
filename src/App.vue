@@ -133,7 +133,7 @@ import { RouterLink, RouterView } from 'vue-router'
         </div>
       </div>
     </nav>
-<div class="container ">
+<div class="container justify-content-center">
   <RouterView /> 
 </div>
   

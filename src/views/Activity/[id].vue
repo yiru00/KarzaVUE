@@ -6,7 +6,7 @@
         <img class="coverImage" :src="details.coverImage" alt="" />
       </div>
       <div class="col-12 col-md-6" id="activityinfo">
-        <h4 class="activityName">{{ details.activityName }}</h4>
+        <p class="activityName">{{ details.activityName }}</p>
         <p>拍攝類型：{{ details.categoryName }}</p>
         <p>建議器材：{{ details.recommendation }}</p>
         <p>活動時間：{{ details.gatheringTime }}</p>
@@ -56,8 +56,8 @@
             <div
               class="instructorInfo d-flex flex-column justify-content-around align-items-center"
             >
-              <p class="instrutorName">{{ detials.instructorName }}</p>
-              <p class="instructorDes">{{ detials.instructorDescription }}</p>
+              <p class="instrutorName">{{ details.instructorName }}</p>
+              <p class="instructorDes">{{ details.instructorDescription }}</p>
             </div>
           </div>
         </div>
@@ -135,24 +135,26 @@ export default {
     let getId = route.path.slice(10);
     console.log(getId); //取得網址
     const data = reactive({
-      activityId: getId,
+      activityId: route.path.slice(10),
     });
 
-    return {data};
-
+    return { data };
   },
   data() {
     return {
       details: {},
+      saveStatus: {},
+      enrollStatus: {},
     };
   },
   mounted() {
     console.log(this.data.activityId);
-    
+
     this.fetchDetails();
+    this.initMap();
+    //this.calculateAndDisplayRoute(directionsService, directionsRenderer)
   },
   methods: {
-    
     async fetchDetails() {
       let activityId = this.data.activityId;
       let response = await fetch(
@@ -162,8 +164,64 @@ export default {
 
       console.log(details);
       this.details = details;
-      // initMap();
+      
     },
+    calculateAndDisplayRoute(directionsService, directionsRenderer) {
+      const selectedMode = document.querySelector("#mode").value;
+      let origin = document.querySelector("#origin").value;
+
+      const destination = document.querySelector("#destination").textContent;
+      //let destination = $("#destination").text();
+
+      // 繪製路線
+      directionsService
+        .route({
+          origin: origin,
+          destination: destination,
+          travelMode: google.maps.TravelMode[selectedMode],
+        })
+        .then((response) => {
+          directionsRenderer.setDirections(response);
+          let legs = response.routes[0]["legs"][0];
+          console.log(legs);
+          let distance = legs.distance.text;
+          let duration = legs.duration.text;
+          console.log(distance, duration);
+          document.querySelector(
+            ".routes"
+          ).innerText = `距離${distance}，花費${duration}`;
+        })
+        .catch((e) =>
+          console.log("Directions request failed due to " + status)
+        );
+    },
+    initMap() {
+      // 載入路線服務與路線顯示圖層
+      const directionsRenderer = new google.maps.DirectionsRenderer();
+      const directionsService = new google.maps.DirectionsService();
+
+      // 初始化地圖
+      const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 7,
+        center: { lat: 23.5, lng: 121 },
+      });
+
+      directionsRenderer.setMap(map);
+      this.calculateAndDisplayRoute(directionsService, directionsRenderer);
+
+
+
+      document
+        .getElementById("floating-panel")
+        .addEventListener("change", () => {
+          this.calculateAndDisplayRoute(directionsService, directionsRenderer);
+        });
+      // $(body).on("change","#floating-panel",function(){
+      //   calculateAndDisplayRoute(directionsService, directionsRenderer);
+      // })
+    },
+
+    
   },
 };
 </script>
@@ -171,11 +229,14 @@ export default {
 <style scoped>
 .detailpage {
   background-color: #fff;
-  width: 90%;
+  width: 95%;
   border-radius: 15px;
   margin-bottom: 20px;
   margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
 }
+
 h5 {
   text-decoration: 4px underline #afc7d8;
   margin-bottom: 30px;
@@ -273,10 +334,12 @@ p {
 #activityinfo {
   height: 350px;
   line-height: 40px;
+  margin-top: 20px;
 }
 #activityimg {
   height: 350px;
   display: flex;
+  margin-top: 20px;
   margin-bottom: 20px;
 }
 .coverImage {
@@ -288,7 +351,7 @@ p {
 
 .activityName {
   border: 10px;
-  font-size: 18px;
+  font-size: 22px;
 }
 
 @media (max-width: 767px) {

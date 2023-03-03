@@ -205,8 +205,9 @@ export default {
       let activityId = $(this).attr("activityId");
       let memberId = $(this).attr("memberId");
       $(this)[0].innerHTML = `<i style="width: 16px;
-  color: #444444;
-  margin-right: 10px;" class="fa-solid fa-bookmark"></i>`;
+        color: #444444;
+        margin-right: 10px;" 
+        class="fa-solid fa-bookmark"></i>`;
       //$(this).attr("deleteId", 0); //避免還沒跑完（按鈕還沒變取消收藏鈕）又按一次
       //console.log(activityId);
       let saveData = {
