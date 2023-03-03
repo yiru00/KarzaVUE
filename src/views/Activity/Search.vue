@@ -159,7 +159,7 @@
       </div>
     </div>
 
-    <loginModal />
+    <div class="d-flex justify-content-center"><loginModal /></div>
   </div>
 </template>
 <script>

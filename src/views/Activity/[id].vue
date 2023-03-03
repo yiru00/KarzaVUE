@@ -21,9 +21,41 @@
         <p>報名截止日：{{ details.deadline }}</p>
         <div class="buttonList mt-2">
           <!-- v-if -->
-          <button class="saveBtn1">
+          <!-- 活動已舉辦、且未收藏 -->
+          <button v-if="saveStatus.statusId == 2" class="saveBtn1" disabled>
             <i class="fa-regular fa-bookmark"></i>
           </button>
+          <!-- 活動未舉辦可收藏 （有登入可收藏）-->
+          <button
+            v-else-if="saveStatus.statusId == 3 && memberId != 0"
+            class="saveBtn" :activityId="saveStatus.activityId"
+          >
+            <i class="fa-regular fa-bookmark"></i>
+          </button>
+
+          <!-- 活動未舉辦可收藏 （無登入可收藏）-->
+          <button
+            v-else-if="saveStatus.statusId == 3 && memberId == 0"
+            data-bs-toggle="modal"
+            data-bs-target="#loginModal"
+            type="button"
+            class="saveBtn1"
+          >
+            <i class="fa-regular fa-bookmark"></i>
+          </button>
+
+          <!-- 活動未舉辦已收藏--><!-- 活動未舉辦已收藏-->
+          <button
+            v-else-if="saveStatus.statusId == 4||saveStatus.statusId == 5"
+            
+            type="button"
+            class="unsaveBtn"
+            :deleteId="saveStatus.unSaveId"
+          >
+            <i class="fa-solid fa-bookmark"></i>
+          </button>
+
+          
           <!-- v-if -->
           <button class="enrollBtn1">報名活動</button>
         </div>
@@ -142,28 +174,32 @@
         </div>
       </div>
     </div>
+    <div class="d-flex justify-content-center"><loginModal /></div>
   </div>
 </template>
 
 <script>
 import { useRoute } from "vue-router";
 import { reactive } from "vue";
-
+import loginModal from "../../components/loginModal.vue";
 export default {
+  components: {
+    loginModal,
+  },
   watch: {
     $route(to, from) {
       // 當路由切換時，這個監聽器會被觸發
       // 可以在這裡執行某些操作，例如更新數據
-    this.getPost();
-    console.log(this.post);
-    this.fetchDetails();
-    this.initMap();
-    this.getEnroll();
-    this.getSave();
-    this.getQandA();
-    this.getSameCategory();
-      console.log('路由發生了變化：', to.path, from.path)
-    }
+      this.getPost();
+      console.log(this.post);
+      this.fetchDetails();
+      this.initMap();
+      this.getEnroll();
+      this.getSave();
+      this.getQandA();
+      this.getSameCategory();
+      console.log("路由發生了變化：", to.path, from.path);
+    },
   },
   data() {
     return {
@@ -182,7 +218,6 @@ export default {
     };
   },
   mounted() {
-   
     this.getPost();
     console.log(this.post);
     this.fetchDetails();
@@ -328,7 +363,8 @@ export default {
     //#region 取得問與答
     async getQandA() {
       let response = await fetch(
-        "https://localhost:7259/api/ActivityQnA/Get/" + this.$route.path.slice(10)
+        "https://localhost:7259/api/ActivityQnA/Get/" +
+          this.$route.path.slice(10)
       );
       let data = await response.json();
       console.log("問與答", data);
@@ -341,7 +377,7 @@ export default {
       let categoryData = {
         memberId: this.memberId,
         categoryId: categoryId,
-        activityId: this.$route.path.slice(10)
+        activityId: this.$route.path.slice(10),
       };
 
       console.log(categoryId);
