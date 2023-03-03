@@ -49,7 +49,7 @@ export default {
 </script>
 
 <template>
-  <div class="d-flex justify-content-center">
+  <div class=" d-flex justify-content-center">
     <div class="modal-content">
       
         <h3>登入會員</h3>
@@ -87,9 +87,10 @@ export default {
     </div>
 </template>
 
-<style >
+<style scoped>
 /* modal start */
 .modal-content {
+  background-color: #fff;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -103,9 +104,7 @@ export default {
   margin: 20px;
   border: 2.5px solid #8991a9;
 }
-body {
-  background-color: #fff;
-}
+
 .modal-body {
   width: 100%;
   display: flex;
