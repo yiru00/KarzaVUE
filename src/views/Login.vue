@@ -89,6 +89,7 @@ export default {
 
 <style scoped>
 /* modal start */
+
 .modal-content {
   background-color: #fff;
   display: flex;

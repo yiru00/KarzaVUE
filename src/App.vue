@@ -126,7 +126,7 @@ import { RouterLink, RouterView } from 'vue-router'
                 <RouterLink  to="" class="dropdown-item personalList">購物車</RouterLink>
               </li>
               <li><hr class="dropdown-divider " /></li>
-              <li><RouterLink to="" class="dropdown-item personalList" href="#">登出</RouterLink></li>
+              <li><RouterLink to="" class="dropdown-item personalList">登出</RouterLink></li>
             </ul>
             </div>
           </div>
