@@ -117,24 +117,28 @@
           <h5>同類型推薦</h5>
         </div>
         <div class="row" id="sameCategoryCard">
+          <div
+            v-for="(e, index) in sameCategory"
+            :key="index"
+            class="col-12 col-md-6"
+          >
+            <router-link :to="e.route" class="sameLink">
+              <div class="sameList">
+                <div>
+                  <img class="sameImg" :src="e.coverImage" alt="活動封面圖" />
+                </div>
 
-          <div v-for="(e, index) in sameCategory"
-        :key="index" class="col-12  col-md-6">
-      <router-link :to="e.route" class="sameLink" >
-        <div class="sameList">
-          <div><img class="sameImg" :src="
-            e.coverImage
-          " alt="活動封面圖"></div>
-     
-          <div class="sameInfo">
-          <p class="activityName">{{e.activityName}}</p>
-          <p class="samedate"><i class="fa-solid fa-calendar-days"></i>{{
-            e.gatheringTime}}</p>
-          <p class="ellipsis">{{e.description.slice(0, 8)}}...</p>
+                <div class="sameInfo">
+                  <p class="activityName">{{ e.activityName }}</p>
+                  <p class="samedate">
+                    <i class="fa-solid fa-calendar-days"></i
+                    >{{ e.gatheringTime }}
+                  </p>
+                  <p class="ellipsis">{{ e.description.slice(0, 8) }}...</p>
+                </div>
+              </div>
+            </router-link>
           </div>
-        </div>
-        </router-link>
-      </div>
         </div>
       </div>
     </div>
@@ -146,15 +150,20 @@ import { useRoute } from "vue-router";
 import { reactive } from "vue";
 
 export default {
-  setup() {
-    const route = useRoute();
-    let getId = route.path.slice(10);
-    console.log(getId); //取得網址
-    const data = reactive({
-      activityId: route.path.slice(10),
-    });
-
-    return { data };
+  watch: {
+    $route(to, from) {
+      // 當路由切換時，這個監聽器會被觸發
+      // 可以在這裡執行某些操作，例如更新數據
+    this.getPost();
+    console.log(this.post);
+    this.fetchDetails();
+    this.initMap();
+    this.getEnroll();
+    this.getSave();
+    this.getQandA();
+    this.getSameCategory();
+      console.log('路由發生了變化：', to.path, from.path)
+    }
   },
   data() {
     return {
@@ -168,14 +177,12 @@ export default {
         selectedMode: "DRIVING",
         destination: " ",
       },
-      post: {
-        memberId: 0,
-        activityId: 0,
-      },
+
+      memberId: 0,
     };
   },
   mounted() {
-    console.log(this.data.activityId);
+   
     this.getPost();
     console.log(this.post);
     this.fetchDetails();
@@ -203,14 +210,13 @@ export default {
         },
         error: function (jqXHR, textStatus, errorThrown) {},
       });
-      this.post.memberId = memberId;
-      this.post.activityId = this.data.activityId;
+      this.memberId = memberId;
     },
     //#endregion
 
     //#region 取得活動資訊
     async fetchDetails() {
-      let activityId = this.data.activityId;
+      let activityId = this.$route.path.slice(10);
       let response = await fetch(
         "https://localhost:7259/api/Activity/Details/?activityId=" + activityId
       );
@@ -274,7 +280,10 @@ export default {
 
     //#region 取得報名狀態
     async getEnroll() {
-      const enrolldata = this.post;
+      const enrolldata = {
+        memberId: this.memberId,
+        activityId: this.$route.path.slice(10),
+      };
 
       let response = await fetch(
         "https://localhost:7259/api/ActivityEnroll/EnrollStatus",
@@ -295,7 +304,10 @@ export default {
 
     //#region 取得收藏狀態
     async getSave() {
-      const savedata = this.post;
+      const savedata = {
+        memberId: this.memberId,
+        activityId: this.$route.path.slice(10),
+      };
       let response = await fetch(
         "https://localhost:7259/api/ActivitySave/SaveStatus",
         {
@@ -316,7 +328,7 @@ export default {
     //#region 取得問與答
     async getQandA() {
       let response = await fetch(
-        "https://localhost:7259/api/ActivityQnA/Get/" + this.post.activityId
+        "https://localhost:7259/api/ActivityQnA/Get/" + this.$route.path.slice(10)
       );
       let data = await response.json();
       console.log("問與答", data);
@@ -327,9 +339,9 @@ export default {
     async getSameCategory() {
       let categoryId = await this.fetchDetails();
       let categoryData = {
-        memberId: this.post.memberId,
+        memberId: this.memberId,
         categoryId: categoryId,
-        activityId: this.post.activityId,
+        activityId: this.$route.path.slice(10)
       };
 
       console.log(categoryId);
@@ -497,11 +509,10 @@ p {
 }
 
 /* 超小尺寸手機不顯示同類推薦圖 */
-@media (max-width:280px){
-  .sameImg{
+@media (max-width: 280px) {
+  .sameImg {
     display: none;
   }
-
 }
 /* 收藏按鈕 */
 .saveBtn,
