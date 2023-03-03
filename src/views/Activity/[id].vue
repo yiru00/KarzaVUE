@@ -112,16 +112,30 @@
     </div>
 
     <div class="row justify-content-center m-4">
-      <div class="col" id="sameCategory">
-        <!-- <div>
-                <h5>同類型推薦</h5>
-              </div>
-              <div class="row justify-content-between" id="sameCategoryCard">
-                <div class="col-12 col-sm-6 col-md-4 col-xl-3">col</div>
-                <div class="col-12 col-sm-6 col-md-4 col-xl-3">col</div>
-                <div class="col-12 col-sm-6 col-md-4 col-xl-3">col</div>
-                <div class="col-12 col-sm-6 col-md-4 col-xl-3">col</div>
-              </div> -->
+      <div v-if="sameCategory.length > 0" class="col" id="sameCategory">
+        <div>
+          <h5>同類型推薦</h5>
+        </div>
+        <div class="row" id="sameCategoryCard">
+
+          <div v-for="(e, index) in sameCategory"
+        :key="index" class="col-12  col-md-6">
+      <router-link :to="e.route" class="sameLink" >
+        <div class="sameList">
+          <div><img class="sameImg" :src="
+            e.coverImage
+          " alt="活動封面圖"></div>
+     
+          <div class="sameInfo">
+          <p class="activityName">{{e.activityName}}</p>
+          <p class="samedate"><i class="fa-solid fa-calendar-days"></i>{{
+            e.gatheringTime}}</p>
+          <p class="ellipsis">{{e.description.slice(0, 8)}}...</p>
+          </div>
+        </div>
+        </router-link>
+      </div>
+        </div>
       </div>
     </div>
   </div>
@@ -145,6 +159,11 @@ export default {
   data() {
     return {
       details: {},
+      saveStatus: {},
+      enrollStatus: {},
+      QandA: [],
+      sameCategory: [],
+
       map: {
         selectedMode: "DRIVING",
         destination: " ",
@@ -153,23 +172,18 @@ export default {
         memberId: 0,
         activityId: 0,
       },
-      saveStatus: {},
-      enrollStatus: {},
-      QandA: [],
-      sameCategory: [],
     };
   },
   mounted() {
     console.log(this.data.activityId);
     this.getPost();
     console.log(this.post);
-    this.fetchDetails()
+    this.fetchDetails();
     this.initMap();
     this.getEnroll();
     this.getSave();
     this.getQandA();
     this.getSameCategory();
-    
   },
   methods: {
     //#region 取得memberId&activityId
@@ -201,7 +215,7 @@ export default {
         "https://localhost:7259/api/Activity/Details/?activityId=" + activityId
       );
       let details = await response.json();
-      let categoryId =parseInt(details.categoryId) ;
+      let categoryId = parseInt(details.categoryId);
       //console.log(categoryId);
       this.details = details;
       return categoryId;
@@ -300,20 +314,18 @@ export default {
     //#endregion
 
     //#region 取得問與答
-   async getQandA() {
-     let response=await fetch(
+    async getQandA() {
+      let response = await fetch(
         "https://localhost:7259/api/ActivityQnA/Get/" + this.post.activityId
-      )
-      let data=await response.json();
+      );
+      let data = await response.json();
       console.log("問與答", data);
-        
     },
     //#endregion
 
     //#region 取得同類活動推薦
     async getSameCategory() {
-     
-      let categoryId=await this.fetchDetails()
+      let categoryId = await this.fetchDetails();
       let categoryData = {
         memberId: this.post.memberId,
         categoryId: categoryId,
@@ -484,6 +496,13 @@ p {
   }
 }
 
+/* 超小尺寸手機不顯示同類推薦圖 */
+@media (max-width:280px){
+  .sameImg{
+    display: none;
+  }
+
+}
 /* 收藏按鈕 */
 .saveBtn,
 .saveBtn1,
