@@ -22,20 +22,21 @@
         <div class="buttonList mt-2">
           <!-- v-if -->
           <!-- 活動已舉辦、且未收藏 -->
-          <button v-if="saveStatus.statusId == 2" class="saveBtn1" disabled>
+          <button v-if="this.saveStatus.statusId == 2" class="saveBtn1" disabled>
             <i class="fa-regular fa-bookmark"></i>
           </button>
           <!-- 活動未舉辦可收藏 （有登入可收藏）-->
           <button
-            v-else-if="saveStatus.statusId == 3 && memberId != 0"
-            class="saveBtn" :activityId="saveStatus.activityId"
+            v-else-if="this.saveStatus.statusId == 3 && this.memberId != 0"
+            class="saveBtn"
+            :activityId="saveStatus.activityId"
           >
             <i class="fa-regular fa-bookmark"></i>
           </button>
 
           <!-- 活動未舉辦可收藏 （無登入可收藏）-->
           <button
-            v-else-if="saveStatus.statusId == 3 && memberId == 0"
+            v-else-if="this.saveStatus.statusId == 3 && this.memberId == 0"
             data-bs-toggle="modal"
             data-bs-target="#loginModal"
             type="button"
@@ -46,8 +47,7 @@
 
           <!-- 活動未舉辦已收藏--><!-- 活動未舉辦已收藏-->
           <button
-            v-else-if="saveStatus.statusId == 4||saveStatus.statusId == 5"
-            
+            v-else-if="this.saveStatus.statusId == 4 || this.saveStatus.statusId == 5"
             type="button"
             class="unsaveBtn"
             :deleteId="saveStatus.unSaveId"
@@ -55,9 +55,52 @@
             <i class="fa-solid fa-bookmark"></i>
           </button>
 
-          
           <!-- v-if -->
-          <button class="enrollBtn1">報名活動</button>
+
+          <button
+            v-if="this.enrollStatus.statusId == 2"
+            class="enrollBtn1"
+            disabled
+          >
+            報名已截止
+          </button>
+
+          <button
+            v-else-if="this.enrollStatus.statusId == 3"
+            class="enrollBtn1"
+            disabled
+          >
+            已額滿
+          </button>
+
+          <!-- 活動可報名未登入 -->
+          <button
+            v-else-if="this.enrollStatus.statusId == 4 && this.memberId == 0"
+            data-bs-toggle="modal"
+            data-bs-target="#loginModal"
+            type="button"
+            class="enrollBtn1"
+          >
+            報名
+          </button>
+
+          <!-- 活動可報名有登入 -->
+          <button
+            v-else-if="this.enrollStatus.statusId == 4 && this.memberId != 0"
+            type="button"
+            class="enrollBtn"
+          >
+            報名
+          </button>
+
+          <!-- 已報名 -->
+          <button
+            v-else-if="this.enrollStatus.statusId == 5"
+            type="button"
+            class="unenrollBtn"
+          >
+            取消報名（已報名）
+          </button>
         </div>
       </div>
     </div>
@@ -217,35 +260,36 @@ export default {
       memberId: 0,
     };
   },
+  
   mounted() {
-    this.getPost();
-    console.log(this.post);
+    this.getMemberId();
+    console.log(this.memberId);
     this.fetchDetails();
-    this.initMap();
+
     this.getEnroll();
     this.getSave();
     this.getQandA();
     this.getSameCategory();
+    this.initMap();
   },
   methods: {
     //#region 取得memberId&activityId
-    getPost() {
+    async getMemberId() {
       let memberId = 0;
-      $.ajax({
-        url: "https://localhost:7259/api/Members/Read",
-        type: "GET",
-        async: false,
-        beforeSend: function (xhr) {
-          let token = $.cookie("token");
-          xhr.setRequestHeader("Authorization", "bearer " + token); //將token包在header裡&解碼
+      let token = $.cookie("token");
+      let options = {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-        success: function (data) {
-          console.log(data);
-          memberId = data;
-        },
-        error: function (jqXHR, textStatus, errorThrown) {},
-      });
-      this.memberId = memberId;
+      };
+      let response = await fetch(
+        "https://localhost:7259/api/Members/Read",
+        options
+      );
+      let data = await response.json();
+      this.memberId = data;
+      //console.log(data);
     },
     //#endregion
 
@@ -315,8 +359,9 @@ export default {
 
     //#region 取得報名狀態
     async getEnroll() {
+      let memberId = this.memberId;
       const enrolldata = {
-        memberId: this.memberId,
+        memberId: memberId,
         activityId: this.$route.path.slice(10),
       };
 
