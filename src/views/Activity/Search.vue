@@ -133,24 +133,21 @@
               </button>
               <!-- 登入沒收藏 -->
               <button
-                @click="save($event, index)"
+                @click="
+                  save($event, index, card.activityId, this.input.memberId)
+                "
                 v-else-if="card.statusId == 3 && this.input.memberId != 0"
                 type="button"
                 class="saveBtn"
-                :activityId="card.activityId"
-                :memberId="this.input.memberId"
               >
                 <i class="fa-regular fa-bookmark"></i>
               </button>
               <!-- 登入有收藏 -->
               <button
                 v-else-if="card.statusId == 4 && this.input.memberId != 0"
-                @click="unsave($event, index)"
+                @click="unsave($event, index, card.unSaveId)"
                 type="button"
                 class="unsaveBtn"
-                :activityId="card.activityId"
-                :memberId="this.input.memberId"
-                :deleteId="card.unSaveId"
               >
                 <i class="fa-solid fa-bookmark"></i>
               </button>
@@ -344,7 +341,7 @@ export default {
     //#endregion
 
     //#region 收藏活動
-    save(event, index) {
+    save(event, index, activityId, memberId) {
       event.stopPropagation();
       //取得點到的按鈕
       let saveBtn;
@@ -355,10 +352,6 @@ export default {
       }
       //收藏數+1
       this.result[index].numOfCollections++;
-
-      //取得資料
-      let activityId = saveBtn.getAttribute("activityId");
-      let memberId = saveBtn.getAttribute("memberId");
 
       //更改按鈕圖示
       saveBtn.innerHTML = `<i style="width: 16px;
@@ -395,7 +388,7 @@ export default {
     //#endregion
 
     //#region 取消收藏活動
-    unsave(event, index) {
+    unsave(event, index, deleteId) {
       event.stopPropagation();
 
       //收藏數減1
@@ -410,8 +403,6 @@ export default {
       unsaveBtn.innerHTML = `<i style="width: 16px;color: #444444;margin-right: 10px;" 
                                 class="fa-regular fa-bookmark"></>`;
 
-      //取消收藏
-      let deleteId = unsaveBtn.getAttribute("deleteId");
       fetch("https://localhost:7259/api/ActivitySave/UnSave/" + deleteId, {
         method: "Delete",
       })

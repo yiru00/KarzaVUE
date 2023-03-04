@@ -33,10 +33,8 @@
             <!-- 活動未舉辦可收藏 （有登入可收藏）-->
             <button
               v-else-if="this.saveStatus.statusId == 3 && this.memberId != 0"
-              @click="save($event)"
+              @click="save($event, this.saveStatus.activityId, this.memberId)"
               class="saveBtn"
-              :activityId="this.saveStatus.activityId"
-              :memberId="this.memberId"
             >
               <i class="fa-regular fa-bookmark"></i>
             </button>
@@ -57,7 +55,7 @@
               v-else-if="
                 this.saveStatus.statusId == 4 || this.saveStatus.statusId == 5
               "
-              @click="unsave($event)"
+              @click="unsave($event, saveStatus.unSaveId)"
               type="button"
               class="unsaveBtn"
               :deleteId="saveStatus.unSaveId"
@@ -193,16 +191,17 @@
                     <img class="quser" :src="item.photoSticker" alt="" />
                     <p class="ms-4">{{ item.nickName }}</p>
                   </div>
-                  <div class="date">{{ item.qDateCreated }}</div>
+
                   <div class="qcontent">
                     <p>{{ item.qContent }}</p>
                   </div>
+                  <div class="date">{{ item.qDateCreated }}</div>
                 </div>
               </div>
               <button
                 v-if="item.memberId == this.memberId"
+                @click="deleteQ(item.qId, index)"
                 class="deleteQcontent"
-                :deleteId="item.qId"
               >
                 <i class="fa-solid fa-trash"></i>
               </button>
@@ -514,7 +513,7 @@ export default {
         activityId: this.$route.path.slice(10),
       };
 
-      console.log(categoryId);
+      //console.log(categoryId);
       let response = await fetch(
         "https://localhost:7259/api/Activity/SameCategory",
         {
@@ -532,7 +531,8 @@ export default {
     },
     //#endregion
 
-    save(event) {
+    //#region 收藏活動
+    save(event, activityId, memberId) {
       event.stopPropagation();
       let saveBtn;
       if (event.target.tagName.toLowerCase() === "button") {
@@ -541,8 +541,6 @@ export default {
         saveBtn = event.currentTarget;
       }
 
-      let activityId = saveBtn.getAttribute("activityId");
-      let memberId = saveBtn.getAttribute("memberId");
       saveBtn.innerHTML = `<i style=" font-size: 25px;
   color: #e9ca89;"
         class="fa-solid fa-bookmark"></i>`;
@@ -570,7 +568,10 @@ export default {
           console.error("Error:", error);
         });
     },
-    unsave(event) {
+    //#endregion
+
+    //#region 取消收藏活動
+    unsave(event, deleteId) {
       event.stopPropagation();
 
       let unsaveBtn;
@@ -583,7 +584,6 @@ export default {
       unsaveBtn.innerHTML = `<i style=" font-size: 25px;
   color: #e9ca89;" class="fa-regular fa-bookmark"></>`;
 
-      let deleteId = unsaveBtn.getAttribute("deleteId");
       // console.log(deleteId);
       fetch("https://localhost:7259/api/ActivitySave/UnSave/" + deleteId, {
         method: "Delete",
@@ -598,6 +598,9 @@ export default {
           console.error("Error:", error);
         });
     },
+    //#endregion
+
+    //#region 發問
     ask() {
       let qcontent = this.askContent;
       this.qerromsg = "";
@@ -629,6 +632,7 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           console.log(data);
+          //新增發問內容
           this.QandA.push({
             nickName: data.nickName,
             photoSticker: data.photoSticker,
@@ -641,33 +645,26 @@ export default {
             aContent: null,
             aDateCreated: null,
           });
-          //append發問內容
         });
-      //     $("#question").append(`<div id="${data.qId}" class="QAlist">
-      //   <div class="question">
-      //     <div class="user d-flex align-items-center">
-      //       <img class="quser" src="${data.photoSticker}" alt="" />
-      //       <p class="ms-4">${data.nickName}</p>
-      //     </div>
-      //     <div class="date">${getDate(data.qDateCreated)}</div>
-      //     <div class="qcontent">
-      //       <p>
-      //         ${data.qContent}
-      //       </p>
-      //     </div>
-
-      //   </div>
-      //   <button class="deleteQcontent" deleteId="${
-      //     data.qId
-      //   }"><i class="fa-solid fa-trash"></i></button>
-      //   </div>
-      //   `);
-      //   })
-
-      //   .catch((error) => {
-      //     console.error("Error:", error);
-      //   });
     },
+    //#endregion
+
+    //#region 刪除發問
+    deleteQ(deleteId, index) {
+      console.log(deleteId);
+      fetch("https://localhost:7259/api/ActivityQnA/DeleteQ/" + deleteId, {
+        method: "Delete",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Success:", data);
+          this.QandA.splice(index, 1);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    },
+    //#endregion
   },
 };
 </script>
