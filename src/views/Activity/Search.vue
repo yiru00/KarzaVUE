@@ -144,7 +144,7 @@
               </button>
               <!-- 登入有收藏 -->
               <button
-              v-else-if="card.statusId == 4 && this.input.memberId != 0"
+                v-else-if="card.statusId == 4 && this.input.memberId != 0"
                 @click="unsave($event, index)"
                 type="button"
                 class="unsaveBtn"
@@ -353,7 +353,8 @@ export default {
         .then((data) => {
           console.log("Success:", data);
           this.result[index].statusId = 4;
-          console.log(this.result[index].statusId)
+          this.result[index].unSaveId = data.activityCollectionId;
+          console.log(this.result[index].statusId);
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -381,7 +382,8 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           console.log("Success:", data);
-          this.result[index].statusId = 3
+          this.result[index].statusId = 3;
+          this.result[index].unSaveId = 0
         })
         .catch((error) => {
           console.error("Error:", error);
