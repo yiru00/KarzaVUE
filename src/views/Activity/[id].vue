@@ -249,19 +249,18 @@ export default {
     $route(to, from) {
       // 當路由切換時，這個監聽器會被觸發
       // 可以在這裡執行某些操作，例如更新數據
-      this.loading();
+      // this.loading();
+      this.scrollToTop();
       this.getMemberId();
-      console.log(this.post);
       this.fetchDetails();
       this.getEnroll();
       this.getSave();
       this.initMap();
-
       this.getQandA();
       this.getSameCategory();
 
       console.log("路由發生了變化：", to.path, from.path);
-      this.scrollToTop();
+      
     },
   },
   data() {
@@ -288,7 +287,7 @@ export default {
     this.getQandA();
     this.getSameCategory();
     this.initMap();
-    this.loading();
+    // this.loading();
   },
   methods: {
     scrollToTop() {
@@ -297,12 +296,7 @@ export default {
         behavior: "smooth", // 平滑滚动
       });
     },
-    loading() {
-      this.isloading = true;
-      setTimeout(() => {
-        this.isloading = false;
-      }, 1000);
-    },
+
     //#region 取得memberId&activityId
     async getMemberId() {
       let Id = 0;
@@ -456,6 +450,7 @@ export default {
 
     //#region 取得同類活動推薦
     async getSameCategory() {
+      this.isloading=true;
       let categoryId = await this.fetchDetails();
       let memberId = await this.getMemberId();
       let categoryData = {
@@ -477,6 +472,7 @@ export default {
       );
       let data = await response.json();
       this.sameCategory = data;
+      this.isloading=false
       console.log("相同類別的活動", data);
     },
     //#endregion
