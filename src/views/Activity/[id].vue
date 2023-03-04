@@ -391,6 +391,7 @@ export default {
 
     //#region 取得報名狀態
     async getEnroll() {
+      this.isloading = true;
       let memberId = await this.getMemberId();
       const enrolldata = {
         memberId: memberId,
@@ -408,7 +409,7 @@ export default {
         }
       );
       let data = await response.json();
-
+      this.isloading = false;
       console.log("報名狀態:", data);
       this.enrollStatus = data;
     },
@@ -450,7 +451,6 @@ export default {
 
     //#region 取得同類活動推薦
     async getSameCategory() {
-      this.isloading = true;
       let categoryId = await this.fetchDetails();
       let memberId = await this.getMemberId();
       let categoryData = {
@@ -472,7 +472,7 @@ export default {
       );
       let data = await response.json();
       this.sameCategory = data;
-      this.isloading = false;
+
       console.log("相同類別的活動", data);
     },
     //#endregion
