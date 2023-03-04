@@ -1,6 +1,6 @@
 <template>
   <!-- {{ data.activityId }} -->
-  <div class="detailpage">
+  <div  class="detailpage">
     <div class="row justify-content-center m-4">
       <div class="col-12 col-md-6" id="activityimg">
         <img class="coverImage" :src="details.coverImage" alt="" />
@@ -14,7 +14,7 @@
           集合地點：<span id="destination">{{ details.address }}</span>
         </p>
         <p>
-          活動名額：{{ details.memberLimit }}人 剩餘{{
+          活動名額：{{ details.memberLimit }}人 || 剩餘{{
             details.memberLimit - details.numOfEnrolment
           }}人
         </p>
@@ -260,7 +260,6 @@ export default {
       enrollStatus: {},
       QandA: [],
       sameCategory: [],
-
       map: {
         selectedMode: "DRIVING",
         destination: " ",
@@ -274,12 +273,12 @@ export default {
     this.getMemberId();
     console.log(this.memberId);
     this.fetchDetails();
-
     this.getEnroll();
     this.getSave();
     this.getQandA();
     this.getSameCategory();
     this.initMap();
+    this.isLoading();
   },
   methods: {
     //#region 取得memberId&activityId
@@ -522,6 +521,7 @@ export default {
           console.error("Error:", error);
         });
     },
+    
   },
 };
 </script>

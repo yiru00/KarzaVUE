@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="searchPage">
     <!-- {{result}} -->
     <!-- <router-link to="/Activity/12">go</router-link> -->
     <form @change="fetchActivityData" class="row inputSearch">
@@ -77,7 +77,8 @@
         之後的活動
       </div>
     </form>
-    <div class="row" id="resultCard">
+
+    <div v-if="!isempty" class="row" id="resultCard">
       <div
         v-for="(card, index) in result"
         :key="index"
@@ -161,6 +162,7 @@
       </div>
     </div>
 
+    <div v-else class="nothingPage">nothing</div>
     <div class="d-flex justify-content-center"><loginModal /></div>
   </div>
 </template>
@@ -183,6 +185,8 @@ export default {
       result: [],
       minDate: new Date(),
       categoryOption: [],
+
+      isempty: false,
     };
   },
   mounted() {
@@ -198,7 +202,6 @@ export default {
     // 获取 JSON 数据
     this.fetchActivityData();
 
-    
     //卡片上的address tag點到時
     this.$nextTick(() => {
       this.result.forEach((city) => {
@@ -220,6 +223,7 @@ export default {
   },
   methods: {
     async fetchActivityData() {
+      this.isempty = false;
       let memberId = await this.getMemberId();
       let queryParams = {
         activityName: this.input.activityName,
@@ -244,6 +248,10 @@ export default {
       const data = await response.json();
 
       this.result = data;
+
+      if (data.length == 0) {
+        this.isempty = true;
+      }
     },
     setTime() {
       let now = new Date(); //取得目前時間
@@ -319,7 +327,7 @@ export default {
       } else if (event.target.tagName.toLowerCase() === "i") {
         saveBtn = event.currentTarget;
       }
-      this.result[index].numOfCollections ++;
+      this.result[index].numOfCollections++;
       let activityId = saveBtn.getAttribute("activityId");
       let memberId = saveBtn.getAttribute("memberId");
       saveBtn.innerHTML = `<i style="width: 16px;
@@ -349,18 +357,17 @@ export default {
     },
     unsave(event, index) {
       event.stopPropagation();
-      this.result[index].numOfCollections --;
+      this.result[index].numOfCollections--;
       let unsaveBtn;
       if (event.target.tagName.toLowerCase() === "button") {
         unsaveBtn = event.target;
       } else if (event.target.tagName.toLowerCase() === "i") {
         unsaveBtn = event.currentTarget;
       }
-      console.log(unsaveBtn)
+      console.log(unsaveBtn);
       unsaveBtn.innerHTML = `<i style="width: 16px;
   color: #444444;
   margin-right: 10px;" class="fa-regular fa-bookmark"></>`;
-      
 
       let deleteId = unsaveBtn.getAttribute("deleteId");
       // console.log(deleteId);
@@ -381,6 +388,16 @@ export default {
 </script>
 
 <style scoped>
+.nothingPage {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.searchPage {
+  display: flex;
+  flex-direction: column;
+}
 .card {
   margin: 10px;
   padding: 10px;
