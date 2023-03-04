@@ -78,7 +78,7 @@
       </div>
     </form>
 
-    <div v-if="!isempty" class="row" id="resultCard">
+    <div v-show="!isempty && !isloading" class="row" id="resultCard">
       <div
         v-for="(card, index) in result"
         :key="index"
@@ -144,7 +144,7 @@
               </button>
               <!-- 登入有收藏 -->
               <button
-                v-else-if="card.statusId == 4 && this.input.memberId != 0"
+              v-else-if="card.statusId == 4 && this.input.memberId != 0"
                 @click="unsave($event, index)"
                 type="button"
                 class="unsaveBtn"
@@ -162,7 +162,8 @@
       </div>
     </div>
 
-    <div v-else class="nothingPage">nothing</div>
+    <div v-show="isempty" class="nothingPage">nothing</div>
+    <div v-show="isloading" class="loadingPage">loading</div>
     <div class="d-flex justify-content-center"><loginModal /></div>
   </div>
 </template>
@@ -185,8 +186,8 @@ export default {
       result: [],
       minDate: new Date(),
       categoryOption: [],
-
-      isempty: false,
+      isloading: true,
+      isempty: true,
     };
   },
   mounted() {
@@ -223,6 +224,7 @@ export default {
   },
   methods: {
     async fetchActivityData() {
+      this.isloading = true;
       this.isempty = false;
       let memberId = await this.getMemberId();
       let queryParams = {
@@ -244,9 +246,10 @@ export default {
       queryStr += `time=${queryParams.time}&`;
       queryStr += `memberId=${queryParams.memberId}`;
       console.log(queryStr);
+      this.isempty = false;
       const response = await fetch(queryStr);
       const data = await response.json();
-
+      this.isloading = false;
       this.result = data;
 
       if (data.length == 0) {
@@ -349,7 +352,8 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           console.log("Success:", data);
-          this.fetchActivityData();
+          this.result[index].statusId = 4;
+          console.log(this.result[index].statusId)
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -377,7 +381,7 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           console.log("Success:", data);
-          this.fetchActivityData();
+          this.result[index].statusId = 3
         })
         .catch((error) => {
           console.error("Error:", error);
