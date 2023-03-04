@@ -352,10 +352,9 @@ export default {
         console.log(data);
         Id = data;
         this.memberId = Id;
-
         return Id;
       } catch (error) {
-        console.log(error);
+        console.log("未登入");
         this.memberId = Id;
         return Id;
       }

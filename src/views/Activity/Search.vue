@@ -1,4 +1,4 @@
-<template >
+<template>
   <div>
     <!-- {{result}} -->
     <!-- <router-link to="/Activity/12">go</router-link> -->
@@ -132,6 +132,7 @@
               </button>
               <!-- 登入沒收藏 -->
               <button
+                @click="save($event, index)"
                 v-else-if="card.statusId == 3 && this.input.memberId != 0"
                 type="button"
                 class="saveBtn"
@@ -143,6 +144,7 @@
               <!-- 登入有收藏 -->
               <button
                 v-else-if="card.statusId == 4 && this.input.memberId != 0"
+                @click="unsave($event, index)"
                 type="button"
                 class="unsaveBtn"
                 :activityId="card.activityId"
@@ -196,66 +198,66 @@ export default {
     // 获取 JSON 数据
     this.fetchActivityData();
 
-    $("body").on("click", ".saveBtn", function (e) {
-      //有登入會員才能按
-      let numOfCollection = Number($(this).next().text());
-      $(this)
-        .next()
-        .text(`${numOfCollection + 1}`);
-      let activityId = $(this).attr("activityId");
-      let memberId = $(this).attr("memberId");
-      $(this)[0].innerHTML = `<i style="width: 16px;
-        color: #444444;
-        margin-right: 10px;" 
-        class="fa-solid fa-bookmark"></i>`;
-      //$(this).attr("deleteId", 0); //避免還沒跑完（按鈕還沒變取消收藏鈕）又按一次
-      //console.log(activityId);
-      let saveData = {
-        memberId: memberId,
-        activityId: activityId,
-      };
-      fetch("https://localhost:7259/api/ActivitySave/Save", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(saveData),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Success:", data);
-          $(this).attr("deleteId", data.activityCollectionId);
-          $(this).attr("class", "unsaveBtn");
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-      //console.log(saveData);
-    });
-    $("body").on("click", ".unsaveBtn", function (e) {
-      //有登入會員才能按
-      $(this)[0].innerHTML = `<i style="width: 16px;
-  color: #444444;
-  margin-right: 10px;" class="fa-regular fa-bookmark"></>`;
-      let deleteId = $(this).attr("deleteId");
-      let numOfCollection = Number($(this).next().text());
-      $(this)
-        .next()
-        .text(numOfCollection - 1);
-      // console.log(deleteId);
-      fetch("https://localhost:7259/api/ActivitySave/UnSave/" + deleteId, {
-        method: "Delete",
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Success:", data);
-          $(this).attr("class", "saveBtn");
-          $(this).attr("deleteId", 0);
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-    });
+    // $("body").on("click", ".saveBtn", function (e) {
+    //   //有登入會員才能按
+    //   let numOfCollection = Number($(this).next().text());
+    //   $(this)
+    //     .next()
+    //     .text(`${numOfCollection + 1}`);
+    //   let activityId = $(this).attr("activityId");
+    //   let memberId = $(this).attr("memberId");
+    //   $(this)[0].innerHTML = `<i style="width: 16px;
+    //     color: #444444;
+    //     margin-right: 10px;"
+    //     class="fa-solid fa-bookmark"></i>`;
+    //   //$(this).attr("deleteId", 0); //避免還沒跑完（按鈕還沒變取消收藏鈕）又按一次
+    //   //console.log(activityId);
+    //   let saveData = {
+    //     memberId: memberId,
+    //     activityId: activityId,
+    //   };
+    //   fetch("https://localhost:7259/api/ActivitySave/Save", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(saveData),
+    //   })
+    //     .then((response) => response.json())
+    //     .then((data) => {
+    //       console.log("Success:", data);
+    //       $(this).attr("deleteId", data.activityCollectionId);
+    //       $(this).attr("class", "unsaveBtn");
+    //     })
+    //     .catch((error) => {
+    //       console.error("Error:", error);
+    //     });
+    //   //console.log(saveData);
+    // });
+    //   $(".unsaveBtn").on("click", function (e) {
+    //     //有登入會員才能按
+    //     $(this)[0].innerHTML = `<i style="width: 16px;
+    // color: #444444;
+    // margin-right: 10px;" class="fa-regular fa-bookmark"></>`;
+    //     let deleteId = $(this).attr("deleteId");
+    //     let numOfCollection = Number($(this).next().text());
+    //     $(this)
+    //       .next()
+    //       .text(numOfCollection - 1);
+    //     // console.log(deleteId);
+    //     fetch("https://localhost:7259/api/ActivitySave/UnSave/" + deleteId, {
+    //       method: "Delete",
+    //     })
+    //       .then((response) => response.json())
+    //       .then((data) => {
+    //         console.log("Success:", data);
+    //         $(this).attr("class", "saveBtn");
+    //         $(this).attr("deleteId", 0);
+    //       })
+    //       .catch((error) => {
+    //         console.error("Error:", error);
+    //       });
+    //   });
     //卡片上的address tag點到時
     this.$nextTick(() => {
       this.result.forEach((city) => {
@@ -277,12 +279,13 @@ export default {
   },
   methods: {
     async fetchActivityData() {
+      let memberId = await this.getMemberId();
       let queryParams = {
         activityName: this.input.activityName,
         categoryId: this.input.categoryId,
         address: this.input.address,
         time: this.input.time,
-        memberId: this.input.memberId,
+        memberId: memberId,
       };
       console.log(queryParams);
       let queryStr = "https://localhost:7259/api/Activity/Search?";
@@ -335,23 +338,30 @@ export default {
       this.setTime();
       this.fetchActivityData();
     },
-    getMemberId() {
-      let memberId = 0;
-      $.ajax({
-        url: "https://localhost:7259/api/Members/Read",
-        type: "GET",
-        async: false,
-        beforeSend: function (xhr) {
-          let token = $.cookie("token");
-          xhr.setRequestHeader("Authorization", "bearer " + token); //將token包在header裡&解碼
+    async getMemberId() {
+      let Id = 0;
+      let token = $.cookie("token");
+      let options = {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-        success: function (data) {
-          console.log(data);
-          memberId = data;
-        },
-        error: function (jqXHR, textStatus, errorThrown) {},
-      });
-      this.input.memberId = memberId;
+      };
+      try {
+        let response = await fetch(
+          "https://localhost:7259/api/Members/Read",
+          options
+        );
+        let data = await response.json();
+        console.log(data);
+        Id = data;
+        this.input.memberId = Id;
+        return Id;
+      } catch (error) {
+        console.log("未登入");
+        this.input.memberId = Id;
+        return Id;
+      }
     },
     async getCategory() {
       let response = await fetch(
@@ -359,6 +369,71 @@ export default {
       );
       let data = await response.json();
       this.categoryOption = data;
+    },
+    save(event, index) {
+      event.stopPropagation();
+      let saveBtn;
+      if (event.target.tagName.toLowerCase() === "button") {
+        saveBtn = event.target;
+      } else if (event.target.tagName.toLowerCase() === "i") {
+        saveBtn = event.currentTarget;
+      }
+      this.result[index].numOfCollections ++;
+      let activityId = saveBtn.getAttribute("activityId");
+      let memberId = saveBtn.getAttribute("memberId");
+      saveBtn.innerHTML = `<i style="width: 16px;
+        color: #444444;
+        margin-right: 10px;"
+        class="fa-solid fa-bookmark"></i>`;
+      console.log(activityId);
+      let saveData = {
+        memberId: memberId,
+        activityId: activityId,
+      };
+      fetch("https://localhost:7259/api/ActivitySave/Save", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(saveData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Success:", data);
+          this.fetchActivityData();
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    },
+    unsave(event, index) {
+      event.stopPropagation();
+      this.result[index].numOfCollections --;
+      let unsaveBtn;
+      if (event.target.tagName.toLowerCase() === "button") {
+        unsaveBtn = event.target;
+      } else if (event.target.tagName.toLowerCase() === "i") {
+        unsaveBtn = event.currentTarget;
+      }
+      console.log(unsaveBtn)
+      unsaveBtn.innerHTML = `<i style="width: 16px;
+  color: #444444;
+  margin-right: 10px;" class="fa-regular fa-bookmark"></>`;
+      
+
+      let deleteId = unsaveBtn.getAttribute("deleteId");
+      // console.log(deleteId);
+      fetch("https://localhost:7259/api/ActivitySave/UnSave/" + deleteId, {
+        method: "Delete",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Success:", data);
+          this.fetchActivityData();
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
     },
   },
 };
