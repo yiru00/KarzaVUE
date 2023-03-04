@@ -179,10 +179,45 @@
         <div class="col">
           <h5>問與答</h5>
 
-          <div class="QandA" id="question"></div>
+          <div v-if="QandA.length > 0">
+            <div
+              v-for="(item, index) in QandA"
+              :key="index"
+              :qid="QandA.QId"
+              class="QandA"
+              id="question"
+            >
+              <div class="QAlist">
+                <div class="question">
+                  <div class="user d-flex align-items-center">
+                    <img class="quser" :src="item.photoSticker" alt="" />
+                    <p class="ms-4">{{ item.nickName }}</p>
+                  </div>
+                  <div class="date">{{ item.qDateCreated }}</div>
+                  <div class="qcontent">
+                    <p>{{ item.qContent }}</p>
+                  </div>
+                </div>
+              </div>
+              <button
+                v-if="item.memberId == this.memberId"
+                class="deleteQcontent"
+                :deleteId="item.qId"
+              >
+                <i class="fa-solid fa-trash"></i>
+              </button>
+              <div v-if="item.aId != null" class="answer m-2">
+                <div class="acontent">
+                  <p>↳ {{ item.aContent }}</p>
+                </div>
+                <div class="date">{{ item.aDateCreated }}</div>
+              </div>
+            </div>
+          </div>
 
           <div class="askInput d-flex mt-4">
             <textarea
+              v-model="askContent"
               name="content"
               id="askcontent"
               class="askContent"
@@ -190,9 +225,25 @@
               placeholder="提出和此活動有關的問題！"
             ></textarea>
 
-            <button class="askBtn" id="ask">發問</button>
+            <button
+              v-if="this.memberId != 0"
+              @click="ask"
+              class="askBtn"
+              id="ask"
+            >
+              發問
+            </button>
+            <button
+              v-else
+              data-bs-toggle="modal"
+              data-bs-target="#loginModal"
+              class="askBtn"
+              id="ask"
+            >
+              發問
+            </button>
           </div>
-          <p class="qerromsg"></p>
+          <p class="qerromsg">{{ qerromsg }}</p>
         </div>
       </div>
 
@@ -276,6 +327,8 @@ export default {
       },
       memberId: 0,
       isloading: true,
+      askContent: "",
+      qerromsg: "",
     };
   },
 
@@ -440,11 +493,13 @@ export default {
 
     //#region 取得問與答
     async getQandA() {
+      let activityId = this.$route.path.slice(10);
       let response = await fetch(
-        "https://localhost:7259/api/ActivityQnA/Get/" +
-          this.$route.path.slice(10)
+        "https://localhost:7259/api/ActivityQnA/Get/" + activityId
       );
       let data = await response.json();
+      this.QandA = data;
+
       console.log("問與答", data);
     },
     //#endregion
@@ -543,6 +598,76 @@ export default {
           console.error("Error:", error);
         });
     },
+    ask() {
+      let qcontent = this.askContent;
+      this.qerromsg = "";
+
+      //驗證輸入內容
+      if (
+        qcontent == null ||
+        qcontent.length == 0 ||
+        qcontent.trim().length < 1
+      ) {
+        this.qerromsg = "請輸入內容";
+        return;
+      }
+
+      const askData = {
+        memberId: this.memberId,
+        activityId: this.details.activityId,
+        content: this.askContent,
+      };
+      console.log(askData);
+      this.askContent = "";
+      fetch("https://localhost:7259/api/ActivityQnA/Ask", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(askData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          this.QandA.push({
+            nickName: data.nickName,
+            photoSticker: data.photoSticker,
+            activityId: data.activityId,
+            qId: data.qId,
+            qContent: data.qContent,
+            qDateCreated: data.qDateCreated,
+            memberId: this.memberId,
+            aId: null,
+            aContent: null,
+            aDateCreated: null,
+          });
+          //append發問內容
+        });
+      //     $("#question").append(`<div id="${data.qId}" class="QAlist">
+      //   <div class="question">
+      //     <div class="user d-flex align-items-center">
+      //       <img class="quser" src="${data.photoSticker}" alt="" />
+      //       <p class="ms-4">${data.nickName}</p>
+      //     </div>
+      //     <div class="date">${getDate(data.qDateCreated)}</div>
+      //     <div class="qcontent">
+      //       <p>
+      //         ${data.qContent}
+      //       </p>
+      //     </div>
+
+      //   </div>
+      //   <button class="deleteQcontent" deleteId="${
+      //     data.qId
+      //   }"><i class="fa-solid fa-trash"></i></button>
+      //   </div>
+      //   `);
+      //   })
+
+      //   .catch((error) => {
+      //     console.error("Error:", error);
+      //   });
+    },
   },
 };
 </script>
@@ -550,6 +675,7 @@ export default {
 <style scoped>
 .detailpage {
   min-height: 100vh;
+  max-height: fit-content;
   background-color: #fff;
   width: 95%;
   border-radius: 15px;
@@ -705,7 +831,7 @@ p {
 }
 
 /* 超小尺寸手機不顯示同類推薦圖 */
-@media (max-width: 280px) {
+@media (max-width: 371px) {
   .sameImg {
     display: none;
   }
