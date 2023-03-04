@@ -32,6 +32,7 @@
           <!-- 活動未舉辦可收藏 （有登入可收藏）-->
           <button
             v-else-if="this.saveStatus.statusId == 3 && this.memberId != 0"
+            @click="save($event)"
             class="saveBtn"
             :activityId="this.saveStatus.activityId"
             :memberId="this.memberId"
@@ -55,6 +56,7 @@
             v-else-if="
               this.saveStatus.statusId == 4 || this.saveStatus.statusId == 5
             "
+            @click="unsave($event)"
             type="button"
             class="unsaveBtn"
             :deleteId="saveStatus.unSaveId"
@@ -278,59 +280,6 @@ export default {
     this.getQandA();
     this.getSameCategory();
     this.initMap();
-
-    $("body").on("click", ".saveBtn", function (e) {
-      //有登入會員才能按
-
-      let activityId = $(this).attr("activityId");
-      let memberId = $(this).attr("memberId");
-      $(this)[0].innerHTML = `<i style="font-size: 25px;
-  color: #e9ca89;" 
-        class="fa-solid fa-bookmark"></i>`;
-      //$(this).attr("deleteId", 0); //避免還沒跑完（按鈕還沒變取消收藏鈕）又按一次
-      //console.log(activityId);
-      let saveData = {
-        memberId: memberId,
-        activityId: activityId,
-      };
-      fetch("https://localhost:7259/api/ActivitySave/Save", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(saveData),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Success:", data);
-          $(this).attr("deleteId", data.activityCollectionId);
-          $(this).attr("class", "unsaveBtn");
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-      //console.log(saveData);
-    });
-
-    $("body").on("click", ".unsaveBtn", function (e) {
-      //有登入會員才能按
-      $(this)[0].innerHTML = `<i style="font-size: 25px;
-  color: #e9ca89;" class="fa-regular fa-bookmark"></>`;
-      let deleteId = $(this).attr("deleteId");
-
-      fetch("https://localhost:7259/api/ActivitySave/UnSave/" + deleteId, {
-        method: "Delete",
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Success:", data);
-          $(this).attr("class", "saveBtn");
-          $(this).attr("deleteId", 0);
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-    });
   },
   methods: {
     //#region 取得memberId&activityId
@@ -510,6 +459,69 @@ export default {
       console.log("相同類別的活動", data);
     },
     //#endregion
+
+    save(event) {
+      event.stopPropagation();
+      let saveBtn;
+      if (event.target.tagName.toLowerCase() === "button") {
+        saveBtn = event.target;
+      } else if (event.target.tagName.toLowerCase() === "i") {
+        saveBtn = event.currentTarget;
+      }
+
+      let activityId = saveBtn.getAttribute("activityId");
+      let memberId = saveBtn.getAttribute("memberId");
+      saveBtn.innerHTML = `<i style=" font-size: 25px;
+  color: #e9ca89;"
+        class="fa-solid fa-bookmark"></i>`;
+      console.log(activityId);
+      let saveData = {
+        memberId: memberId,
+        activityId: activityId,
+      };
+      fetch("https://localhost:7259/api/ActivitySave/Save", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(saveData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Success:", data);
+          this.getSave();
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    },
+    unsave(event) {
+      event.stopPropagation();
+
+      let unsaveBtn;
+      if (event.target.tagName.toLowerCase() === "button") {
+        unsaveBtn = event.target;
+      } else if (event.target.tagName.toLowerCase() === "i") {
+        unsaveBtn = event.currentTarget;
+      }
+      console.log(unsaveBtn);
+      unsaveBtn.innerHTML = `<i style=" font-size: 25px;
+  color: #e9ca89;" class="fa-regular fa-bookmark"></>`;
+
+      let deleteId = unsaveBtn.getAttribute("deleteId");
+      // console.log(deleteId);
+      fetch("https://localhost:7259/api/ActivitySave/UnSave/" + deleteId, {
+        method: "Delete",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Success:", data);
+          this.getSave();
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    },
   },
 };
 </script>

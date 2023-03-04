@@ -198,66 +198,7 @@ export default {
     // 获取 JSON 数据
     this.fetchActivityData();
 
-    // $("body").on("click", ".saveBtn", function (e) {
-    //   //有登入會員才能按
-    //   let numOfCollection = Number($(this).next().text());
-    //   $(this)
-    //     .next()
-    //     .text(`${numOfCollection + 1}`);
-    //   let activityId = $(this).attr("activityId");
-    //   let memberId = $(this).attr("memberId");
-    //   $(this)[0].innerHTML = `<i style="width: 16px;
-    //     color: #444444;
-    //     margin-right: 10px;"
-    //     class="fa-solid fa-bookmark"></i>`;
-    //   //$(this).attr("deleteId", 0); //避免還沒跑完（按鈕還沒變取消收藏鈕）又按一次
-    //   //console.log(activityId);
-    //   let saveData = {
-    //     memberId: memberId,
-    //     activityId: activityId,
-    //   };
-    //   fetch("https://localhost:7259/api/ActivitySave/Save", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(saveData),
-    //   })
-    //     .then((response) => response.json())
-    //     .then((data) => {
-    //       console.log("Success:", data);
-    //       $(this).attr("deleteId", data.activityCollectionId);
-    //       $(this).attr("class", "unsaveBtn");
-    //     })
-    //     .catch((error) => {
-    //       console.error("Error:", error);
-    //     });
-    //   //console.log(saveData);
-    // });
-    //   $(".unsaveBtn").on("click", function (e) {
-    //     //有登入會員才能按
-    //     $(this)[0].innerHTML = `<i style="width: 16px;
-    // color: #444444;
-    // margin-right: 10px;" class="fa-regular fa-bookmark"></>`;
-    //     let deleteId = $(this).attr("deleteId");
-    //     let numOfCollection = Number($(this).next().text());
-    //     $(this)
-    //       .next()
-    //       .text(numOfCollection - 1);
-    //     // console.log(deleteId);
-    //     fetch("https://localhost:7259/api/ActivitySave/UnSave/" + deleteId, {
-    //       method: "Delete",
-    //     })
-    //       .then((response) => response.json())
-    //       .then((data) => {
-    //         console.log("Success:", data);
-    //         $(this).attr("class", "saveBtn");
-    //         $(this).attr("deleteId", 0);
-    //       })
-    //       .catch((error) => {
-    //         console.error("Error:", error);
-    //       });
-    //   });
+    
     //卡片上的address tag點到時
     this.$nextTick(() => {
       this.result.forEach((city) => {
