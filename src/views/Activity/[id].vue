@@ -185,26 +185,28 @@
               class="QandA"
               id="question"
             >
-              <div class="QAlist">
-                <div class="question">
-                  <div class="user d-flex align-items-center">
-                    <img class="quser" :src="item.photoSticker" alt="" />
-                    <p class="ms-4">{{ item.nickName }}</p>
-                  </div>
+              <div class="QAlist d-flex align-items-center mb-2 p-3">
+                <div>
+                  <div class="question">
+                    <div class="user d-flex align-items-center">
+                      <img class="quser" :src="item.photoSticker" alt="" />
+                      <p class="ms-4">{{ item.nickName }}</p>
+                    </div>
 
-                  <div class="qcontent">
-                    <p>{{ item.qContent }}</p>
+                    <div class="qcontent">
+                      <p>{{ item.qContent }}</p>
+                    </div>
+                    <div class="date">{{ item.qDateCreated }}</div>
                   </div>
-                  <div class="date">{{ item.qDateCreated }}</div>
                 </div>
+                <button
+                  v-if="item.memberId == this.memberId"
+                  @click="deleteQ(item.qId, index)"
+                  class="deleteQcontent"
+                >
+                  <i class="fa-solid fa-trash"></i>
+                </button>
               </div>
-              <button
-                v-if="item.memberId == this.memberId"
-                @click="deleteQ(item.qId, index)"
-                class="deleteQcontent"
-              >
-                <i class="fa-solid fa-trash"></i>
-              </button>
               <div v-if="item.aId != null" class="answer m-2">
                 <div class="acontent">
                   <p>↳ {{ item.aContent }}</p>
@@ -732,6 +734,7 @@ p {
 }
 .qcontent {
   display: inline-block;
+  max-width: 800px;
   padding: 10px;
   margin-top: 10px;
   border-radius: 10px;
@@ -740,11 +743,7 @@ p {
 .date {
   color: #686868;
   margin-top: 3px;
-  font-size: 14px;
-}
-.QAlist {
-  padding: 10px;
-  border-bottom: 1px solid #fcf7f0;
+  font-size: 12px;
 }
 .acontent {
   border-radius: 10px;
@@ -758,6 +757,9 @@ p {
   border: 0px;
   width: fit-content;
   height: fit-content;
+  padding: 10px;
+  margin-right: 20px;
+  margin-left: auto;
 }
 .deleteQcontent i {
   font-size: 14px;
