@@ -1,7 +1,7 @@
 <script>
 import { useRouter } from "vue-router";
-
 export default {
+  
   data() {
     return {
       user: {
@@ -36,6 +36,7 @@ export default {
             document.cookie = `token=${response}`;
             // const router=useRouter();
             // router.push("/")
+            
             history.go(-1);
           }
         })
@@ -93,7 +94,9 @@ export default {
 
 <style scoped>
 /* modal start */
-
+body {
+  background-color: #fff;
+}
 .modal-content {
   background-color: #fff;
   display: flex;

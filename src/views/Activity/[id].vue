@@ -506,7 +506,10 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           console.log("Success:", data);
-          this.getSave();
+          if (data.result) {
+            this.saveStatus.statusId = 4;
+            this.saveStatus.unSaveId = data.activityCollectionId;
+          }
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -533,7 +536,8 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           console.log("Success:", data);
-          this.getSave();
+          this.saveStatus.statusId = 3;
+          this.saveStatus.unSaveId = 0;
         })
         .catch((error) => {
           console.error("Error:", error);
