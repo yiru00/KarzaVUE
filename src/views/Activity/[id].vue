@@ -1,231 +1,238 @@
 <template>
   <!-- {{ data.activityId }} -->
-  <div  class="detailpage">
-    <div class="row justify-content-center m-4">
-      <div class="col-12 col-md-6" id="activityimg">
-        <img class="coverImage" :src="details.coverImage" alt="" />
-      </div>
-      <div class="col-12 col-md-6" id="activityinfo">
-        <p class="activityName">{{ details.activityName }}</p>
-        <p>拍攝類型：{{ details.categoryName }}</p>
-        <p>建議器材：{{ details.recommendation }}</p>
-        <p>活動時間：{{ details.gatheringTime }}</p>
-        <p>
-          集合地點：<span id="destination">{{ details.address }}</span>
-        </p>
-        <p>
-          活動名額：{{ details.memberLimit }}人 || 剩餘{{
-            details.memberLimit - details.numOfEnrolment
-          }}人
-        </p>
-        <p>報名截止日：{{ details.deadline }}</p>
-        <div class="buttonList mt-2">
-          <!-- v-if -->
-          <!-- 活動已舉辦、且未收藏 -->
-          <button
-            v-if="this.saveStatus.statusId == 2"
-            class="saveBtn1"
-            disabled
-          >
-            <i class="fa-regular fa-bookmark"></i>
-          </button>
-          <!-- 活動未舉辦可收藏 （有登入可收藏）-->
-          <button
-            v-else-if="this.saveStatus.statusId == 3 && this.memberId != 0"
-            @click="save($event)"
-            class="saveBtn"
-            :activityId="this.saveStatus.activityId"
-            :memberId="this.memberId"
-          >
-            <i class="fa-regular fa-bookmark"></i>
-          </button>
-
-          <!-- 活動未舉辦可收藏 （無登入可收藏）-->
-          <button
-            v-else-if="this.saveStatus.statusId == 3 && this.memberId == 0"
-            data-bs-toggle="modal"
-            data-bs-target="#loginModal"
-            type="button"
-            class="saveBtn1"
-          >
-            <i class="fa-regular fa-bookmark"></i>
-          </button>
-
-          <!-- 活動未舉辦已收藏--><!-- 活動未舉辦已收藏-->
-          <button
-            v-else-if="
-              this.saveStatus.statusId == 4 || this.saveStatus.statusId == 5
-            "
-            @click="unsave($event)"
-            type="button"
-            class="unsaveBtn"
-            :deleteId="saveStatus.unSaveId"
-          >
-            <i class="fa-solid fa-bookmark"></i>
-          </button>
-
-          <!-- v-if -->
-
-          <button
-            v-if="this.enrollStatus.statusId == 2"
-            class="enrollBtn1"
-            disabled
-          >
-            報名已截止
-          </button>
-
-          <button
-            v-else-if="this.enrollStatus.statusId == 3"
-            class="enrollBtn1"
-            disabled
-          >
-            已額滿
-          </button>
-
-          <!-- 活動可報名未登入 -->
-          <button
-            v-else-if="this.enrollStatus.statusId == 4 && this.memberId == 0"
-            data-bs-toggle="modal"
-            data-bs-target="#loginModal"
-            type="button"
-            class="enrollBtn1"
-          >
-            報名
-          </button>
-
-          <!-- 活動可報名有登入 -->
-          <button
-            v-else-if="this.enrollStatus.statusId == 4 && this.memberId != 0"
-            type="button"
-            class="enrollBtn"
-          >
-            報名
-          </button>
-
-          <!-- 已報名 -->
-          <button
-            v-else-if="this.enrollStatus.statusId == 5"
-            type="button"
-            class="unenrollBtn"
-          >
-            取消報名（已報名）
-          </button>
+  <div class="detailpage">
+    <div v-show="!isloading">
+      <div class="row justify-content-center m-4">
+        <div class="col-12 col-md-6" id="activityimg">
+          <img class="coverImage" :src="details.coverImage" alt="" />
         </div>
-      </div>
-    </div>
-
-    <div class="row justify-content-center m-4">
-      <div class="col-12 col-md-6">
-        <h5>活動說明</h5>
-        <div id="description">
-          {{ details.activityDescription }}
-        </div>
-      </div>
-      <div class="col-12 col-md-6">
-        <h5>講師資訊</h5>
-        <div
-          id="instructorCard"
-          class="d-flex justify-content-center align-items-center"
-        >
-          <div class="instructorCard">
-            <div
-              class="instructorPhoto d-flex justify-content-center align-items-center"
+        <div class="col-12 col-md-6" id="activityinfo">
+          <p class="activityName">{{ details.activityName }}</p>
+          <p>拍攝類型：{{ details.categoryName }}</p>
+          <p>建議器材：{{ details.recommendation }}</p>
+          <p>活動時間：{{ details.gatheringTime }}</p>
+          <p>
+            集合地點：<span id="destination">{{ details.address }}</span>
+          </p>
+          <p>
+            活動名額：{{ details.memberLimit }}人 || 剩餘{{
+              details.memberLimit - details.numOfEnrolment
+            }}人
+          </p>
+          <p>報名截止日：{{ details.deadline }}</p>
+          <div class="buttonList mt-2">
+            <!-- v-if -->
+            <!-- 活動已舉辦、且未收藏 -->
+            <button
+              v-if="this.saveStatus.statusId == 2"
+              class="saveBtn1"
+              disabled
             >
-              <img
-                :src="details.resumePhoto"
-                alt=""
-                referrerpolicy="no-referrer"
+              <i class="fa-regular fa-bookmark"></i>
+            </button>
+            <!-- 活動未舉辦可收藏 （有登入可收藏）-->
+            <button
+              v-else-if="this.saveStatus.statusId == 3 && this.memberId != 0"
+              @click="save($event)"
+              class="saveBtn"
+              :activityId="this.saveStatus.activityId"
+              :memberId="this.memberId"
+            >
+              <i class="fa-regular fa-bookmark"></i>
+            </button>
+
+            <!-- 活動未舉辦可收藏 （無登入可收藏）-->
+            <button
+              v-else-if="this.saveStatus.statusId == 3 && this.memberId == 0"
+              data-bs-toggle="modal"
+              data-bs-target="#loginModal"
+              type="button"
+              class="saveBtn1"
+            >
+              <i class="fa-regular fa-bookmark"></i>
+            </button>
+
+            <!-- 活動未舉辦已收藏--><!-- 活動未舉辦已收藏-->
+            <button
+              v-else-if="
+                this.saveStatus.statusId == 4 || this.saveStatus.statusId == 5
+              "
+              @click="unsave($event)"
+              type="button"
+              class="unsaveBtn"
+              :deleteId="saveStatus.unSaveId"
+            >
+              <i class="fa-solid fa-bookmark"></i>
+            </button>
+
+            <!-- v-if -->
+
+            <button
+              v-if="this.enrollStatus.statusId == 2"
+              class="enrollBtn1"
+              disabled
+            >
+              報名已截止
+            </button>
+
+            <button
+              v-else-if="this.enrollStatus.statusId == 3"
+              class="enrollBtn1"
+              disabled
+            >
+              已額滿
+            </button>
+
+            <!-- 活動可報名未登入 -->
+            <button
+              v-else-if="this.enrollStatus.statusId == 4 && this.memberId == 0"
+              data-bs-toggle="modal"
+              data-bs-target="#loginModal"
+              type="button"
+              class="enrollBtn1"
+            >
+              報名
+            </button>
+
+            <!-- 活動可報名有登入 -->
+            <button
+              v-else-if="this.enrollStatus.statusId == 4 && this.memberId != 0"
+              type="button"
+              class="enrollBtn"
+            >
+              報名
+            </button>
+
+            <!-- 已報名 -->
+            <button
+              v-else-if="this.enrollStatus.statusId == 5"
+              type="button"
+              class="unenrollBtn"
+            >
+              取消報名（已報名）
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-center m-4">
+        <div class="col-12 col-md-6">
+          <h5>活動說明</h5>
+          <div id="description">
+            {{ details.activityDescription }}
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <h5>講師資訊</h5>
+          <div
+            id="instructorCard"
+            class="d-flex justify-content-center align-items-center"
+          >
+            <div class="instructorCard">
+              <div
+                class="instructorPhoto d-flex justify-content-center align-items-center"
+              >
+                <img
+                  :src="details.resumePhoto"
+                  alt=""
+                  referrerpolicy="no-referrer"
+                />
+              </div>
+              <div
+                class="instructorInfo d-flex flex-column justify-content-around align-items-center"
+              >
+                <p class="instrutorName">{{ details.instructorName }}</p>
+                <p class="instructorDes">{{ details.instructorDescription }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-center m-4">
+        <div class="col">
+          <h5>查看路線</h5>
+          <div class="d-flex justify-content-between">
+            <div id="floating-panel">
+              <label for="mode">移動方式：</label>
+              <select v-model="map.selectedMode" id="mode" class="mode">
+                <option value="DRIVING">開車</option>
+                <option value="WALKING">走路</option>
+                <option value="BICYCLING">腳踏車</option>
+                <option value="TRANSIT">大眾運輸</option>
+              </select>
+              <label for="origin">出發地點：</label>
+              <input
+                v-model="map.destination"
+                type="text"
+                id="origin"
+                class="origin"
               />
             </div>
+            <span class="routes"></span>
+          </div>
+          <div id="map"></div>
+        </div>
+      </div>
+
+      <div class="row justify-content-center m-4">
+        <div class="col">
+          <h5>問與答</h5>
+
+          <div class="QandA" id="question"></div>
+
+          <div class="askInput d-flex mt-4">
+            <textarea
+              name="content"
+              id="askcontent"
+              class="askContent"
+              maxlength="300"
+              placeholder="提出和此活動有關的問題！"
+            ></textarea>
+
+            <button class="askBtn" id="ask">發問</button>
+          </div>
+          <p class="qerromsg"></p>
+        </div>
+      </div>
+
+      <div class="row justify-content-center m-4">
+        <div v-if="sameCategory.length > 0" class="col" id="sameCategory">
+          <div>
+            <h5>同類型推薦</h5>
+          </div>
+          <div class="row" id="sameCategoryCard">
             <div
-              class="instructorInfo d-flex flex-column justify-content-around align-items-center"
+              v-for="(e, index) in sameCategory"
+              :key="index"
+              class="col-12 col-md-6"
             >
-              <p class="instrutorName">{{ details.instructorName }}</p>
-              <p class="instructorDes">{{ details.instructorDescription }}</p>
+              <router-link :to="e.route" class="sameLink">
+                <div class="sameList">
+                  <div>
+                    <img class="sameImg" :src="e.coverImage" alt="活動封面圖" />
+                  </div>
+
+                  <div class="sameInfo">
+                    <p class="activityName">{{ e.activityName }}</p>
+                    <p class="samedate">
+                      <i class="fa-solid fa-calendar-days"></i
+                      >{{ e.gatheringTime }}
+                    </p>
+                    <p class="ellipsis">{{ e.description.slice(0, 8) }}...</p>
+                  </div>
+                </div>
+              </router-link>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="row justify-content-center m-4">
-      <div class="col">
-        <h5>查看路線</h5>
-        <div class="d-flex justify-content-between">
-          <div id="floating-panel">
-            <label for="mode">移動方式：</label>
-            <select v-model="map.selectedMode" id="mode" class="mode">
-              <option value="DRIVING">開車</option>
-              <option value="WALKING">走路</option>
-              <option value="BICYCLING">腳踏車</option>
-              <option value="TRANSIT">大眾運輸</option>
-            </select>
-            <label for="origin">出發地點：</label>
-            <input
-              v-model="map.destination"
-              type="text"
-              id="origin"
-              class="origin"
-            />
-          </div>
-          <span class="routes"></span>
-        </div>
-        <div id="map"></div>
-      </div>
+    <div v-show="isloading" class="image-container">
+      <img src="../../assets/Spinner-1s-200px-2.gif" alt="" />
     </div>
 
-    <div class="row justify-content-center m-4">
-      <div class="col">
-        <h5>問與答</h5>
-
-        <div class="QandA" id="question"></div>
-
-        <div class="askInput d-flex mt-4">
-          <textarea
-            name="content"
-            id="askcontent"
-            class="askContent"
-            maxlength="300"
-            placeholder="提出和此活動有關的問題！"
-          ></textarea>
-
-          <button class="askBtn" id="ask">發問</button>
-        </div>
-        <p class="qerromsg"></p>
-      </div>
-    </div>
-
-    <div class="row justify-content-center m-4">
-      <div v-if="sameCategory.length > 0" class="col" id="sameCategory">
-        <div>
-          <h5>同類型推薦</h5>
-        </div>
-        <div class="row" id="sameCategoryCard">
-          <div
-            v-for="(e, index) in sameCategory"
-            :key="index"
-            class="col-12 col-md-6"
-          >
-            <router-link :to="e.route" class="sameLink">
-              <div class="sameList">
-                <div>
-                  <img class="sameImg" :src="e.coverImage" alt="活動封面圖" />
-                </div>
-
-                <div class="sameInfo">
-                  <p class="activityName">{{ e.activityName }}</p>
-                  <p class="samedate">
-                    <i class="fa-solid fa-calendar-days"></i
-                    >{{ e.gatheringTime }}
-                  </p>
-                  <p class="ellipsis">{{ e.description.slice(0, 8) }}...</p>
-                </div>
-              </div>
-            </router-link>
-          </div>
-        </div>
-      </div>
-    </div>
     <div class="d-flex justify-content-center"><loginModal /></div>
   </div>
 </template>
@@ -242,15 +249,19 @@ export default {
     $route(to, from) {
       // 當路由切換時，這個監聽器會被觸發
       // 可以在這裡執行某些操作，例如更新數據
+      this.loading();
       this.getMemberId();
       console.log(this.post);
       this.fetchDetails();
-      this.initMap();
       this.getEnroll();
       this.getSave();
+      this.initMap();
+
       this.getQandA();
       this.getSameCategory();
+
       console.log("路由發生了變化：", to.path, from.path);
+      this.scrollToTop();
     },
   },
   data() {
@@ -264,23 +275,34 @@ export default {
         selectedMode: "DRIVING",
         destination: " ",
       },
-
       memberId: 0,
+      isloading: true,
     };
   },
 
   mounted() {
     this.getMemberId();
-    console.log(this.memberId);
     this.fetchDetails();
     this.getEnroll();
     this.getSave();
     this.getQandA();
     this.getSameCategory();
     this.initMap();
-    this.isLoading();
+    this.loading();
   },
   methods: {
+    scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth", // 平滑滚动
+      });
+    },
+    loading() {
+      this.isloading = true;
+      setTimeout(() => {
+        this.isloading = false;
+      }, 1000);
+    },
     //#region 取得memberId&activityId
     async getMemberId() {
       let Id = 0;
@@ -521,13 +543,13 @@ export default {
           console.error("Error:", error);
         });
     },
-    
   },
 };
 </script>
 
 <style scoped>
 .detailpage {
+  min-height: 100vh;
   background-color: #fff;
   width: 95%;
   border-radius: 15px;
@@ -537,6 +559,18 @@ export default {
   margin-right: auto;
 }
 
+.image-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.image-container img {
+  width: 80%; /* 可根据需要进行调整 */
+  height: auto;
+  max-height: 80%; /* 可根据需要进行调整 */
+}
 h5 {
   text-decoration: 4px underline #afc7d8;
   margin-bottom: 30px;
