@@ -1,4 +1,4 @@
-<template @load="fetchData">
+<template >
   <div>
     <!-- {{result}} -->
     <!-- <router-link to="/Activity/12">go</router-link> -->

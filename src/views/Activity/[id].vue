@@ -22,14 +22,19 @@
         <div class="buttonList mt-2">
           <!-- v-if -->
           <!-- 活動已舉辦、且未收藏 -->
-          <button v-if="this.saveStatus.statusId == 2" class="saveBtn1" disabled>
+          <button
+            v-if="this.saveStatus.statusId == 2"
+            class="saveBtn1"
+            disabled
+          >
             <i class="fa-regular fa-bookmark"></i>
           </button>
           <!-- 活動未舉辦可收藏 （有登入可收藏）-->
           <button
             v-else-if="this.saveStatus.statusId == 3 && this.memberId != 0"
             class="saveBtn"
-            :activityId="saveStatus.activityId"
+            :activityId="this.saveStatus.activityId"
+            :memberId="this.memberId"
           >
             <i class="fa-regular fa-bookmark"></i>
           </button>
@@ -47,7 +52,9 @@
 
           <!-- 活動未舉辦已收藏--><!-- 活動未舉辦已收藏-->
           <button
-            v-else-if="this.saveStatus.statusId == 4 || this.saveStatus.statusId == 5"
+            v-else-if="
+              this.saveStatus.statusId == 4 || this.saveStatus.statusId == 5
+            "
             type="button"
             class="unsaveBtn"
             :deleteId="saveStatus.unSaveId"
@@ -233,7 +240,7 @@ export default {
     $route(to, from) {
       // 當路由切換時，這個監聽器會被觸發
       // 可以在這裡執行某些操作，例如更新數據
-      this.getPost();
+      this.getMemberId();
       console.log(this.post);
       this.fetchDetails();
       this.initMap();
@@ -260,7 +267,7 @@ export default {
       memberId: 0,
     };
   },
-  
+
   mounted() {
     this.getMemberId();
     console.log(this.memberId);
@@ -271,11 +278,64 @@ export default {
     this.getQandA();
     this.getSameCategory();
     this.initMap();
+
+    $("body").on("click", ".saveBtn", function (e) {
+      //有登入會員才能按
+
+      let activityId = $(this).attr("activityId");
+      let memberId = $(this).attr("memberId");
+      $(this)[0].innerHTML = `<i style="font-size: 25px;
+  color: #e9ca89;" 
+        class="fa-solid fa-bookmark"></i>`;
+      //$(this).attr("deleteId", 0); //避免還沒跑完（按鈕還沒變取消收藏鈕）又按一次
+      //console.log(activityId);
+      let saveData = {
+        memberId: memberId,
+        activityId: activityId,
+      };
+      fetch("https://localhost:7259/api/ActivitySave/Save", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(saveData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Success:", data);
+          $(this).attr("deleteId", data.activityCollectionId);
+          $(this).attr("class", "unsaveBtn");
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+      //console.log(saveData);
+    });
+
+    $("body").on("click", ".unsaveBtn", function (e) {
+      //有登入會員才能按
+      $(this)[0].innerHTML = `<i style="font-size: 25px;
+  color: #e9ca89;" class="fa-regular fa-bookmark"></>`;
+      let deleteId = $(this).attr("deleteId");
+
+      fetch("https://localhost:7259/api/ActivitySave/UnSave/" + deleteId, {
+        method: "Delete",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Success:", data);
+          $(this).attr("class", "saveBtn");
+          $(this).attr("deleteId", 0);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    });
   },
   methods: {
     //#region 取得memberId&activityId
     async getMemberId() {
-      let memberId = 0;
+      let Id = 0;
       let token = $.cookie("token");
       let options = {
         method: "GET",
@@ -283,13 +343,22 @@ export default {
           Authorization: `Bearer ${token}`,
         },
       };
-      let response = await fetch(
-        "https://localhost:7259/api/Members/Read",
-        options
-      );
-      let data = await response.json();
-      this.memberId = data;
-      //console.log(data);
+      try {
+        let response = await fetch(
+          "https://localhost:7259/api/Members/Read",
+          options
+        );
+        let data = await response.json();
+        console.log(data);
+        Id = data;
+        this.memberId = Id;
+
+        return Id;
+      } catch (error) {
+        console.log(error);
+        this.memberId = Id;
+        return Id;
+      }
     },
     //#endregion
 
@@ -359,7 +428,7 @@ export default {
 
     //#region 取得報名狀態
     async getEnroll() {
-      let memberId = this.memberId;
+      let memberId = await this.getMemberId();
       const enrolldata = {
         memberId: memberId,
         activityId: this.$route.path.slice(10),
@@ -385,7 +454,7 @@ export default {
     //#region 取得收藏狀態
     async getSave() {
       const savedata = {
-        memberId: this.memberId,
+        memberId: await this.getMemberId(),
         activityId: this.$route.path.slice(10),
       };
       let response = await fetch(
@@ -419,8 +488,9 @@ export default {
     //#region 取得同類活動推薦
     async getSameCategory() {
       let categoryId = await this.fetchDetails();
+      let memberId = await this.getMemberId();
       let categoryData = {
-        memberId: this.memberId,
+        memberId: memberId,
         categoryId: categoryId,
         activityId: this.$route.path.slice(10),
       };
