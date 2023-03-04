@@ -162,8 +162,10 @@
       </div>
     </div>
 
-    <div v-show="isempty" class="nothingPage">nothing</div>
-    <div v-show="isloading" class="loadingPage">loading</div>
+    <div v-show="isempty" class="nothingPage">找不到符合的資料</div>
+    <div v-show="isloading" class="image-container">
+      <img src="../../assets/Spinner-1s-200px-2.gif" alt="" />
+    </div>
     <div class="d-flex justify-content-center"><loginModal /></div>
   </div>
 </template>
@@ -212,6 +214,7 @@ export default {
         });
       });
     });
+
     // 卡片上的categoryTag tag點到時
     this.$nextTick(() => {
       this.result.forEach((categoryId) => {
@@ -223,6 +226,7 @@ export default {
     });
   },
   methods: {
+    //#region 取得活動資訊、設定搜尋結果狀態
     async fetchActivityData() {
       this.isloading = true;
       this.isempty = false;
@@ -256,6 +260,9 @@ export default {
         this.isempty = true;
       }
     },
+    //#endregion
+
+    //#region 設定時間欄位得最大值和預設值
     setTime() {
       let now = new Date(); //取得目前時間
       let time = {
@@ -276,6 +283,9 @@ export default {
       this.input.time = timeStr;
       this.minDate = timeStr;
     },
+    //#endregion
+
+    //#region 點選地區tag時重設輸入欄位並重新取得資料
     Citytag(city) {
       this.input.address = city;
       this.input.activityName = "";
@@ -283,6 +293,9 @@ export default {
       this.setTime();
       this.fetchActivityData();
     },
+    //#endregion
+
+    //#region 點選分類tag時重設輸入欄位並重新取得資料
     Categorytag(categoryId) {
       this.input.address = "";
       this.input.activityName = "";
@@ -290,6 +303,9 @@ export default {
       this.setTime();
       this.fetchActivityData();
     },
+    //#endregion
+
+    //#region getMemberId()設定、回傳memberId 預設=0
     async getMemberId() {
       let Id = 0;
       let token = $.cookie("token");
@@ -315,6 +331,9 @@ export default {
         return Id;
       }
     },
+    //#endregion
+
+    //#region 取得分類
     async getCategory() {
       let response = await fetch(
         "https://localhost:7259/api/Activity/Category"
@@ -322,22 +341,32 @@ export default {
       let data = await response.json();
       this.categoryOption = data;
     },
+    //#endregion
+
+    //#region 收藏活動
     save(event, index) {
       event.stopPropagation();
+      //取得點到的按鈕
       let saveBtn;
       if (event.target.tagName.toLowerCase() === "button") {
         saveBtn = event.target;
       } else if (event.target.tagName.toLowerCase() === "i") {
         saveBtn = event.currentTarget;
       }
+      //收藏數+1
       this.result[index].numOfCollections++;
+
+      //取得資料
       let activityId = saveBtn.getAttribute("activityId");
       let memberId = saveBtn.getAttribute("memberId");
+
+      //更改按鈕圖示
       saveBtn.innerHTML = `<i style="width: 16px;
         color: #444444;
         margin-right: 10px;"
         class="fa-solid fa-bookmark"></i>`;
-      console.log(activityId);
+
+      //收藏
       let saveData = {
         memberId: memberId,
         activityId: activityId,
@@ -352,16 +381,24 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           console.log("Success:", data);
-          this.result[index].statusId = 4;
-          this.result[index].unSaveId = data.activityCollectionId;
-          console.log(this.result[index].statusId);
+
+          //回傳成功收藏=>更改狀態
+          if (data.result) {
+            this.result[index].statusId = 4;
+            this.result[index].unSaveId = data.activityCollectionId;
+          }
         })
         .catch((error) => {
           console.error("Error:", error);
         });
     },
+    //#endregion
+
+    //#region 取消收藏活動
     unsave(event, index) {
       event.stopPropagation();
+
+      //收藏數減1
       this.result[index].numOfCollections--;
       let unsaveBtn;
       if (event.target.tagName.toLowerCase() === "button") {
@@ -369,31 +406,46 @@ export default {
       } else if (event.target.tagName.toLowerCase() === "i") {
         unsaveBtn = event.currentTarget;
       }
-      console.log(unsaveBtn);
-      unsaveBtn.innerHTML = `<i style="width: 16px;
-  color: #444444;
-  margin-right: 10px;" class="fa-regular fa-bookmark"></>`;
 
+      unsaveBtn.innerHTML = `<i style="width: 16px;color: #444444;margin-right: 10px;" 
+                                class="fa-regular fa-bookmark"></>`;
+
+      //取消收藏
       let deleteId = unsaveBtn.getAttribute("deleteId");
-      // console.log(deleteId);
       fetch("https://localhost:7259/api/ActivitySave/UnSave/" + deleteId, {
         method: "Delete",
       })
         .then((response) => response.json())
         .then((data) => {
           console.log("Success:", data);
-          this.result[index].statusId = 3;
-          this.result[index].unSaveId = 0
+          if (data.result) {
+            //更改狀態
+            this.result[index].statusId = 3;
+            this.result[index].unSaveId = 0;
+          }
         })
         .catch((error) => {
           console.error("Error:", error);
         });
     },
+    //#endregion
   },
 };
 </script>
 
 <style scoped>
+.image-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.image-container img {
+  width: 80%; /* 可根据需要进行调整 */
+  height: auto;
+  max-height: 80%; /* 可根据需要进行调整 */
+}
 .nothingPage {
   height: 100%;
   display: flex;
