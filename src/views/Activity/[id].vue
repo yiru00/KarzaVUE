@@ -299,12 +299,12 @@
 import { useRoute } from "vue-router";
 import { reactive } from "vue";
 import loginModal from "../../components/loginModal.vue";
-import alert from "./../../../public/alert.js";
+import utility from "./../../../public/utility.js";
 export default {
   components: {
     loginModal,
   },
-  mixins: [alert],
+  mixins: [utility],
   watch: {
     $route(to, from) {
       // 當路由切換時，這個監聽器會被觸發
@@ -352,6 +352,7 @@ export default {
 
   mounted() {
     this.getMemberId();
+
     this.fetchDetails();
     this.getEnroll();
     this.getSave();
