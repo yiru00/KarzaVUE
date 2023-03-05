@@ -11,7 +11,7 @@
         <h3>登入會員使用更多功能！</h3>
         <div class="modal-body">
           <div class="loginInput">
-            <div class="form-floating mb-3">
+            <div class="form-floating mb-3" @keydown.enter="userLogin">
               <input
                 v-model="user.email"
                 name="account"
