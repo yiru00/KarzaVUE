@@ -222,6 +222,7 @@
           <div class="askInput d-flex mt-4">
             <textarea
               v-model="askContent"
+              @keydown="errmsg"
               name="content"
               id="askcontent"
               class="askContent"
@@ -508,6 +509,12 @@ export default {
     },
     //#endregion
 
+    //#region 問與答輸入提示在文字輸入時不顯示
+    errmsg(){
+      this.qerromsg=""
+    },
+    //#endregion
+
     //#region 取得同類活動推薦
     async getSameCategory() {
       let categoryId = await this.fetchDetails();
@@ -783,6 +790,7 @@ p {
   margin-top: 10px;
   border-radius: 10px;
   background-color: #fcf7f0;
+  white-space: pre-wrap;
 }
 .date {
   color: #686868;
@@ -792,6 +800,7 @@ p {
 .acontent {
   border-radius: 10px;
   word-wrap: break-word;
+  white-space: pre-wrap;
 }
 .qerromsg {
   color: #d39899;

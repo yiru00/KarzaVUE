@@ -2,10 +2,11 @@
   <div class="searchPage">
     <!-- {{result}} -->
     <!-- <router-link to="/Activity/12">go</router-link> -->
-    <form @change="fetchActivityData" class="row inputSearch">
+    <form class="row inputSearch">
       <div class="col-lg-3 col-md-4 col-12">
         <input
           v-model="input.activityName"
+          @keydown.enter="fetchActivityData"
           class="inputName"
           name="activityName"
           id="activityName"
@@ -15,6 +16,7 @@
       </div>
       <div class="col-lg-2 col-md-4 col-6">
         <select
+          @change="fetchActivityData"
           v-model="input.categoryId"
           class="inputCategory"
           name="categoryId"
@@ -33,6 +35,7 @@
       </div>
       <div class="col-lg-2 col-md-4 col-6">
         <select
+          @change="fetchActivityData"
           v-model="input.address"
           class="inputAddress"
           name="address"
@@ -66,6 +69,7 @@
       </div>
       <div class="col-lg-5 col-md-12 col-12">
         <input
+          @change="fetchActivityData"
           v-model="input.time"
           :min="minDate"
           class="inputTime"
