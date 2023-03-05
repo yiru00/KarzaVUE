@@ -89,7 +89,7 @@
               type="button"
               class="enrollBtn1"
             >
-              報名
+              報名活動
             </button>
 
             <!-- 活動可報名有登入 -->
@@ -97,8 +97,9 @@
               v-else-if="this.enrollStatus.statusId == 4 && this.memberId != 0"
               type="button"
               class="enrollBtn"
+              @click="enroll($event)"
             >
-              報名
+              報名活動
             </button>
 
             <!-- 已報名 -->
@@ -106,6 +107,8 @@
               v-else-if="this.enrollStatus.statusId == 5"
               type="button"
               class="unenrollBtn"
+              :deleteId="this.enrollStatus.deleteId"
+              @click="unenroll(this.enrollStatus.deleteId)"
             >
               取消報名（已報名）
             </button>
@@ -667,6 +670,47 @@ export default {
         });
     },
     //#endregion
+
+    enroll(event) {
+      let enrollData = {
+        memberId: this.memberId,
+        activityId: this.$route.path.slice(10),
+      };
+      fetch("https://localhost:7259/api/ActivtiyEnroll/Enroll", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(enrollData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Success:", data);
+          this.enrollStatus.statusId = 5;
+          this.enrollStatus.deleteId = data.deleteId;
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    },
+
+    unenroll(deleteId) {
+      fetch(
+        "https://localhost:7259/api/ActivtiyEnroll/CancelEnroll/" + deleteId,
+        {
+          method: "Delete",
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Success:", data);
+          this.enrollStatus.statusId = 4;
+          this.enrollStatus.deleteId = 0;
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    },
   },
 };
 </script>
