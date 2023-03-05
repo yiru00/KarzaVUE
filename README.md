@@ -1,29 +1,35 @@
-# karzaProject
-
-This template should help get you started developing with Vue 3 in Vite.
-
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
+## 共用登入modal、alert
+在.vue中引用下方內容就可以使用
+(路徑輸入相對位置)
+```javascript
+<script>
+import loginModal from "@/components/loginModal.vue";
+import utility from "@/public/utility.js"
+export default {
+  components: {
+    loginModal,
+  },
+  mixins: [utility],
+}
+</script>
 ```
+### 使用方法
 
-### Compile and Hot-Reload for Development
+####   **登入**
 
-```sh
-npm run dev
-```
+點擊要顯示登入modal的按鈕：
+`<button data-bs-toggle="modal"
+                data-bs-target="#loginModal"></button>` 
 
-### Compile and Minify for Production
 
-```sh
-npm run build
-```
+####   **alert**
+使用 `this.showAlert(string message)`
+
+ex: `this.showAlert("成功加入購物車")`
+
+在畫面下方會顯示傳入字串的alert
+
+####   **memberId**
+使用 `this.fetchMemberId()`
+
+有登入回傳memberId，沒登入回傳0
