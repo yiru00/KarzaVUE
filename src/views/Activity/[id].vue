@@ -172,7 +172,7 @@
               />
             </div>
             <button @click="getLocation" id="geo">Get Location</button>
-            <span class="routes"></span>
+            <span class="routes">{{ routes }}</span>
           </div>
           <div id="map"></div>
         </div>
@@ -307,7 +307,13 @@ export default {
     $route(to, from) {
       // 當路由切換時，這個監聽器會被觸發
       // 可以在這裡執行某些操作，例如更新數據
-      // this.loading();
+      this.geo = null;
+      this.map= {
+        selectedMode: "TRANSIT",
+        origin: " ",
+      };
+      this.routes="";
+      this.initMap();
       this.scrollToTop();
       this.getMemberId();
       this.fetchDetails();
@@ -316,7 +322,6 @@ export default {
 
       this.getQandA();
       this.getSameCategory();
-      this.initMap();
 
       console.log("路由發生了變化：", to.path, from.path);
     },
@@ -329,7 +334,7 @@ export default {
       QandA: [],
       sameCategory: [],
       map: {
-        selectedMode: "",
+        selectedMode: "TRANSIT",
         origin: " ",
       },
       memberId: 0,
@@ -339,6 +344,7 @@ export default {
       latitude: null,
       longitude: null,
       geo: null,
+      routes:""
     };
   },
 
@@ -349,8 +355,8 @@ export default {
     this.getSave();
     this.getQandA();
     this.getSameCategory();
-
     this.initMap();
+
     // this.loading();
   },
   methods: {
@@ -473,9 +479,7 @@ export default {
           let distance = legs.distance.text;
           let duration = legs.duration.text;
           console.log(distance, duration);
-          document.querySelector(
-            ".routes"
-          ).innerText = `距離${distance}，花費${duration}`;
+          this.routes = `距離${distance}，花費${duration}`;
         })
         .catch((e) =>
           console.log("Directions request failed due to " + status)
