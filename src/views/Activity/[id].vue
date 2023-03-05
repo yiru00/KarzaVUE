@@ -157,6 +157,7 @@
             <div id="floating-panel">
               <label for="mode">移動方式：</label>
               <select v-model="map.selectedMode" id="mode" class="mode">
+                <option value="" selected disabled>選擇交通方式</option>
                 <option value="DRIVING">開車</option>
                 <option value="WALKING">走路</option>
                 <option value="BICYCLING">腳踏車</option>
@@ -164,12 +165,13 @@
               </select>
               <label for="origin">出發地點：</label>
               <input
-                v-model="map.destination"
+                v-model="map.origin"
                 type="text"
                 id="origin"
                 class="origin"
               />
             </div>
+            <button @click="getLocation" id="geo">Get Location</button>
             <span class="routes"></span>
           </div>
           <div id="map"></div>
@@ -327,13 +329,16 @@ export default {
       QandA: [],
       sameCategory: [],
       map: {
-        selectedMode: "TRANSIT",
-        destination: " ",
+        selectedMode: "",
+        origin: " ",
       },
       memberId: 0,
       isloading: true,
       askContent: "",
       qerromsg: "",
+      latitude: null,
+      longitude: null,
+      geo: null,
     };
   },
 
@@ -344,6 +349,7 @@ export default {
     this.getSave();
     this.getQandA();
     this.getSameCategory();
+
     this.initMap();
     // this.loading();
   },
@@ -400,6 +406,24 @@ export default {
     //#endregion
 
     //#region 地圖
+    async getLocation() {
+      try {
+        navigator.geolocation.getCurrentPosition((position) => {
+          const pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+
+          this.geo = pos;
+          console.log(this.geo);
+          this.map.origin = "使用目前位置";
+
+          this.initMap();
+        });
+      } catch (error) {
+        console.error("Geolocation is not supported by this browser.");
+      }
+    },
     initMap() {
       // 載入路線服務與路線顯示圖層
       const directionsRenderer = new google.maps.DirectionsRenderer();
@@ -413,16 +437,28 @@ export default {
 
       directionsRenderer.setMap(map);
       this.calculateAndDisplayRoute(directionsService, directionsRenderer);
+
       document
         .getElementById("floating-panel")
         .addEventListener("change", () => {
           this.calculateAndDisplayRoute(directionsService, directionsRenderer);
         });
+      // document
+      // .getElementById("geo")
+      // .addEventListener("click", () => {
+      //   this.calculateAndDisplayRoute(directionsService, directionsRenderer);
+      // });
     },
     calculateAndDisplayRoute(directionsService, directionsRenderer) {
-      const destination = this.map.destination;
+      const destination = this.details.address;
       let selectedMode = this.map.selectedMode;
-      let origin = this.details.address;
+      let origin = this.map.origin;
+      //有開定位且沒輸入起點
+      if (this.geo != null && this.map.origin == "使用目前位置") {
+        origin = this.geo;
+        console.log("使用目前位置");
+      }
+
       // 繪製路線
       directionsService
         .route({
