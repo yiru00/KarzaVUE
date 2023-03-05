@@ -172,6 +172,7 @@
 </template>
 <script>
 import loginModal from "../../components/loginModal.vue";
+import Swal from "sweetalert2";
 export default {
   components: {
     loginModal,
@@ -191,6 +192,7 @@ export default {
       categoryOption: [],
       isloading: true,
       isempty: true,
+      isShow: false,
     };
   },
   mounted() {
@@ -227,7 +229,22 @@ export default {
     });
   },
   methods: {
+    //#region alert
+    showAlert(message, type = null) {
+      Swal.fire({
+        text: message,
+        icon: type,
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 1000,
+        timerProgressBar: false,
+      });
+    },
+    //#endregion
+
     //#region 取得活動資訊、設定搜尋結果狀態
+
     async fetchActivityData() {
       this.isloading = true;
       this.isempty = false;
@@ -383,6 +400,7 @@ export default {
           if (data.result) {
             this.result[index].statusId = 4;
             this.result[index].unSaveId = data.activityCollectionId;
+            this.showAlert(data.message,"success");
           }
         })
         .catch((error) => {
