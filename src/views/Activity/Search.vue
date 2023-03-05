@@ -172,7 +172,7 @@
 </template>
 <script>
 import loginModal from "../../components/loginModal.vue";
-import Swal from "sweetalert2";
+
 export default {
   components: {
     loginModal,
@@ -230,15 +230,18 @@ export default {
   },
   methods: {
     //#region alert
-    showAlert(message, type = null) {
-      Swal.fire({
+    showAlert(message) {
+      this.$swal.fire({
         text: message,
-        icon: type,
         toast: true,
-        position: "top-end",
+        position: "bottom",
         showConfirmButton: false,
-        timer: 1000,
-        timerProgressBar: false,
+        showCancelButton: false,
+        background: "#555",
+        color: "#fff",
+        timer: 800,
+        width: "fit-content",
+        padding: "5px",
       });
     },
     //#endregion
@@ -376,7 +379,7 @@ export default {
 
       //更改按鈕圖示
       saveBtn.innerHTML = `<i style="width: 16px;
-        color: #444444;
+        color: #444;
         margin-right: 10px;"
         class="fa-solid fa-bookmark"></i>`;
 
@@ -400,7 +403,9 @@ export default {
           if (data.result) {
             this.result[index].statusId = 4;
             this.result[index].unSaveId = data.activityCollectionId;
-            this.showAlert(data.message,"success");
+            this.showAlert(data.message);
+          } else {
+            this.showAlert(data.message);
           }
         })
         .catch((error) => {
@@ -435,6 +440,9 @@ export default {
             //更改狀態
             this.result[index].statusId = 3;
             this.result[index].unSaveId = 0;
+            this.showAlert(data.message);
+          } else {
+            this.showAlert(data.message);
           }
         })
         .catch((error) => {
