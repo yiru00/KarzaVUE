@@ -47,7 +47,7 @@ import { RouterLink, RouterView } from 'vue-router'
               class="userButton"
               data-bs-toggle="dropdown"
               aria-expanded="false"
-              style="background-image: url(src/assets/userPic.png)"
+              style="background-image: url(/src/assets/userPic.png)"
             ></button>
             <ul class="dropdown-menu dropdown-menu-end">
               <li>
@@ -110,7 +110,7 @@ import { RouterLink, RouterView } from 'vue-router'
                 class="userButton"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
-                style="background-image: url(src/assets/userPic.png)"
+                style="background-image: url(/src/assets/userPic.png)"
               ></button>
               <ul class="dropdown-menu dropdown-menu-end ">
               <li>
@@ -126,14 +126,14 @@ import { RouterLink, RouterView } from 'vue-router'
                 <RouterLink  to="" class="dropdown-item personalList">購物車</RouterLink>
               </li>
               <li><hr class="dropdown-divider " /></li>
-              <li><RouterLink to="" class="dropdown-item personalList" href="#">登出</RouterLink></li>
+              <li><RouterLink to="" class="dropdown-item personalList">登出</RouterLink></li>
             </ul>
             </div>
           </div>
         </div>
       </div>
     </nav>
-<div class="container ">
+<div class="container justify-content-center">
   <RouterView /> 
 </div>
   
@@ -148,7 +148,7 @@ import { RouterLink, RouterView } from 'vue-router'
     </footer>
 </template>
 
-<style scope>
+<style >
 * {
     font-family: "Noto Serif TC", serif;
     color: #070707;
@@ -158,7 +158,7 @@ import { RouterLink, RouterView } from 'vue-router'
     /* height: 300vh; */
   }
   .container{
-    height: 100vh;
+    min-height: 100vh;
   }
   #mainNav {
     top: 0;
