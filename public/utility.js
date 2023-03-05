@@ -14,7 +14,7 @@ export default {
         padding: "5px",
       });
     },
-    async memberId() {
+    async fetchMemberId() {
       let Id = 0;
       let token = $.cookie("token");
       let options = {
@@ -29,16 +29,15 @@ export default {
           options
         );
         let data = await response.json();
-        
+
         Id = data;
-        console.log("登入成功"+Id);
+        console.log("登入成功" + Id);
         return Id;
       } catch (error) {
         console.log("未登入");
-        
+
         return Id;
       }
     },
-   
   },
 };
