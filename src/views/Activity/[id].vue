@@ -299,20 +299,22 @@
 import { useRoute } from "vue-router";
 import { reactive } from "vue";
 import loginModal from "../../components/loginModal.vue";
+import utility from "./../../../public/utility.js";
 export default {
   components: {
     loginModal,
   },
+  mixins: [utility],
   watch: {
     $route(to, from) {
       // 當路由切換時，這個監聽器會被觸發
       // 可以在這裡執行某些操作，例如更新數據
       this.geo = null;
-      this.map= {
+      this.map = {
         selectedMode: "TRANSIT",
         origin: " ",
       };
-      this.routes="";
+      this.routes = "";
       this.initMap();
       this.scrollToTop();
       this.getMemberId();
@@ -344,12 +346,13 @@ export default {
       latitude: null,
       longitude: null,
       geo: null,
-      routes:""
+      routes: "",
     };
   },
 
   mounted() {
     this.getMemberId();
+
     this.fetchDetails();
     this.getEnroll();
     this.getSave();
@@ -614,6 +617,9 @@ export default {
           if (data.result) {
             this.saveStatus.statusId = 4;
             this.saveStatus.unSaveId = data.activityCollectionId;
+            this.showAlert(data.message);
+          } else {
+            this.showAlert(data.message);
           }
         })
         .catch((error) => {
@@ -643,8 +649,13 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           console.log("Success:", data);
-          this.saveStatus.statusId = 3;
-          this.saveStatus.unSaveId = 0;
+          if (data.result) {
+            this.saveStatus.statusId = 3;
+            this.saveStatus.unSaveId = 0;
+            this.showAlert(data.message);
+          } else {
+            this.showAlert(data.message);
+          }
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -703,19 +714,40 @@ export default {
 
     //#region 刪除發問
     deleteQ(deleteId, index) {
-      console.log(deleteId);
-      fetch("https://localhost:7259/api/ActivityQnA/DeleteQ/" + deleteId, {
-        method: "Delete",
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Success:", data);
-          this.QandA.splice(index, 1);
+      //this.showConfirm("確定刪除發問？", true, this.delete(deleteId, index));
+      //console.log(deleteId);
+      this.$swal
+        .fire({
+          text: "確定刪除發問？",
+          showCancelButton: true,
+          width: "220px",
+          focusCancel: true,
         })
-        .catch((error) => {
-          console.error("Error:", error);
+        .then((result) => {
+          if (result.isConfirmed) {
+            fetch(
+              "https://localhost:7259/api/ActivityQnA/DeleteQ/" + deleteId,
+              {
+                method: "Delete",
+              }
+            )
+              .then((response) => response.json())
+              .then((data) => {
+                if (data.result) {
+                  console.log("Success:", data);
+                  this.QandA.splice(index, 1);
+                  this.showAlert(data.message);
+                } else {
+                  this.showAlert(data.message);
+                }
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+          }
         });
     },
+
     //#endregion
 
     enroll(event) {
@@ -723,39 +755,72 @@ export default {
         memberId: this.memberId,
         activityId: this.$route.path.slice(10),
       };
-      fetch("https://localhost:7259/api/ActivtiyEnroll/Enroll", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(enrollData),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Success:", data);
-          this.enrollStatus.statusId = 5;
-          this.enrollStatus.deleteId = data.deleteId;
+      this.$swal
+        .fire({
+          text: "確定報名？",
+          showCancelButton: true,
+          width: "220px",
+          focusConfirm: false,
         })
-        .catch((error) => {
-          console.error("Error:", error);
+        .then((result) => {
+          if (result.isConfirmed) {
+            fetch("https://localhost:7259/api/ActivtiyEnroll/Enroll", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(enrollData),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                console.log("Success:", data);
+                if (data.result) {
+                  this.enrollStatus.statusId = 5;
+                  this.enrollStatus.deleteId = data.deleteId;
+                  this.showAlert(data.message);
+                } else {
+                  this.showAlert(data.message);
+                }
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+          }
         });
     },
 
     unenroll(deleteId) {
-      fetch(
-        "https://localhost:7259/api/ActivtiyEnroll/CancelEnroll/" + deleteId,
-        {
-          method: "Delete",
-        }
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Success:", data);
-          this.enrollStatus.statusId = 4;
-          this.enrollStatus.deleteId = 0;
+      this.$swal
+        .fire({
+          text: "取消報名？",
+          showCancelButton: true,
+          width: "220px",
+          focusCancel: true,
         })
-        .catch((error) => {
-          console.error("Error:", error);
+        .then((result) => {
+          if (result.isConfirmed) {
+            fetch(
+              "https://localhost:7259/api/ActivtiyEnroll/CancelEnroll/" +
+                deleteId,
+              {
+                method: "Delete",
+              }
+            )
+              .then((response) => response.json())
+              .then((data) => {
+                console.log("Success:", data);
+                if (data.result) {
+                  this.enrollStatus.statusId = 4;
+                  this.enrollStatus.deleteId = 0;
+                  this.showAlert(data.message);
+                } else {
+                  this.showAlert(data.message);
+                }
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+          }
         });
     },
   },

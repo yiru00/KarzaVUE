@@ -172,12 +172,12 @@
 </template>
 <script>
 import loginModal from "../../components/loginModal.vue";
-import alert from "./../../../public/alert.js"
+import utility from "./../../../public/utility.js";
 export default {
   components: {
     loginModal,
   },
-  mixins: [alert],
+  mixins: [utility],
   data() {
     return {
       input: {
@@ -196,7 +196,7 @@ export default {
     };
   },
   mounted() {
-    
+   
     //取得memberId
     this.getMemberId();
 
@@ -231,7 +231,7 @@ export default {
   },
   methods: {
     //#region alert
-   
+
     //#endregion
 
     //#region 取得活動資訊、設定搜尋結果狀態
