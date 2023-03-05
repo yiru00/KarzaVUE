@@ -327,7 +327,7 @@ export default {
       QandA: [],
       sameCategory: [],
       map: {
-        selectedMode: "DRIVING",
+        selectedMode: "TRANSIT",
         destination: " ",
       },
       memberId: 0,
@@ -510,8 +510,8 @@ export default {
     //#endregion
 
     //#region 問與答輸入提示在文字輸入時不顯示
-    errmsg(){
-      this.qerromsg=""
+    errmsg() {
+      this.qerromsg = "";
     },
     //#endregion
 
