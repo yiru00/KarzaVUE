@@ -10,7 +10,7 @@
       <div class="modal-content">
         <h3>登入會員使用更多功能！</h3>
         <div class="modal-body">
-          <div class="loginInput">
+          <div class="loginInput" @keydown.enter="userLogin">
             <div class="form-floating mb-3">
               <input
                 v-model="user.email"
@@ -44,11 +44,17 @@
                 value="登入"
               />
             </div>
-            <router-link to="" class="mt-3" href="./../forgetPassword.html">忘記密碼？</router-link>
+            <router-link to="" class="mt-3" href="./../forgetPassword.html"
+              >忘記密碼？</router-link
+            >
           </div>
         </div>
 
-        <p>還沒加入會員？<router-link to="" href="./../register.html">註冊</router-link></p>
+        <p>
+          還沒加入會員？<router-link to="" href="./../register.html"
+            >註冊</router-link
+          >
+        </p>
       </div>
     </div>
   </div>
