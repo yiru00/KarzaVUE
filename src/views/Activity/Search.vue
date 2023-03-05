@@ -172,12 +172,12 @@
 </template>
 <script>
 import loginModal from "../../components/loginModal.vue";
-
+import alert from "./../../../public/alert.js"
 export default {
   components: {
     loginModal,
   },
-
+  mixins: [alert],
   data() {
     return {
       input: {
@@ -196,6 +196,7 @@ export default {
     };
   },
   mounted() {
+    
     //取得memberId
     this.getMemberId();
 
@@ -230,20 +231,7 @@ export default {
   },
   methods: {
     //#region alert
-    showAlert(message) {
-      this.$swal.fire({
-        text: message,
-        toast: true,
-        position: "bottom",
-        showConfirmButton: false,
-        showCancelButton: false,
-        background: "#555",
-        color: "#fff",
-        timer: 800,
-        width: "fit-content",
-        padding: "5px",
-      });
-    },
+   
     //#endregion
 
     //#region 取得活動資訊、設定搜尋結果狀態
