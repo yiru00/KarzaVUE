@@ -196,7 +196,7 @@
                 class="QandA"
                 id="question"
               >
-                <div class="QAlist d-flex align-items-center mb-2 p-3">
+                <div v-if="item.memberId != this.memberId" class="QAlist">
                   <div>
                     <div class="question">
                       <div class="user d-flex align-items-center">
@@ -221,20 +221,62 @@
                       <div class="date">{{ item.qDateCreated }}</div>
                     </div>
                   </div>
-                  <button
-                    v-if="item.memberId == this.memberId"
-                    @click="deleteQ(item.qId, index)"
-                    class="deleteQcontent"
-                  >
-                    <i class="fa-solid fa-trash"></i>
-                  </button>
+                  <div v-if="item.aId != null" class="answer mt-3">回覆
+                    <div class="acontent">
+                      <p>{{ item.aContent }}</p>
+                    </div>
+                    <div class="date">{{ item.aDateCreated }}</div>
+                  </div>
                 </div>
-                <div v-if="item.aId != null" class="answer m-2">
+                <div
+                  v-else-if="item.memberId == this.memberId"
+                  class="myQAlist"
+                >
+                  <div>
+                    <div>
+                      <div class="myquestion">
+                        <div class="user d-flex align-items-center">
+                          <img
+                            v-if="item.photoSticker"
+                            class="quser"
+                            :src="item.photoSticker"
+                            alt=""
+                          />
+                          <img
+                            v-else
+                            class="quser"
+                            src="../../../src/assets/userPic.png"
+                            alt=""
+                          />
+                          <p class="ms-4">{{ item.nickName }}</p>
+                          <button
+                            @click="deleteQ(item.qId, index)"
+                            class="deleteQcontent"
+                          >
+                            <i class="fa-solid fa-trash"></i>
+                          </button>
+                        </div>
+
+                        <div class="myqcontent">
+                          <p>{{ item.qContent }}</p>
+                        </div>
+                        <div class="date">{{ item.qDateCreated }}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div v-if="item.aId != null" class="myanswer mt-3">回覆
+                    <div class="myacontent">
+                      <p>{{ item.aContent }}</p>
+                    </div>
+                    <div class="date">{{ item.aDateCreated }}</div>
+                  </div>
+                </div>
+                <!-- <div v-if="item.aId != null" class="answer m-2">
                   <div class="acontent">
                     <p>↳ {{ item.aContent }}</p>
                   </div>
                   <div class="date">{{ item.aDateCreated }}</div>
-                </div>
+                </div> -->
               </div>
             </div>
 
@@ -878,6 +920,22 @@ p {
 }
 
 /* 問與答 */
+.QAlist {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+  padding: 1rem;
+  border-bottom: 0.3px solid #afc7d8;
+}
+.myQAlist {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-bottom: 0.5rem;
+  padding: 1rem;
+  border-bottom: 0.3px solid #afc7d8;
+}
 .askInput {
   border: 2px solid #afc7d8;
   border-radius: 15px;
@@ -898,6 +956,7 @@ p {
   background-color: transparent;
   border-left: 2px solid #afc7d8;
 }
+
 .quser {
   width: 40px;
   height: 40px;
@@ -914,13 +973,45 @@ p {
   background-color: #fcf7f0;
   white-space: pre-wrap;
 }
+.myqcontent {
+  display: inline-block;
+  max-width: 800px;
+  padding: 20px;
+  margin-top: 10px;
+  border-radius: 30px;
+  border-top-right-radius: 5px;
+  background-color: #fcf7f0;
+  white-space: pre-wrap;
+}
+.myquestion {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
 .date {
   color: #686868;
   margin-top: 3px;
   font-size: 12px;
 }
 .acontent {
-  border-radius: 10px;
+  display: inline-block;
+  max-width: 800px;
+  padding: 20px;
+  margin-top: 10px;
+  border-radius: 30px;
+  background-color: #fcf0f0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+.myacontent {
+  display: inline-block;
+  max-width: 800px;
+  padding: 20px;
+  margin-top: 10px;
+  border-radius: 30px;
+  background-color: #fcf0f0;
+  white-space: pre-wrap;
   word-wrap: break-word;
   white-space: pre-wrap;
 }
@@ -933,14 +1024,21 @@ p {
   width: fit-content;
   height: fit-content;
   padding: 10px;
-  margin-right: 20px;
-  margin-left: auto;
 }
 .deleteQcontent i {
   font-size: 14px;
   color: #d39899;
 }
-
+.answer{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.myanswer{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
 /* 講師card */
 .instructorPhoto img {
   width: 80px;
