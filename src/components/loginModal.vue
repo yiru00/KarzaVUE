@@ -115,7 +115,7 @@ export default {
         })
         .catch((error) => {
           console.error("Error:", error);
-          alert("Failure");
+          // alert("Failure");
         });
     },
   },
