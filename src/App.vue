@@ -1,10 +1,36 @@
 <script>
-import { useRoute } from "vue-router";
 import utility from "./../public/utility.js";
+import { useRouter } from "vue-router";
 export default {
+  setup() {
+    const router = useRouter();
+    const currentRoute = router.currentRoute.value.path;
+    console.log(currentRoute);
+    const navigateTo = () => {
+      router.go(0);
+    };
+
+    return {
+      navigateTo,
+      currentRoute,
+    };
+  },
+  watch: {
+    $route(to, from) {
+      // 當路由切換時，這個監聽器會被觸發
+      // 可以在這裡執行某些操作，例如更新數據
+      this.getMemberId();
+      console.log("路由發生了變化：", to.path, from.path);
+    },
+  },
   data() {
     return {
       memberId: Number,
+      user: {
+        email: "",
+        password: "",
+        erromsg: "",
+      },
     };
   },
   mounted() {
@@ -43,7 +69,53 @@ export default {
     async getMemberId() {
       let id = await this.fetchMemberId();
       this.memberId = id;
-      console.log(id);
+      console.log(this.memberId);
+    },
+    userLogin() {
+      if (!this.user.email && !this.user.password) {
+        this.user.erromsg = "記得輸入帳號密碼";
+        return;
+      } else if (!this.user.email) {
+        this.user.erromsg = "記得輸入帳號";
+        return;
+      } else if (!this.user.password) {
+        this.user.erromsg = "記得輸入密碼";
+        return;
+      } else {
+        console.log(this.user.email);
+        let account = this.user.email;
+        let password = this.user.password;
+        console.log(account, password);
+      }
+
+      //console.log(account)
+      fetch(
+        `https://localhost:7259/api/Members/JwtLogin?account=${this.user.email}&password=${this.user.password}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((response) => response.text())
+        .then((response) => {
+          console.log(response);
+          if (
+            response == "帳號密碼錯誤" ||
+            response == "帳號尚未啟用，請至信箱查看。" ||
+            response == "此帳戶已是黑名單"
+          ) {
+            this.user.erromsg = response;
+          } else {
+            document.cookie = `token=${response}`;
+            this.navigateTo();
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          // alert("Failure");
+        });
     },
   },
 };
@@ -77,9 +149,14 @@ export default {
       <!-- （有登入）lg以下顯示 訊息、通知、個人選單  -->
       <div class="d-lg-none d-flex align-items-center justify-content-between">
         <!-- 登入 -->
-        <div v-if="memberId == 0" class="btn-group">
-          <button type="button" class="loginBtn">
-            <RouterLink to="/Login">登入</RouterLink>
+        <div v-if="this.memberId == 0" class="btn-group">
+          <button
+            data-bs-toggle="modal"
+            data-bs-target="#loginModal"
+            type="button"
+            class="loginBtn"
+          >
+            登入
           </button>
         </div>
 
@@ -144,7 +221,7 @@ export default {
             <RouterLink to="" class="nav-link navLink">商城</RouterLink>
           </li>
           <li class="nav-item">
-            <RouterLink to="" class="nav-link navLink">論壇</RouterLink>
+            <RouterLink to="/Forum" class="nav-link navLink">論壇</RouterLink>
           </li>
         </ul>
 
@@ -153,7 +230,7 @@ export default {
           class="d-lg-block d-none d-flex justify-content-between align-items-center ms-auto"
         >
           <!-- 登入(沒登入前顯示) -->
-          <div v-if="memberId == 0" class="btn-group">
+          <div v-if="this.memberId == 0" class="btn-group">
             <button type="button" class="loginBtn">
               <RouterLink to="/Login">登入</RouterLink>
             </button>
@@ -202,10 +279,66 @@ export default {
     </div>
   </nav>
 
-  <div class="container justify-content-center">
-    <RouterView />
-  </div>
+  <main><RouterView /></main>
+  <div
+    class="modal fade"
+    id="loginModal"
+    tabindex="-1"
+    aria-labelledby="loginModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered modalcenter">
+      <div class="modal-content">
+        <h3>登入會員使用更多功能！</h3>
+        <div class="modal-body">
+          <div class="loginInput" @keydown.enter="userLogin">
+            <div class="form-floating mb-3">
+              <input
+                v-model="user.email"
+                name="account"
+                class="form-control"
+                id="loginEmail"
+                type="email"
+                placeholder="電子郵件"
+              />
+              <label for="loginEmail">電子郵件</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input
+                v-model="user.password"
+                name="password"
+                class="form-control"
+                id="loginPassword"
+                type="password"
+                placeholder="密碼"
+              />
+              <label for="loginPassword">密碼</label>
+              <span class="loginErroMsg">{{ user.erromsg }}</span>
+            </div>
 
+            <div>
+              <input
+                @click="userLogin"
+                id="login"
+                class="login"
+                type="submit"
+                value="登入"
+              />
+            </div>
+            <router-link to="" class="mt-3" href="./../forgetPassword.html"
+              >忘記密碼？</router-link
+            >
+          </div>
+        </div>
+
+        <p>
+          還沒加入會員？<router-link to="" href="./../register.html"
+            >註冊</router-link
+          >
+        </p>
+      </div>
+    </div>
+  </div>
   <!-- 以下會是點了連結之後的內容渲染 -->
   <footer
     class="footer border-top d-flex justify-content-center align-items-center me-0"
@@ -225,7 +358,7 @@ body {
   background-color: #fcf7f0;
   /* height: 300vh; */
 }
-.container {
+main {
   min-height: 100vh;
 }
 #mainNav {
@@ -280,13 +413,6 @@ body {
   border-radius: 10%;
   background-color: #afc7d8;
   border: 0;
-}
-/* .loginBtn:hover {
-    cursor: pointer;
-    background-color: #8991a9;
-  } */
-.loginBtn a {
-  text-decoration: none;
   font-size: 18px;
   color: #ffffff;
 }
@@ -323,4 +449,63 @@ body {
   .messageButton:focus {
     border: 0;
   } */
+
+.modal-content {
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  border: 0px;
+  max-height: 85vh;
+  min-width: 40vh;
+  width: 450px;
+  padding: 60px 50px;
+}
+.modal-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.loginInput {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.form-control {
+  border: 0px;
+  border-radius: 0px;
+  outline: 0;
+  border-bottom: 1px solid #444;
+  color: gray;
+  width: 100%;
+}
+.form-control:focus {
+  outline: none; /* 外框效果 */
+  box-shadow: none;
+  border-bottom: 2.5px solid #8991a9;
+}
+/* modal上的登入鈕 */
+.login {
+  width: 100%;
+  height: 40px;
+  border-radius: 10px;
+  border: 0px;
+  background: #afc7d8;
+  color: #fff;
+}
+.modal-content a {
+  text-decoration: none;
+  color: #8991a9;
+}
+.modalcenter {
+  display: flex;
+  justify-content: center;
+}
+.loginErroMsg {
+  color: #d39899;
+}
+/* modal end */
 </style>

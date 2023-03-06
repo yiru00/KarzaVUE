@@ -9,15 +9,12 @@ import "sweetalert2/dist/sweetalert2.min.css";
 const options = {
   confirmButtonColor: "#8991a9",
   cancelButtonColor: "#D39899",
-  confirmButtonText:"確定",
-  cancelButtonText:"取消"
-
+  confirmButtonText: "確定",
+  cancelButtonText: "取消",
 };
 
-
-
 const app = createApp(App);
-app.use(VueSweetalert2,options);
+app.use(VueSweetalert2, options);
 app.use(router);
 
 app.mount("#app");

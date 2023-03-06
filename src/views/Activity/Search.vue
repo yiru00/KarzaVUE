@@ -1,182 +1,182 @@
 <template>
-  <div class="searchPage">
-    <!-- {{result}} -->
-    <!-- <router-link to="/Activity/12">go</router-link> -->
-    <form class="row inputSearch">
-      <div class="col-lg-3 col-md-4 col-12">
-        <input
-          v-model="input.activityName"
-          @keydown.enter="fetchActivityData"
-          class="inputName"
-          name="activityName"
-          id="activityName"
-          type="text"
-          placeholder="輸入活動名稱關鍵字..."
-        />
-      </div>
-      <div class="col-lg-2 col-md-4 col-6">
-        <select
-          @change="fetchActivityData"
-          v-model="input.categoryId"
-          class="inputCategory"
-          name="categoryId"
-          id="categoryId"
-        >
-          <option value="" disabled>選擇拍攝類型</option>
-          <option value="0">所有拍攝類型</option>
-          <option
-            v-for="option in categoryOption"
-            :key="option.categoryName"
-            :value="option.id"
+  <div class="container">
+    <div class="searchPage">
+      <!-- {{result}} -->
+      <!-- <router-link to="/Activity/12">go</router-link> -->
+      <form class="row inputSearch">
+        <div class="col-lg-3 col-md-4 col-12">
+          <input
+            v-model="input.activityName"
+            @keydown.enter="fetchActivityData"
+            class="inputName"
+            name="activityName"
+            id="activityName"
+            type="text"
+            placeholder="輸入活動名稱關鍵字..."
+          />
+        </div>
+        <div class="col-lg-2 col-md-4 col-6">
+          <select
+            @change="fetchActivityData"
+            v-model="input.categoryId"
+            class="inputCategory"
+            name="categoryId"
+            id="categoryId"
           >
-            {{ option.categoryName }}
-          </option>
-        </select>
-      </div>
-      <div class="col-lg-2 col-md-4 col-6">
-        <select
-          @change="fetchActivityData"
-          v-model="input.address"
-          class="inputAddress"
-          name="address"
-          id="adress"
+            <option value="" disabled>選擇拍攝類型</option>
+            <option value="0">所有拍攝類型</option>
+            <option
+              v-for="option in categoryOption"
+              :key="option.categoryName"
+              :value="option.id"
+            >
+              {{ option.categoryName }}
+            </option>
+          </select>
+        </div>
+        <div class="col-lg-2 col-md-4 col-6">
+          <select
+            @change="fetchActivityData"
+            v-model="input.address"
+            class="inputAddress"
+            name="address"
+            id="adress"
+          >
+            <option disabled>選擇地區</option>
+            <option value="" selected>所有地區</option>
+            <option value="基隆市">基隆市</option>
+            <option value="台北市">台北市</option>
+            <option value="新北市">新北市</option>
+            <option value="桃園市">桃園市</option>
+            <option value="新竹市">新竹市</option>
+            <option value="新竹縣">新竹縣</option>
+            <option value="苗栗縣">苗栗線</option>
+            <option value="台中市">台中市</option>
+            <option value="彰化縣">彰化縣</option>
+            <option value="南投縣">南投縣</option>
+            <option value="雲林縣">雲林縣</option>
+            <option value="嘉義市">嘉義市</option>
+            <option value="嘉義縣">嘉義縣</option>
+            <option value="台南市">台南市</option>
+            <option value="高雄市">高雄市</option>
+            <option value="屏東縣">屏東縣</option>
+            <option value="宜蘭縣">宜蘭縣</option>
+            <option value="花蓮縣">花蓮縣</option>
+            <option value="台東縣">台東縣</option>
+            <option value="澎湖縣">澎湖縣</option>
+            <option value="金門縣">金門縣</option>
+            <option value="連江縣">連江縣</option>
+          </select>
+        </div>
+        <div class="col-lg-5 col-md-12 col-12">
+          <input
+            @change="fetchActivityData"
+            v-model="input.time"
+            :min="minDate"
+            class="inputTime"
+            name="time"
+            type="datetime-local"
+            id="inputTime"
+          />
+
+          之後的活動
+        </div>
+      </form>
+
+      <div v-show="!isempty && !isloading" class="row" id="resultCard">
+        <div
+          v-for="(card, index) in result"
+          :key="index"
+          class="col-12 col-sm-6 col-md-4 col-xl-3"
         >
-          <option disabled>選擇地區</option>
-          <option value="" selected>所有地區</option>
-          <option value="基隆市">基隆市</option>
-          <option value="台北市">台北市</option>
-          <option value="新北市">新北市</option>
-          <option value="桃園市">桃園市</option>
-          <option value="新竹市">新竹市</option>
-          <option value="新竹縣">新竹縣</option>
-          <option value="苗栗縣">苗栗線</option>
-          <option value="台中市">台中市</option>
-          <option value="彰化縣">彰化縣</option>
-          <option value="南投縣">南投縣</option>
-          <option value="雲林縣">雲林縣</option>
-          <option value="嘉義市">嘉義市</option>
-          <option value="嘉義縣">嘉義縣</option>
-          <option value="台南市">台南市</option>
-          <option value="高雄市">高雄市</option>
-          <option value="屏東縣">屏東縣</option>
-          <option value="宜蘭縣">宜蘭縣</option>
-          <option value="花蓮縣">花蓮縣</option>
-          <option value="台東縣">台東縣</option>
-          <option value="澎湖縣">澎湖縣</option>
-          <option value="金門縣">金門縣</option>
-          <option value="連江縣">連江縣</option>
-        </select>
-      </div>
-      <div class="col-lg-5 col-md-12 col-12">
-        <input
-          @change="fetchActivityData"
-          v-model="input.time"
-          :min="minDate"
-          class="inputTime"
-          name="time"
-          type="datetime-local"
-          id="inputTime"
-        />
-
-        之後的活動
-      </div>
-    </form>
-
-    <div v-show="!isempty && !isloading" class="row" id="resultCard">
-      <div
-        v-for="(card, index) in result"
-        :key="index"
-        class="col-12 col-sm-6 col-md-4 col-xl-3"
-      >
-        <div class="card" :activityId="card.activityId">
-          <div class="card-header">
-            <router-link :to="card.route"
-              ><img :src="card.coverImage" alt="cover"
-            /></router-link>
-          </div>
-          <div class="card-body">
-            <h5>{{ card.activityName }}</h5>
-            <p>
-              <i class="fa-solid fa-calendar-days"></i>{{ card.gatheringTime }}
-            </p>
-            <p>
-              <i class="fa-solid fa-map-pin"></i
-              ><a
-                @click="Citytag(card.city)"
-                class="addressTag"
-                :city="card.city"
-                >{{ card.city }}</a
-              >
-            </p>
-            <span class="tag"
-              ><a
-                @click="Categorytag(card.categoryId)"
-                class="categoryTag"
-                :categoryId="card.categoryId"
-                >{{ card.categoryName }}</a
-              >
-            </span>
-          </div>
-          <div class="info">
-            <div class="enroll">
-              <i class="fa-solid fa-user"></i>
-              <p class="num">{{ card.numOfEnrolment }}</p>
+          <div class="card" :activityId="card.activityId">
+            <div class="card-header">
+              <router-link :to="card.route"
+                ><img :src="card.coverImage" alt="cover"
+              /></router-link>
             </div>
+            <div class="card-body">
+              <h5>{{ card.activityName }}</h5>
+              <p>
+                <i class="fa-solid fa-calendar-days"></i
+                >{{ card.gatheringTime }}
+              </p>
+              <p>
+                <i class="fa-solid fa-map-pin"></i
+                ><a
+                  @click="Citytag(card.city)"
+                  class="addressTag"
+                  :city="card.city"
+                  >{{ card.city }}</a
+                >
+              </p>
+              <span class="tag"
+                ><a
+                  @click="Categorytag(card.categoryId)"
+                  class="categoryTag"
+                  :categoryId="card.categoryId"
+                  >{{ card.categoryName }}</a
+                >
+              </span>
+            </div>
+            <div class="info">
+              <div class="enroll">
+                <i class="fa-solid fa-user"></i>
+                <p class="num">{{ card.numOfEnrolment }}</p>
+              </div>
 
-            <div class="save">
-              <!-- 未登入 -->
-              <button
-                v-if="this.input.memberId == 0"
-                data-bs-toggle="modal"
-                data-bs-target="#loginModal"
-                type="button"
-                class="saveBtn1"
-                :activityId="card.activityId"
-              >
-                <i class="fa-regular fa-bookmark"></i>
-              </button>
-              <!-- 登入沒收藏 -->
-              <button
-                @click="
-                  save($event, index, card.activityId, this.input.memberId)
-                "
-                v-else-if="card.statusId == 3 && this.input.memberId != 0"
-                type="button"
-                class="saveBtn"
-              >
-                <i class="fa-regular fa-bookmark"></i>
-              </button>
-              <!-- 登入有收藏 -->
-              <button
-                v-else-if="card.statusId == 4 && this.input.memberId != 0"
-                @click="unsave($event, index, card.unSaveId)"
-                type="button"
-                class="unsaveBtn"
-              >
-                <i class="fa-solid fa-bookmark"></i>
-              </button>
+              <div class="save">
+                <!-- 未登入 -->
+                <button
+                  v-if="this.input.memberId == 0"
+                  data-bs-toggle="modal"
+                  data-bs-target="#loginModal"
+                  type="button"
+                  class="saveBtn1"
+                  :activityId="card.activityId"
+                >
+                  <i class="fa-regular fa-bookmark"></i>
+                </button>
+                <!-- 登入沒收藏 -->
+                <button
+                  @click="
+                    save($event, index, card.activityId, this.input.memberId)
+                  "
+                  v-else-if="card.statusId == 3 && this.input.memberId != 0"
+                  type="button"
+                  class="saveBtn"
+                >
+                  <i class="fa-regular fa-bookmark"></i>
+                </button>
+                <!-- 登入有收藏 -->
+                <button
+                  v-else-if="card.statusId == 4 && this.input.memberId != 0"
+                  @click="unsave($event, index, card.unSaveId)"
+                  type="button"
+                  class="unsaveBtn"
+                >
+                  <i class="fa-solid fa-bookmark"></i>
+                </button>
 
-              <p class="num">{{ card.numOfCollections }}</p>
+                <p class="num">{{ card.numOfCollections }}</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div v-show="isempty" class="nothingPage">找不到符合的資料</div>
-    <div v-show="isloading" class="image-container">
-      <img src="../../assets/Spinner-1s-200px-2.gif" alt="" />
+      <div v-show="isempty" class="nothingPage">找不到符合的資料</div>
+      <div v-show="isloading" class="image-container">
+        <img src="../../assets/Spinner-1s-200px-2.gif" alt="" />
+      </div>
+      <!-- <div class="d-flex justify-content-center"><loginModal /></div> -->
     </div>
-    <div class="d-flex justify-content-center"><loginModal /></div>
   </div>
 </template>
 <script>
-import loginModal from "../../components/loginModal.vue";
+// import loginModal from "./../../components/loginModal.vue";
 import utility from "./../../../public/utility.js";
 export default {
-  components: {
-    loginModal,
-  },
   mixins: [utility],
   data() {
     return {
@@ -196,7 +196,6 @@ export default {
     };
   },
   mounted() {
-   
     //取得memberId
     this.getMemberId();
 
