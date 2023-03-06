@@ -1,7 +1,6 @@
 <script>
 import { useRouter } from "vue-router";
 export default {
-  
   data() {
     return {
       user: {
@@ -13,35 +12,49 @@ export default {
   },
   methods: {
     userLogin() {
-      console.log(this.user.email);
-      let account = this.user.email;
-      let password = this.user.password;
+      if (!this.user.email && !this.user.password) {
+        this.user.erromsg = "記得輸入帳號密碼";
+        return;
+      } else if (!this.user.email) {
+        this.user.erromsg = "記得輸入帳號";
+        return;
+      } else if (!this.user.password) {
+        this.user.erromsg = "記得輸入密碼";
+        return;
+      } else {
+        console.log(this.user.email);
+        let account = this.user.email;
+        let password = this.user.password;
+        console.log(account, password);
+      }
 
       //console.log(account)
-      $.ajax({
-        url: `https://localhost:7259/api/Members/JwtLogin?account=${account}&password=${password}`,
-        type: "POST",
-        async: false,
-      })
-        .done(function (response) {
+      fetch(
+        `https://localhost:7259/api/Members/JwtLogin?account=${this.user.email}&password=${this.user.password}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((response) => response.text())
+        .then((response) => {
           console.log(response);
           if (
             response == "帳號密碼錯誤" ||
             response == "帳號尚未啟用，請至信箱查看。" ||
             response == "此帳戶已是黑名單"
           ) {
-            // alert(response)
-            $(".loginErroMsg").text(response);
+            this.user.erromsg = response;
           } else {
             document.cookie = `token=${response}`;
-            // const router=useRouter();
-            // router.push("/")
-            
             history.go(-1);
           }
         })
-        .fail(function () {
-          alert("Failure");
+        .catch((error) => {
+          console.error("Error:", error);
+          // alert("Failure");
         });
     },
   },
@@ -52,7 +65,7 @@ export default {
   <div class="d-flex justify-content-center">
     <div class="modal-content">
       <h3>登入會員</h3>
-      <div class="modal-body">
+      <div class="modal-body" @keydown.enter="userLogin">
         <div class="form-floating mb-3">
           <input
             v-model.trim="user.email"
@@ -72,7 +85,7 @@ export default {
             placeholder="密碼"
           />
           <label for="loginPassword">密碼</label>
-          <span class="loginErroMsg"></span>
+          <span class="loginErroMsg">{{ user.erromsg }}</span>
         </div>
 
         <div>
