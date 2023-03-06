@@ -5,6 +5,9 @@
 在.vue中引用下方內容就可以使用
 (路徑輸入相對位置)
 ```javascript
+<template>
+  <loginModal/>
+</templete>
 <script>
 import loginModal from "@/components/loginModal.vue";
 import utility from "@/public/utility.js"
