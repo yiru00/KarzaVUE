@@ -159,27 +159,28 @@
         <div class="row justify-content-center m-4">
           <div class="col">
             <h5>查看路線</h5>
-            <div class="d-flex justify-content-between">
-              <div id="floating-panel">
-                <label for="mode">移動方式：</label>
-                <select v-model="map.selectedMode" id="mode" class="mode">
-                  <option value="" selected disabled>選擇交通方式</option>
-                  <option value="DRIVING">開車</option>
-                  <option value="WALKING">走路</option>
-                  <option value="BICYCLING">腳踏車</option>
-                  <option value="TRANSIT">大眾運輸</option>
-                </select>
-                <label for="origin">出發地點：</label>
-                <input
-                  v-model="map.origin"
-                  type="text"
-                  id="origin"
-                  class="origin"
-                />
-              </div>
-              <button @click="getLocation" id="geo">Get Location</button>
-              <span class="routes">{{ routes }}</span>
+            <div class="panel" id="floating-panel">
+              <label for="mode">交通方式： </label>
+              <select v-model="map.selectedMode" id="mode" class="mode">
+                <option value="" selected disabled>選擇交通方式</option>
+                <option value="DRIVING">開車</option>
+                <option value="WALKING">走路</option>
+                <option value="BICYCLING">腳踏車</option>
+                <option value="TRANSIT">大眾運輸</option>
+              </select>
+              <!-- <label for="origin">出發地點： </label> -->
+              <input
+                placeholder="輸入出發地點..."
+                v-model="map.origin"
+                type="text"
+                id="origin"
+                class="origin"
+              />
+              <button class="geoBtn" @click="getLocation" id="geo">
+                使用目前位置
+              </button>
             </div>
+            <div v-show="routes != ''" class="routes">{{ routes }}</div>
             <div id="map"></div>
           </div>
         </div>
@@ -221,7 +222,8 @@
                       <div class="date">{{ item.qDateCreated }}</div>
                     </div>
                   </div>
-                  <div v-if="item.aId != null" class="answer mt-3">回覆
+                  <div v-if="item.aId != null" class="answer mt-3">
+                    回覆
                     <div class="acontent">
                       <p>{{ item.aContent }}</p>
                     </div>
@@ -264,19 +266,14 @@
                       </div>
                     </div>
                   </div>
-                  <div v-if="item.aId != null" class="myanswer mt-3">回覆
+                  <div v-if="item.aId != null" class="myanswer mt-3">
+                    回覆
                     <div class="myacontent">
                       <p>{{ item.aContent }}</p>
                     </div>
                     <div class="date">{{ item.aDateCreated }}</div>
                   </div>
                 </div>
-                <!-- <div v-if="item.aId != null" class="answer m-2">
-                  <div class="acontent">
-                    <p>↳ {{ item.aContent }}</p>
-                  </div>
-                  <div class="date">{{ item.aDateCreated }}</div>
-                </div> -->
               </div>
             </div>
 
@@ -370,7 +367,7 @@ export default {
       this.geo = null;
       this.map = {
         selectedMode: "TRANSIT",
-        origin: " ",
+        origin: null,
       };
       this.routes = "";
       this.initMap();
@@ -395,7 +392,7 @@ export default {
       sameCategory: [],
       map: {
         selectedMode: "TRANSIT",
-        origin: " ",
+        origin: null,
       },
       memberId: 0,
       isloading: true,
@@ -1029,12 +1026,12 @@ p {
   font-size: 14px;
   color: #d39899;
 }
-.answer{
+.answer {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
-.myanswer{
+.myanswer {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -1199,5 +1196,33 @@ p {
   outline: none;
   box-shadow: none;
   border: 0px;
+  margin-right: 10px;
+  height: 50px;
+}
+.panel {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+   margin: 10px 0px;
+}
+.routes {
+  display: inline-block;
+  border: 1px solid #e9ca89;
+  padding: 15px;
+  border-radius: 15px;
+  margin: 10px 0px;
+}
+.geoBtn {
+  background-color: #a6b6b0;
+  color: #fff;
+  font-size:large;
+  padding: 10px;
+  border: 0px;
+  border-radius: 15px;
+}
+.geoBtn ::hover {
+  background-color: #fff;
+  color: #a6b6b0;
+  border: 1px solid #a6b6b0;
 }
 </style>
