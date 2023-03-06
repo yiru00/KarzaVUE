@@ -231,8 +231,13 @@ export default {
         >
           <!-- 登入(沒登入前顯示) -->
           <div v-if="this.memberId == 0" class="btn-group">
-            <button type="button" class="loginBtn">
-              <RouterLink to="/Login">登入</RouterLink>
+            <button
+              data-bs-toggle="modal"
+              data-bs-target="#loginModal"
+              type="button"
+              class="loginBtn"
+            >
+              登入
             </button>
           </div>
 
