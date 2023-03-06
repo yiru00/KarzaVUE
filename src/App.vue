@@ -4,28 +4,27 @@ import { useRouter } from "vue-router";
 export default {
   setup() {
     const router = useRouter();
-    const currentRoute = router.currentRoute.value.path;
-    console.log(currentRoute);
+    // const currentRoute = router.currentRoute.value.path;
+    // console.log(currentRoute);
     const navigateTo = () => {
       router.go(0);
     };
-
     return {
       navigateTo,
-      currentRoute,
+      // currentRoute,
     };
   },
-  watch: {
-    $route(to, from) {
-      // 當路由切換時，這個監聽器會被觸發
-      // 可以在這裡執行某些操作，例如更新數據
-      this.getMemberId();
-      console.log("路由發生了變化：", to.path, from.path);
-    },
-  },
+  // watch: {
+  //   $route(to, from) {
+  //     // 當路由切換時，這個監聽器會被觸發
+  //     // 可以在這裡執行某些操作，例如更新數據
+  //     this.getMemberId();
+  //     console.log("路由發生了變化：", to.path, from.path);
+  //   },
+  // },
   data() {
     return {
-      memberId: Number,
+      isLogin: null,
       user: {
         email: "",
         password: "",
@@ -34,6 +33,9 @@ export default {
     };
   },
   mounted() {
+    this.checkToken();
+    // this.getMemberId();
+    this.setPhoto();
     //導覽列變化
     window.addEventListener("DOMContentLoaded", () => {
       let scrollPos = 0;
@@ -62,14 +64,44 @@ export default {
         scrollPos = currentTop;
       });
     });
-    this.getMemberId();
   },
   mixins: [utility],
+
   methods: {
-    async getMemberId() {
+    checkToken() {
+      let isLogin = false;
+      let token = $.cookie("token");
+      if (token) isLogin = true;
+      this.isLogin = isLogin;
+    },
+    // async getMemberId() {
+    //   let id = await this.fetchMemberId();
+    //   this.memberId = id;
+    //   console.log(this.memberId);
+    // },
+    async setPhoto() {
       let id = await this.fetchMemberId();
-      this.memberId = id;
-      console.log(this.memberId);
+
+      if (id != 0) {
+        fetch(`https://localhost:7259/api/Members/Profile?id=${id}`, {
+          method: "GET",
+          headers: {
+            Authorization: `bearer ${$.cookie("token")}`,
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            if (data.photoSticker != null)
+              $(".userButton").css(
+                "background-image",
+                `url(${data.photoSticker})`
+              );
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
     },
     userLogin() {
       if (!this.user.email && !this.user.password) {
@@ -149,7 +181,7 @@ export default {
       <!-- （有登入）lg以下顯示 訊息、通知、個人選單  -->
       <div class="d-lg-none d-flex align-items-center justify-content-between">
         <!-- 登入 -->
-        <div v-if="this.memberId == 0" class="btn-group">
+        <div v-if="!isLogin" class="btn-group">
           <button
             data-bs-toggle="modal"
             data-bs-target="#loginModal"
@@ -161,7 +193,7 @@ export default {
         </div>
 
         <!-- 個人資料下拉選單（登入後顯示頭像）(mobile) -->
-        <div v-else class="btn-group">
+        <div v-else-if="isLogin" class="btn-group">
           <button
             type="button"
             class="userButton"
@@ -230,7 +262,7 @@ export default {
           class="d-lg-block d-none d-flex justify-content-between align-items-center ms-auto"
         >
           <!-- 登入(沒登入前顯示) -->
-          <div v-if="this.memberId == 0" class="btn-group">
+          <div v-if="!isLogin" class="btn-group">
             <button
               data-bs-toggle="modal"
               data-bs-target="#loginModal"
@@ -242,7 +274,7 @@ export default {
           </div>
 
           <!-- 個人資料下拉選單（登入後顯示頭像） -->
-          <div v-else class="btn-group">
+          <div v-else-if="isLogin" class="btn-group">
             <button
               type="button"
               class="userButton"
@@ -285,6 +317,8 @@ export default {
   </nav>
 
   <main><RouterView /></main>
+
+  <!-- login modal -->
   <div
     class="modal fade"
     id="loginModal"

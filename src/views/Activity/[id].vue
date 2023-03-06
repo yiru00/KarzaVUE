@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="detailpage">
-      <div v-show="!isloading">
+      <div v-show="!isloading && details.activityName != null">
         <div class="row justify-content-center m-4">
           <div class="col-12 col-md-6" id="activityimg">
             <img class="coverImage" :src="details.coverImage" alt="" />
@@ -200,7 +200,18 @@
                   <div>
                     <div class="question">
                       <div class="user d-flex align-items-center">
-                        <img class="quser" :src="item.photoSticker" alt="" />
+                        <img
+                          v-if="item.photoSticker"
+                          class="quser"
+                          :src="item.photoSticker"
+                          alt=""
+                        />
+                        <img
+                          v-else
+                          class="quser"
+                          src="../../../src/assets/userPic.png"
+                          alt=""
+                        />
                         <p class="ms-4">{{ item.nickName }}</p>
                       </div>
 
@@ -300,6 +311,7 @@
       <div v-show="isloading" class="image-container">
         <img src="../../assets/Spinner-1s-200px-2.gif" alt="" />
       </div>
+      <div v-if="!isloading && details.activityName == null">沒有此活動</div>
     </div>
   </div>
 </template>
@@ -410,7 +422,7 @@ export default {
       );
       let details = await response.json();
       let categoryId = parseInt(details.categoryId);
-      //console.log(categoryId);
+      //console.log(details);
       this.details = details;
       return categoryId;
 
@@ -895,9 +907,10 @@ p {
 .qcontent {
   display: inline-block;
   max-width: 800px;
-  padding: 10px;
+  padding: 20px;
   margin-top: 10px;
-  border-radius: 10px;
+  border-radius: 30px;
+  border-top-left-radius: 5px;
   background-color: #fcf7f0;
   white-space: pre-wrap;
 }
