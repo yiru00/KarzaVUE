@@ -2,21 +2,46 @@
   <div class="content">
     <h4>我的報名活動</h4>
     <div class="line"></div>
-    <button class="linkBtn">
-      <RouterLink to="/Record/ActivityEnrolled">未舉辦</RouterLink>
-    </button>
-    <button class="linkBtn">
-      <RouterLink to="/Record/ActivityJoined">已舉辦</RouterLink>
-    </button>
+    <div class="mt-3 mb-5">
+      <RouterLink
+        to="/Record/ActivityEnrolled"
+        class="linkBtn me-3"
+        exact
+        active-class="active"
+        >未舉辦</RouterLink
+      >
 
+      <RouterLink
+        to="/Record/ActivityJoined"
+        class="linkBtn"
+        exact
+        active-class="active"
+        >已舉辦</RouterLink
+      >
+    </div>
     <RouterView />
   </div>
 </template>
 
-<script setup>
-import { RouterLink, RouterView, routerViewLocationKey } from "vue-router";
+<script>
+export default {
+  data() {
+    return {
+      showUnderline: false,
+    };
+  },
+  created() {
+    this.$router.beforeEach((to, from, next) => {
+      if (to.path === this.$root.selectedTab) {
+        this.showUnderline = true;
+      } else {
+        this.showUnderline = false;
+      }
+      next();
+    });
+  },
+};
 </script>
-
 <style scoped>
 .content {
   padding: 20px 50px;
@@ -35,10 +60,11 @@ a {
   border: 0px;
   height: 50px;
   width: 80px;
-  padding: 0px;
+  padding: 5px;
   margin-bottom: 10px;
 }
-.linkBtn:hover {
+
+.active {
   border-bottom: 2px solid #afc7d8;
 }
 </style>
