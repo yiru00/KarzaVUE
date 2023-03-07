@@ -103,6 +103,10 @@ export default {
           });
       }
     },
+    logout(){
+     document.cookie = "token=''; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+     this.$router.go(0)
+    },
     userLogin() {
       if (!this.user.email && !this.user.password) {
         this.user.erromsg = "記得輸入帳號密碼";
@@ -203,7 +207,7 @@ export default {
           ></button>
           <ul class="dropdown-menu dropdown-menu-end">
             <li>
-              <RouterLink to="" class="dropdown-item personalList"
+              <RouterLink to="/Profile" class="dropdown-item personalList"
                 >帳戶管理</RouterLink
               >
             </li>
@@ -225,7 +229,7 @@ export default {
             <li><hr class="dropdown-divider" /></li>
             <li>
               <RouterLink to="" class="dropdown-item personalList" href="#"
-                >登出</RouterLink
+               @click="logout" >登出</RouterLink
               >
             </li>
           </ul>
@@ -284,7 +288,7 @@ export default {
             ></button>
             <ul class="dropdown-menu dropdown-menu-end">
               <li>
-                <RouterLink to="" class="dropdown-item personalList"
+                <RouterLink to="/Profile" class="dropdown-item personalList"
                   >帳戶管理</RouterLink
                 >
               </li>
@@ -306,7 +310,7 @@ export default {
               <li><hr class="dropdown-divider" /></li>
               <li>
                 <RouterLink to="" class="dropdown-item personalList"
-                  >登出</RouterLink
+                @click="logout">登出</RouterLink
                 >
               </li>
             </ul>
@@ -317,7 +321,6 @@ export default {
   </nav>
 
   <main><RouterView /></main>
-
   <!-- login modal -->
   <div
     class="modal fade"
@@ -364,15 +367,15 @@ export default {
                 value="登入"
               />
             </div>
-            <router-link to="" class="mt-3" href="./../forgetPassword.html"
+            <router-link to="" class="mt-3"
               >忘記密碼？</router-link
             >
           </div>
         </div>
 
         <p>
-          還沒加入會員？<router-link to="" href="./../register.html"
-            >註冊</router-link
+          還沒加入會員？<router-link to="/Register"
+          ><span data-bs-dismiss="modal">註冊</span></router-link
           >
         </p>
       </div>
