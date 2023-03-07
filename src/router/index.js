@@ -49,17 +49,27 @@ const router = createRouter({
       name: "Record",
       component: () => import("../views/Record.vue"),
       children: [
-        //預設顯示活動收藏
-       
         {
           path: "/Record/ActivitySaved",
           name: "ActivitySaveRecord",
           component: () => import("../views/Record/ActivitySaved.vue"),
         },
         {
-          path: "/Record/ActivityEnrolled",
-          name: "ActivityEnrolledRecord",
-          component: () => import("../views/Record/ActivityEnrolled.vue"),
+          path: "/Record/ActivityRecord",
+          name: "ActivityRecord",
+          component: () => import("../views/Record/ActivityRecord.vue"),
+          children: [
+            {
+              path: "/Record/ActivityEnrolled",
+              name: "ActivityEnrolled",
+              component: () => import("../views/Record/ActivityEnrolled.vue"),
+            },
+            {
+              path: "/Record/ActivityJoined",
+              name: "ActivityJoined",
+              component: () => import("../views/Record/ActivityJoined.vue"),
+            },
+          ],
         },
       ],
     },

@@ -1,10 +1,8 @@
 <template>
   <div>
     <div v-show="!isempty && !isloading">
-      <div class="content">
-        <h4>我的收藏活動</h4>
-        <div class="line mb-4"></div>
-        <div v-for="(items, month) in groupedSave" :key="month">
+      <!-- <div class="content"> -->
+        <div v-for="(items, month) in getActivityJoined" :key="month">
           <p class="month">{{ month }}</p>
           <div class="list">
             <div v-for="(item, index) in items" :key="index">
@@ -31,9 +29,9 @@
             </div>
           </div>
         </div>
-      </div>
+      <!-- </div> -->
     </div>
-    <div v-show="isempty && !isloading">沒有收藏的活動</div>
+    <div v-show="isempty && !isloading">沒有參加過的的活動</div>
     <div v-show="isloading" class="image-container">
       <img src="../../assets/Spinner-1s-200px-2.gif" alt="" />
     </div>
@@ -41,35 +39,28 @@
 </template>
 
 <script>
-// import { useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import utility from "./../../../public/utility.js";
 
 //const route=useRoute();
 export default {
   mixins: [utility],
-  // setup() {
-  //   const router = useRouter();
-  //   console.log(router.path); //取得網址
-  //   const currentRoute = router.currentRoute.value.path;
-  //   console.log(currentRoute);
+  setup() {
+    const router = useRouter();
+    console.log(router.path); //取得網址
+    const currentRoute = router.currentRoute.value.path;
+    console.log(currentRoute);
 
-  //   return {
-  //     currentRoute,
-  //   };
-  // },
-  data() {
     return {
-      savedData: [],
-      isempty: false,
-      isloading: true,
+      currentRoute,
     };
   },
   computed: {
-    groupedSave() {
+    groupedEnroll() {
       //依照收藏月份分組
       const grouped = {};
-      this.savedData.forEach((item) => {
-        const month = item.dateOfSave.substring(0, 7);
+      this.enrolledData.forEach((item) => {
+        const month = item.dateJoined.substring(0, 7);
         if (!grouped[month]) {
           grouped[month] = [];
         }
@@ -78,11 +69,18 @@ export default {
       return grouped;
     },
   },
+  data() {
+    return {
+      enrolledData: [],
+      isempty: false,
+      isloading: true,
+    };
+  },
   mounted() {
-    this.getActivitySaved();
+    this.getActivityJoined();
   },
   methods: {
-    async getActivitySaved() {
+    async getActivityJoined() {
       this.isempty = false;
       this.isloading = true;
       let memberId = await this.fetchMemberId();
@@ -90,7 +88,7 @@ export default {
         memberId: memberId,
       };
 
-      fetch("https://localhost:7259/api/ActivityRecord/Saved", {
+      fetch("https://localhost:7259/api/ActivityRecord/Joined", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -102,7 +100,7 @@ export default {
           this.isloading = false;
           console.log("Success:", data);
           if (data.length == 0) this.isempty = true;
-          this.savedData = data;
+          this.enrolledData = data;
         })
         .catch((error) => {
           console.error("Error:", error);
