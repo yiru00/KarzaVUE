@@ -1,6 +1,6 @@
 ## 共用登入modal、alert
 
-`npm install sweetalert2`
+`npm install -S vue-sweetalert2`
 
 在.vue中引用下方內容就可以使用
 (路徑輸入相對位置)
