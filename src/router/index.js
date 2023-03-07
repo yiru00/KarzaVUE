@@ -52,12 +52,12 @@ const router = createRouter({
         //預設顯示活動收藏
        
         {
-          path: "/ActivitySaved",
+          path: "/Record/ActivitySaved",
           name: "ActivitySaveRecord",
           component: () => import("../views/Record/ActivitySaved.vue"),
         },
         {
-          path: "/ActivityEnrolled",
+          path: "/Record/ActivityEnrolled",
           name: "ActivityEnrolledRecord",
           component: () => import("../views/Record/ActivityEnrolled.vue"),
         },

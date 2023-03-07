@@ -1,14 +1,35 @@
 <template>
   <div>
-    <h4>我的收藏活動</h4>
-    <hr />
     <div v-show="!isempty && !isloading">
-      <div v-for="(items, month) in groupedSave" :key="month">
-        <p class="month">{{ month }}</p>
-        <div v-for="item in items" :key="item.activityId">
-          <router-link :to="item.route">
-            {{ item.activityName }}
-          </router-link>
+      <div class="content">
+        <h4>我的收藏活動</h4>
+        <div class="line mb-4"></div>
+        <div v-for="(items, month) in groupedSave" :key="month">
+          <p class="month">{{ month }}</p>
+          <div class="list">
+            <div v-for="(item, index) in items" :key="index">
+              <router-link :to="item.route">
+                <div class="listContent">
+                  <div class="coverImg">
+                    <img :src="item.coverImage" alt="" />
+                  </div>
+                  <div class="info">
+                    <p class="activityName">{{ item.activityName }}</p>
+                    <p class="description">
+                      {{ item.description.slice(0, 20) }}...
+                    </p>
+                    <p class="date">
+                      <i class="fa-solid fa-calendar-days"></i
+                      >{{ item.gatheringTime }}
+                    </p>
+                  </div>
+                </div>
+
+                <!-- 最後一筆資料不顯示分隔線 -->
+                <div class="line" v-show="index + 1 < items.length"></div>
+              </router-link>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -45,6 +66,7 @@ export default {
   },
   computed: {
     groupedSave() {
+      //依照收藏月份分組
       const grouped = {};
       this.savedData.forEach((item) => {
         const month = item.dateOfSave.substring(0, 7);
@@ -91,6 +113,15 @@ export default {
 </script>
 
 <style scoped>
+a {
+  text-decoration: none;
+}
+.line {
+  height: 1px;
+
+  background-color: #a3a3a3;
+}
+
 .image-container {
   position: absolute;
   top: 50%;
@@ -103,11 +134,57 @@ export default {
   height: auto;
   max-height: 80%;
 }
+.content {
+  padding: 20px 50px;
+}
 .month {
   padding: 0px;
   margin: 0px;
   margin-bottom: 5px;
   font-size: 15px;
   color: #444;
+}
+.list {
+  background-color: #afc7d81d;
+  border-radius: 15px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+.listContent {
+  margin: 15px 0px 15px 0px;
+  display: flex;
+  align-items: center;
+}
+/* .info {
+} */
+.saveBtn {
+  z-index: 1;
+}
+.coverImg {
+  width: 80px;
+  height: 80px;
+  margin-right: 20px;
+}
+.coverImg img {
+  border-radius: 10px;
+  border: 0.5px solid #a3a3a3;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.activityName {
+  padding: 0px;
+  margin: 0px;
+  font-size: 20px;
+  font-weight: 500;
+}
+.description {
+  padding: 0px;
+  margin: 0px;
+  color: gray;
+}
+.date i {
+  color: #444;
+  margin-right: 5px;
 }
 </style>

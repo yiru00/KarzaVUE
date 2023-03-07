@@ -764,6 +764,7 @@ export default {
             aContent: null,
             aDateCreated: null,
           });
+          this.showAlert(data.message);
         });
     },
     //#endregion

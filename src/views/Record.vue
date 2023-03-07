@@ -8,8 +8,8 @@ import { RouterLink, RouterView } from "vue-router";
       <!-- <h4>我的紀錄</h4> -->
       <ul>
         <h5>官方活動</h5>
-        <li><RouterLink to="/ActivitySaved">收藏</RouterLink></li>
-        <li><RouterLink to="/ActivityEnrolled">報名</RouterLink></li>
+        <li><RouterLink to="/Record/ActivitySaved">收藏</RouterLink></li>
+        <li><RouterLink to="/Record/ActivityEnrolled">報名</RouterLink></li>
       </ul>
       <ul>
         <h5>商城</h5>
@@ -19,7 +19,6 @@ import { RouterLink, RouterView } from "vue-router";
     </nav>
 
     <div class="record">
-      
       <RouterView />
     </div>
   </div>
@@ -58,7 +57,6 @@ import { RouterLink, RouterView } from "vue-router";
 .reordpanel {
   display: flex;
   justify-content: center;
- 
 }
 nav {
   margin-right: 80px;
@@ -72,8 +70,8 @@ nav {
   background-color: #fff;
   padding: 20px;
   border-radius: 10px;
-  width: 900px;
-  height: 100vh;
+  width: 800px;
+  min-height: 80vh;
 }
 a {
   text-decoration: none;
