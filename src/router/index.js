@@ -4,7 +4,6 @@ import HomeView from "../views/HomeView.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    
     //首頁
     {
       path: "/",
@@ -30,12 +29,12 @@ const router = createRouter({
       //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
       component: () => import("../views/Forum.vue"),
     },
-    
+
     //活動詳細頁面(動態router
     {
       path: "/Activity/:id",
       name: "activityDetails",
-      component: ()=>import("../views/Activity/[id].vue"),
+      component: () => import("../views/Activity/[id].vue"),
     },
     //活動搜尋
     {
@@ -44,30 +43,30 @@ const router = createRouter({
       component: () => import("../views/Activity/Search.vue"),
     },
 
-//我的紀錄
-{
-  path: "/Record",
-  name: "Record",
-  component: () => import("../views/Record.vue"),
-  children: [
-    //預設顯示活動收藏
+    //我的紀錄
     {
-      path:"",
-      name:'ActivitySaveRecord',
-      component:import("../views/Record/ActivitySaved.vue")
+      path: "/Record",
+      name: "Record",
+      component: () => import("../views/Record.vue"),
+      children: [
+        //預設顯示活動收藏
+        {
+          path: "",
+          name: "ActivitySaveRecord",
+          component: () => import("../views/Record/ActivitySaved.vue"),
+        },
+        {
+          path: "/ActivitySaved",
+          name: "ActivitySaveRecord",
+          component: () => import("../views/Record/ActivitySaved.vue"),
+        },
+        {
+          path: "/ActivityEnrolled",
+          name: "ActivityEnrolledRecord",
+          component: () => import("../views/Record/ActivityEnrolled.vue"),
+        },
+      ],
     },
-    {
-      path: "/ActivitySaved",
-      name: "ActivitySaveRecord",
-      component: import("../views/Record/ActivitySaved.vue"),
-    },
-    {
-      path: "/ActivityEnrolled",
-      name: "ActivityEnrolledRecord",
-      component: import("../views/Record/ActivityEnrolled.vue"),
-    },
-  ],
-},
     //要在最後一個(可能被動態router攔截)
     // 網址錯誤會跑到404那頁
     {

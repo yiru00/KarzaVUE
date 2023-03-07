@@ -13,6 +13,7 @@
             id="activityName"
             type="text"
             placeholder="輸入活動名稱關鍵字..."
+            autocomplete="off"
           />
         </div>
         <div class="col-lg-2 col-md-4 col-6">

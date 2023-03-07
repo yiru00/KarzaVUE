@@ -175,6 +175,7 @@
                 type="text"
                 id="origin"
                 class="origin"
+                autocomplete="off"
               />
               <button class="geoBtn" @click="getLocation" id="geo">
                 使用目前位置
@@ -893,6 +894,7 @@ export default {
   margin-top: 20px;
   margin-left: auto;
   margin-right: auto;
+  padding-bottom: 0.75rem;
 }
 
 .image-container {
@@ -923,7 +925,7 @@ p {
   align-items: flex-start;
   margin-bottom: 0.5rem;
   padding: 1rem;
-  border-bottom: 0.3px solid #afc7d8;
+  /* border-bottom: 0.3px solid #afc7d8; */
 }
 .myQAlist {
   display: flex;
@@ -931,7 +933,7 @@ p {
   align-items: flex-end;
   margin-bottom: 0.5rem;
   padding: 1rem;
-  border-bottom: 0.3px solid #afc7d8;
+  /* border-bottom: 0.3px solid #afc7d8; */
 }
 .askInput {
   border: 2px solid #afc7d8;
@@ -999,7 +1001,6 @@ p {
   background-color: #fcf0f0;
   white-space: pre-wrap;
   word-wrap: break-word;
-  white-space: pre-wrap;
 }
 .myacontent {
   display: inline-block;
@@ -1203,7 +1204,7 @@ p {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-   margin: 10px 0px;
+  margin: 10px 0px;
 }
 .routes {
   display: inline-block;
@@ -1215,7 +1216,7 @@ p {
 .geoBtn {
   background-color: #a6b6b0;
   color: #fff;
-  font-size:large;
+  font-size: large;
   padding: 10px;
   border: 0px;
   border-radius: 15px;
