@@ -208,7 +208,7 @@ export default {
               >
             </li>
             <li>
-              <RouterLink to="/Record" class="dropdown-item personalList"
+              <RouterLink to="/ActivitySaved" class="dropdown-item personalList"
                 >我的紀錄</RouterLink
               >
             </li>
@@ -289,7 +289,7 @@ export default {
                 >
               </li>
               <li>
-                <RouterLink to="/Record" class="dropdown-item personalList"
+                <RouterLink to="/ActivitySaved" class="dropdown-item personalList"
                   >我的紀錄</RouterLink
                 >
               </li>

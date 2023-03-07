@@ -193,7 +193,7 @@ export default {
       categoryOption: [],
       isloading: true,
       isempty: true,
-      isShow: false,
+      // isShow: false,
     };
   },
   mounted() {
@@ -230,9 +230,7 @@ export default {
     });
   },
   methods: {
-    //#region alert
-
-    //#endregion
+  
 
     //#region 取得活動資訊、設定搜尋結果狀態
 

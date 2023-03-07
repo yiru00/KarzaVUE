@@ -50,11 +50,7 @@ const router = createRouter({
       component: () => import("../views/Record.vue"),
       children: [
         //預設顯示活動收藏
-        {
-          path: "",
-          name: "ActivitySaveRecord",
-          component: () => import("../views/Record/ActivitySaved.vue"),
-        },
+       
         {
           path: "/ActivitySaved",
           name: "ActivitySaveRecord",

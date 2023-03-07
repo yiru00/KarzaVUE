@@ -19,6 +19,7 @@ import { RouterLink, RouterView } from "vue-router";
     </nav>
 
     <div class="record">
+      
       <RouterView />
     </div>
   </div>
@@ -37,7 +38,7 @@ import { RouterLink, RouterView } from "vue-router";
     display: flex;
     margin-left: 0px;
     margin: 0px;
-
+    height: 110px;
     min-width: 100%;
     width: 100%;
   }
@@ -54,19 +55,25 @@ import { RouterLink, RouterView } from "vue-router";
     margin-bottom: 0px;
   }
 }
-
+.reordpanel {
+  display: flex;
+  justify-content: center;
+ 
+}
 nav {
   margin-right: 80px;
   background-color: #fff;
   padding: 20px;
   border-radius: 10px;
   min-width: 170px;
+  height: 250px;
 }
 .record {
   background-color: #fff;
   padding: 20px;
   border-radius: 10px;
-  width: 850px;
+  width: 900px;
+  height: 100vh;
 }
 a {
   text-decoration: none;
