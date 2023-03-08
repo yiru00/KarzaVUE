@@ -407,6 +407,7 @@ export default {
   },
 
   mounted() {
+    this.scrollToTop();
     this.getMemberId();
 
     this.fetchDetails();
@@ -847,7 +848,7 @@ export default {
         });
     },
     //#endregion
-    
+
     //#region  取消報名
     unenroll(deleteId) {
       this.$swal

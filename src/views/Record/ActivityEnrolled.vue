@@ -165,8 +165,8 @@ a {
 } */
 
 .coverImg {
-  width: 80px;
-  height: 80px;
+  width: 110px;
+  height: 90px;
   margin-right: 20px;
 }
 .coverImg img {
@@ -191,5 +191,4 @@ a {
   color: #444;
   margin-right: 5px;
 }
-
 </style>
