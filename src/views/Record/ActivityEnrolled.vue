@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="relative">
     <div v-show="!isempty && !isloading">
       <!-- <div class="content"> -->
       <div v-for="(items, month) in groupedEnroll" :key="month">
@@ -45,16 +45,16 @@ import utility from "./../../../public/utility.js";
 //const route=useRoute();
 export default {
   mixins: [utility],
-  setup() {
-    const router = useRouter();
-    console.log(router.path); //取得網址
-    const currentRoute = router.currentRoute.value.path;
-    console.log(currentRoute);
+  // setup() {
+  //   const router = useRouter();
+  //   console.log(router.path); //取得網址
+  //   const currentRoute = router.currentRoute.value.path;
+  //   console.log(currentRoute);
 
-    return {
-      currentRoute,
-    };
-  },
+  //   return {
+  //     currentRoute,
+  //   };
+  // },
   computed: {
     groupedEnroll() {
       //依照收藏月份分組
@@ -119,7 +119,10 @@ a {
 
   background-color: #a3a3a3;
 }
-
+.relative {
+  position: relative;
+  /* height: 100%; */
+}
 .image-container {
   position: absolute;
   top: 50%;

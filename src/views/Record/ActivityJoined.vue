@@ -1,34 +1,34 @@
 <template>
-  <div>
+  <div class="relative">
     <div v-show="!isempty && !isloading">
       <!-- <div class="content"> -->
-        <div v-for="(items, month) in getActivityJoined" :key="month">
-          <p class="month">{{ month }}</p>
-          <div class="list">
-            <div v-for="(item, index) in items" :key="index">
-              <router-link :to="item.route">
-                <div class="listContent">
-                  <div class="coverImg">
-                    <img :src="item.coverImage" alt="活動圖" />
-                  </div>
-                  <div class="info">
-                    <p class="activityName">{{ item.activityName }}</p>
-                    <p class="description">
-                      {{ item.description.slice(0, 20) }}...
-                    </p>
-                    <p class="date">
-                      <i class="fa-solid fa-calendar-days"></i
-                      >{{ item.gatheringTime }}
-                    </p>
-                  </div>
+      <div v-for="(items, month) in groupedJoined" :key="month">
+        <p class="month">{{ month }}</p>
+        <div class="list">
+          <div v-for="(item, index) in items" :key="index">
+            <router-link :to="item.route">
+              <div class="listContent">
+                <div class="coverImg">
+                  <img :src="item.coverImage" alt="活動圖" />
                 </div>
+                <div class="info">
+                  <p class="activityName">{{ item.activityName }}</p>
+                  <p class="description">
+                    {{ item.description.slice(0, 20) }}...
+                  </p>
+                  <p class="date">
+                    <i class="fa-solid fa-calendar-days"></i
+                    >{{ item.gatheringTime }}
+                  </p>
+                </div>
+              </div>
 
-                <!-- 最後一筆資料不顯示分隔線 -->
-                <div class="line" v-show="index + 1 < items.length"></div>
-              </router-link>
-            </div>
+              <!-- 最後一筆資料不顯示分隔線 -->
+              <div class="line" v-show="index + 1 < items.length"></div>
+            </router-link>
           </div>
         </div>
+      </div>
       <!-- </div> -->
     </div>
     <div v-show="isempty && !isloading">沒有參加過的的活動</div>
@@ -45,21 +45,21 @@ import utility from "./../../../public/utility.js";
 //const route=useRoute();
 export default {
   mixins: [utility],
-  setup() {
-    const router = useRouter();
-    console.log(router.path); //取得網址
-    const currentRoute = router.currentRoute.value.path;
-    console.log(currentRoute);
+  // setup() {
+  //   const router = useRouter();
+  //   console.log(router.path); //取得網址
+  //   const currentRoute = router.currentRoute.value.path;
+  //   console.log(currentRoute);
 
-    return {
-      currentRoute,
-    };
-  },
+  //   return {
+  //     currentRoute,
+  //   };
+  // },
   computed: {
-    groupedEnroll() {
+    groupedJoined() {
       //依照收藏月份分組
       const grouped = {};
-      this.enrolledData.forEach((item) => {
+      this.joinedData.forEach((item) => {
         const month = item.dateJoined.substring(0, 7);
         if (!grouped[month]) {
           grouped[month] = [];
@@ -71,7 +71,7 @@ export default {
   },
   data() {
     return {
-      enrolledData: [],
+      joinedData: [],
       isempty: false,
       isloading: true,
     };
@@ -100,7 +100,7 @@ export default {
           this.isloading = false;
           console.log("Success:", data);
           if (data.length == 0) this.isempty = true;
-          this.enrolledData = data;
+          this.joinedData = data;
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -119,7 +119,10 @@ a {
 
   background-color: #a3a3a3;
 }
-
+.relative {
+  position: relative;
+  height: 100%;
+}
 .image-container {
   position: absolute;
   top: 50%;

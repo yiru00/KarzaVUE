@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="relative">
     <div v-show="!isempty && !isloading">
       <div class="content">
         <h4>我的收藏活動</h4>
@@ -121,14 +121,16 @@ a {
 
   background-color: #a3a3a3;
 }
-
+.relative {
+  position: relative;
+  height: 100%;
+}
 .image-container {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
-
 .image-container img {
   width: 80%;
   height: auto;

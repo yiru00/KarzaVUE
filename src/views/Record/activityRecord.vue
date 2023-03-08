@@ -24,23 +24,23 @@
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      showUnderline: false,
-    };
-  },
-  created() {
-    this.$router.beforeEach((to, from, next) => {
-      if (to.path === this.$root.selectedTab) {
-        this.showUnderline = true;
-      } else {
-        this.showUnderline = false;
-      }
-      next();
-    });
-  },
-};
+// export default {
+//   data() {
+//     return {
+//       showUnderline: false,
+//     };
+//   },
+//   created() {
+//     this.$router.beforeEach((to, from, next) => {
+//       if (to.path === this.$root.selectedTab) {
+//         this.showUnderline = true;
+//       } else {
+//         this.showUnderline = false;
+//       }
+//       next();
+//     });
+//   },
+// };
 </script>
 <style scoped>
 .content {
@@ -53,7 +53,7 @@ export default {
 
 a {
   text-decoration: none;
-  color: #070707;
+  color: gray;
 }
 .linkBtn {
   background-color: transparent;
@@ -66,5 +66,6 @@ a {
 
 .active {
   border-bottom: 2px solid #afc7d8;
+  color: #070707;
 }
 </style>
