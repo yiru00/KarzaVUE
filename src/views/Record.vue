@@ -1,21 +1,61 @@
-<script setup>
+<script>
 import { RouterLink, RouterView } from "vue-router";
+import utility from "../../public/utility";
+export default {
+  data() {
+    return {
+      profile: [],
+    };
+  },
+  mixins: [utility],
+  mounted() {
+    this.getProfile();
+  },
+  methods: {
+    async getProfile() {
+      let id = await this.fetchMemberId();
+
+      if (id != 0) {
+        fetch(`https://localhost:7259/api/Members/Profile?id=${id}`, {
+          method: "GET",
+          headers: {
+            Authorization: `bearer ${$.cookie("token")}`,
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            this.profile = data;
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    },
+  },
+};
 </script>
 
 <template>
   <div class="d-flex m-5 reordpanel">
-    <nav>
-      <!-- <h4>我的紀錄</h4> -->
-      <ul>
-        <h5>官方活動</h5>
-        <li><RouterLink to="/ActivitySaved">收藏</RouterLink></li>
-        <li><RouterLink to="/ActivityEnrolled">報名</RouterLink></li>
-      </ul>
-      <ul>
-        <h5>商城</h5>
-        <li><RouterLink to="">收藏</RouterLink></li>
-        <li><RouterLink to="">訂單記錄</RouterLink></li>
-      </ul>
+    <nav class="nav">
+      <div class="info">
+        <img
+          v-if="profile.photoSticker == null"
+          src="../assets/userPic.png"
+          alt=""
+        />
+        <img v-else :src="profile.photoSticker" alt="" />
+        <p class="nickName">{{ profile.nickName }}</p>
+      </div>
+      <div class="linklist">
+        <RouterLink to="/Record/ActivitySaved">活動收藏</RouterLink>
+
+        <RouterLink to="/Record/ActivityEnrolled">活動報名</RouterLink>
+
+        <RouterLink to="">商品收藏</RouterLink>
+        <RouterLink to="">訂單記錄</RouterLink>
+      </div>
     </nav>
 
     <div class="record">
@@ -25,6 +65,65 @@ import { RouterLink, RouterView } from "vue-router";
 </template>
 
 <style scoped>
+.reordpanel {
+  display: flex;
+  justify-content: center;
+}
+.nav {
+  margin-right: 80px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 180px;
+  height: 350px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.nickName {
+  padding: 0;
+  margin: 0;
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: 500;
+}
+.info img {
+  width: 80px;
+  height: 80px;
+
+  border: 0.5px solid gray;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.linklist {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.record {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 800px;
+  min-height: 80vh;
+}
+a {
+  text-decoration: none;
+  color: #444;
+  padding: 5px;
+}
+a:hover {
+  background-color: #8991a9;
+  color: #fff;
+}
 @media (max-width: 992px) {
   .reordpanel {
     flex-direction: column;
@@ -33,13 +132,11 @@ import { RouterLink, RouterView } from "vue-router";
     min-width: 170px;
     border-radius: 10px;
   }
-  nav {
-    display: flex;
-    margin-left: 0px;
-    margin: 0px;
 
-    min-width: 100%;
+  .nav {
+    margin: 0px auto;
     width: 100%;
+    height: fit-content;
   }
   .record {
     background-color: #fff;
@@ -49,34 +146,11 @@ import { RouterLink, RouterView } from "vue-router";
     min-width: 100%;
     width: 100%;
   }
-  ul {
-    margin-left: 15px;
-    margin-bottom: 0px;
+  .linklist {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
   }
-}
-
-nav {
-  margin-right: 80px;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  min-width: 170px;
-}
-.record {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  width: 850px;
-}
-a {
-  text-decoration: none;
-  color: #444;
-}
-li {
-  list-style-type: none;
-}
-ul {
-  padding: 0px;
-  margin-bottom: 15px;
 }
 </style>

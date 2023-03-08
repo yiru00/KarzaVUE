@@ -1,39 +1,37 @@
 <template>
   <div class="relative">
     <div v-show="!isempty && !isloading">
-      <div class="content">
-        <h4>我的收藏活動</h4>
-        <div class="line mb-4"></div>
-        <div v-for="(items, month) in groupedSave" :key="month">
-          <p class="month">{{ month }}</p>
-          <div class="list">
-            <div v-for="(item, index) in items" :key="index">
-              <router-link :to="item.route">
-                <div class="listContent">
-                  <div class="coverImg">
-                    <img :src="item.coverImage" alt="活動圖" />
-                  </div>
-                  <div class="info">
-                    <p class="activityName">{{ item.activityName }}</p>
-                    <p class="description">
-                      {{ item.description.slice(0, 20) }}...
-                    </p>
-                    <p class="date">
-                      <i class="fa-solid fa-calendar-days"></i
-                      >{{ item.gatheringTime }}
-                    </p>
-                  </div>
+      <!-- <div class="content"> -->
+      <div v-for="(items, month) in groupedJoined" :key="month">
+        <p class="month">{{ month }}</p>
+        <div class="list">
+          <div v-for="(item, index) in items" :key="index">
+            <router-link :to="item.route">
+              <div class="listContent">
+                <div class="coverImg">
+                  <img :src="item.coverImage" alt="活動圖" />
                 </div>
+                <div class="info">
+                  <p class="activityName">{{ item.activityName }}</p>
+                  <p class="description">
+                    {{ item.description.slice(0, 20) }}...
+                  </p>
+                  <p class="date">
+                    <i class="fa-solid fa-calendar-days"></i
+                    >{{ item.gatheringTime }}
+                  </p>
+                </div>
+              </div>
 
-                <!-- 最後一筆資料不顯示分隔線 -->
-                <div class="line" v-show="index + 1 < items.length"></div>
-              </router-link>
-            </div>
+              <!-- 最後一筆資料不顯示分隔線 -->
+              <div class="line" v-show="index + 1 < items.length"></div>
+            </router-link>
           </div>
         </div>
       </div>
+      <!-- </div> -->
     </div>
-    <div v-show="isempty && !isloading">沒有收藏的活動</div>
+    <div v-show="isempty && !isloading">沒有參加過的的活動</div>
     <div v-show="isloading" class="image-container">
       <img src="../../assets/Spinner-1s-200px-2.gif" alt="" />
     </div>
@@ -41,7 +39,7 @@
 </template>
 
 <script>
-// import { useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import utility from "./../../../public/utility.js";
 
 //const route=useRoute();
@@ -57,19 +55,12 @@ export default {
   //     currentRoute,
   //   };
   // },
-  data() {
-    return {
-      savedData: [],
-      isempty: false,
-      isloading: true,
-    };
-  },
   computed: {
-    groupedSave() {
+    groupedJoined() {
       //依照收藏月份分組
       const grouped = {};
-      this.savedData.forEach((item) => {
-        const month = item.dateOfSave.substring(0, 7);
+      this.joinedData.forEach((item) => {
+        const month = item.dateJoined.substring(0, 7);
         if (!grouped[month]) {
           grouped[month] = [];
         }
@@ -78,11 +69,18 @@ export default {
       return grouped;
     },
   },
+  data() {
+    return {
+      joinedData: [],
+      isempty: false,
+      isloading: true,
+    };
+  },
   mounted() {
-    this.getActivitySaved();
+    this.getActivityJoined();
   },
   methods: {
-    async getActivitySaved() {
+    async getActivityJoined() {
       this.isempty = false;
       this.isloading = true;
       let memberId = await this.fetchMemberId();
@@ -90,7 +88,7 @@ export default {
         memberId: memberId,
       };
 
-      fetch("https://localhost:7259/api/ActivityRecord/Saved", {
+      fetch("https://localhost:7259/api/ActivityRecord/Joined", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -102,7 +100,7 @@ export default {
           this.isloading = false;
           console.log("Success:", data);
           if (data.length == 0) this.isempty = true;
-          this.savedData = data;
+          this.joinedData = data;
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -136,6 +134,7 @@ a {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
 .image-container img {
   width: 80%;
   height: auto;
@@ -192,4 +191,5 @@ a {
   color: #444;
   margin-right: 5px;
 }
+
 </style>

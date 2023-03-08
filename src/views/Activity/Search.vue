@@ -13,6 +13,7 @@
             id="activityName"
             type="text"
             placeholder="輸入活動名稱關鍵字..."
+            autocomplete="off"
           />
         </div>
         <div class="col-lg-2 col-md-4 col-6">
@@ -192,7 +193,7 @@ export default {
       categoryOption: [],
       isloading: true,
       isempty: true,
-      isShow: false,
+      // isShow: false,
     };
   },
   mounted() {
@@ -229,9 +230,7 @@ export default {
     });
   },
   methods: {
-    //#region alert
-
-    //#endregion
+  
 
     //#region 取得活動資訊、設定搜尋結果狀態
 

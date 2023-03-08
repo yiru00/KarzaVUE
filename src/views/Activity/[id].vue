@@ -159,27 +159,29 @@
         <div class="row justify-content-center m-4">
           <div class="col">
             <h5>查看路線</h5>
-            <div class="d-flex justify-content-between">
-              <div id="floating-panel">
-                <label for="mode">移動方式：</label>
-                <select v-model="map.selectedMode" id="mode" class="mode">
-                  <option value="" selected disabled>選擇交通方式</option>
-                  <option value="DRIVING">開車</option>
-                  <option value="WALKING">走路</option>
-                  <option value="BICYCLING">腳踏車</option>
-                  <option value="TRANSIT">大眾運輸</option>
-                </select>
-                <label for="origin">出發地點：</label>
-                <input
-                  v-model="map.origin"
-                  type="text"
-                  id="origin"
-                  class="origin"
-                />
-              </div>
-              <button @click="getLocation" id="geo">Get Location</button>
-              <span class="routes">{{ routes }}</span>
+            <div class="panel" id="floating-panel">
+              <label for="mode">交通方式： </label>
+              <select v-model="map.selectedMode" id="mode" class="mode">
+                <option value="" selected disabled>選擇交通方式</option>
+                <option value="DRIVING">開車</option>
+                <option value="WALKING">走路</option>
+                <option value="BICYCLING">腳踏車</option>
+                <option value="TRANSIT">大眾運輸</option>
+              </select>
+              <!-- <label for="origin">出發地點： </label> -->
+              <input
+                placeholder="輸入出發地點..."
+                v-model="map.origin"
+                type="text"
+                id="origin"
+                class="origin"
+                autocomplete="off"
+              />
+              <button class="geoBtn" @click="getLocation" id="geo">
+                使用目前位置
+              </button>
             </div>
+            <div v-show="routes != ''" class="routes">{{ routes }}</div>
             <div id="map"></div>
           </div>
         </div>
@@ -196,7 +198,7 @@
                 class="QandA"
                 id="question"
               >
-                <div class="QAlist d-flex align-items-center mb-2 p-3">
+                <div v-if="item.memberId != this.memberId" class="QAlist">
                   <div>
                     <div class="question">
                       <div class="user d-flex align-items-center">
@@ -221,19 +223,57 @@
                       <div class="date">{{ item.qDateCreated }}</div>
                     </div>
                   </div>
-                  <button
-                    v-if="item.memberId == this.memberId"
-                    @click="deleteQ(item.qId, index)"
-                    class="deleteQcontent"
-                  >
-                    <i class="fa-solid fa-trash"></i>
-                  </button>
-                </div>
-                <div v-if="item.aId != null" class="answer m-2">
-                  <div class="acontent">
-                    <p>↳ {{ item.aContent }}</p>
+                  <div v-if="item.aId != null" class="answer mt-3">
+                    回覆
+                    <div class="acontent">
+                      <p>{{ item.aContent }}</p>
+                    </div>
+                    <div class="date">{{ item.aDateCreated }}</div>
                   </div>
-                  <div class="date">{{ item.aDateCreated }}</div>
+                </div>
+                <div
+                  v-else-if="item.memberId == this.memberId"
+                  class="myQAlist"
+                >
+                  <div>
+                    <div>
+                      <div class="myquestion">
+                        <div class="user d-flex align-items-center">
+                          <img
+                            v-if="item.photoSticker"
+                            class="quser"
+                            :src="item.photoSticker"
+                            alt=""
+                          />
+                          <img
+                            v-else
+                            class="quser"
+                            src="../../../src/assets/userPic.png"
+                            alt=""
+                          />
+                          <p class="ms-4">{{ item.nickName }}</p>
+                          <button
+                            @click="deleteQ(item.qId, index)"
+                            class="deleteQcontent"
+                          >
+                            <i class="fa-solid fa-trash"></i>
+                          </button>
+                        </div>
+
+                        <div class="myqcontent">
+                          <p>{{ item.qContent }}</p>
+                        </div>
+                        <div class="date">{{ item.qDateCreated }}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div v-if="item.aId != null" class="myanswer mt-3">
+                    回覆
+                    <div class="myacontent">
+                      <p>{{ item.aContent }}</p>
+                    </div>
+                    <div class="date">{{ item.aDateCreated }}</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -328,7 +368,7 @@ export default {
       this.geo = null;
       this.map = {
         selectedMode: "TRANSIT",
-        origin: " ",
+        origin: null,
       };
       this.routes = "";
       this.initMap();
@@ -353,7 +393,7 @@ export default {
       sameCategory: [],
       map: {
         selectedMode: "TRANSIT",
-        origin: " ",
+        origin: null,
       },
       memberId: 0,
       isloading: true,
@@ -724,6 +764,7 @@ export default {
             aContent: null,
             aDateCreated: null,
           });
+          this.showAlert(data.message);
         });
     },
     //#endregion
@@ -766,6 +807,7 @@ export default {
 
     //#endregion
 
+    //#region 報名
     enroll(event) {
       let enrollData = {
         memberId: this.memberId,
@@ -804,7 +846,9 @@ export default {
           }
         });
     },
-
+    //#endregion
+    
+    //#region  取消報名
     unenroll(deleteId) {
       this.$swal
         .fire({
@@ -839,6 +883,7 @@ export default {
           }
         });
     },
+    //#endregion
   },
 };
 </script>
@@ -854,6 +899,7 @@ export default {
   margin-top: 20px;
   margin-left: auto;
   margin-right: auto;
+  padding-bottom: 0.75rem;
 }
 
 .image-container {
@@ -878,6 +924,22 @@ p {
 }
 
 /* 問與答 */
+.QAlist {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+  padding: 1rem;
+  /* border-bottom: 0.3px solid #afc7d8; */
+}
+.myQAlist {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-bottom: 0.5rem;
+  padding: 1rem;
+  /* border-bottom: 0.3px solid #afc7d8; */
+}
 .askInput {
   border: 2px solid #afc7d8;
   border-radius: 15px;
@@ -898,6 +960,7 @@ p {
   background-color: transparent;
   border-left: 2px solid #afc7d8;
 }
+
 .quser {
   width: 40px;
   height: 40px;
@@ -914,13 +977,44 @@ p {
   background-color: #fcf7f0;
   white-space: pre-wrap;
 }
+.myqcontent {
+  display: inline-block;
+  max-width: 800px;
+  padding: 20px;
+  margin-top: 10px;
+  border-radius: 30px;
+  border-top-right-radius: 5px;
+  background-color: #fcf7f0;
+  white-space: pre-wrap;
+}
+.myquestion {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
 .date {
   color: #686868;
   margin-top: 3px;
   font-size: 12px;
 }
 .acontent {
-  border-radius: 10px;
+  display: inline-block;
+  max-width: 800px;
+  padding: 20px;
+  margin-top: 10px;
+  border-radius: 30px;
+  background-color: #fcf0f0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+.myacontent {
+  display: inline-block;
+  max-width: 800px;
+  padding: 20px;
+  margin-top: 10px;
+  border-radius: 30px;
+  background-color: #fcf0f0;
+  white-space: pre-wrap;
   word-wrap: break-word;
   white-space: pre-wrap;
 }
@@ -933,14 +1027,21 @@ p {
   width: fit-content;
   height: fit-content;
   padding: 10px;
-  margin-right: 20px;
-  margin-left: auto;
 }
 .deleteQcontent i {
   font-size: 14px;
   color: #d39899;
 }
-
+.answer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.myanswer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
 /* 講師card */
 .instructorPhoto img {
   width: 80px;
@@ -1101,5 +1202,33 @@ p {
   outline: none;
   box-shadow: none;
   border: 0px;
+  margin-right: 10px;
+  height: 50px;
+}
+.panel {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 10px 0px;
+}
+.routes {
+  display: inline-block;
+  border: 1px solid #e9ca89;
+  padding: 15px;
+  border-radius: 15px;
+  margin: 10px 0px;
+}
+.geoBtn {
+  background-color: #a6b6b0;
+  color: #fff;
+  font-size: large;
+  padding: 10px;
+  border: 0px;
+  border-radius: 15px;
+}
+.geoBtn ::hover {
+  background-color: #fff;
+  color: #a6b6b0;
+  border: 1px solid #a6b6b0;
 }
 </style>
