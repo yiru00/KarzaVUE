@@ -213,7 +213,7 @@ export default {
               >
             </li>
             <li>
-              <RouterLink to="" class="dropdown-item personalList"
+              <RouterLink to="/Community" class="dropdown-item personalList"
                 >社群主頁</RouterLink
               >
             </li>
@@ -246,7 +246,9 @@ export default {
             <!-- <RouterLink to="/activity">activity</RouterLink> -->
           </li>
           <li class="nav-item">
-            <RouterLink to="" class="nav-link navLink">社群</RouterLink>
+            <RouterLink to="/Community" class="nav-link navLink"
+              >社群</RouterLink
+            >
           </li>
 
           <li class="nav-item">
@@ -294,8 +296,10 @@ export default {
                 >
               </li>
               <li>
-                <RouterLink to="" class="dropdown-item personalList"
-                  >社群主頁</RouterLink
+                <RouterLink
+                  to="/Community/PersonalPage"
+                  class="dropdown-item personalList"
+                  >個人主頁</RouterLink
                 >
               </li>
               <li>
@@ -388,7 +392,7 @@ export default {
   </footer>
 </template>
 
-<style>
+<style scoped>
 * {
   font-family: "Noto Serif TC", serif;
   color: #070707;

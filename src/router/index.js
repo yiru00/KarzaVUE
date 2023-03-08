@@ -1,10 +1,13 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
-
+import PhotoGrid from "../components/PersonalPage/PhotoGrid.vue";
+import AlbumGrid from "../components/PersonalPage/AlbumGrid.vue";
+import AlbumPhoto from "../components/PersonalPage/AlbumPhoto.vue";
+import Collection from "../components/PersonalPage/Collection.vue";
+import Statics from "../components/PersonalPage/Statics.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    
     //首頁
     {
       path: "/",
@@ -12,7 +15,6 @@ const router = createRouter({
       //適合一般靜態網頁
       component: HomeView,
     },
-    
     {
       path: "/Activity",
       name: "Activity",
@@ -25,12 +27,12 @@ const router = createRouter({
       //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
       component: () => import("../views/Forum.vue"),
     },
-    
+
     //活動詳細頁面(動態router
     {
       path: "/Activity/:id",
       name: "activityDetails",
-      component: ()=>import("../views/Activity/[id].vue"),
+      component: () => import("../views/Activity/[id].vue"),
     },
     //活動搜尋
     {
@@ -38,31 +40,69 @@ const router = createRouter({
       name: "activitySearch",
       component: () => import("../views/Activity/Search.vue"),
     },
-
-//我的紀錄
-{
-  path: "/Record",
-  name: "Record",
-  component: () => import("../views/Record.vue"),
-  children: [
-    //預設顯示活動收藏
+    //社群主頁
     {
-      path:"",
-      name:'ActivitySaveRecord',
-      component:import("../views/Record/ActivitySaved.vue")
+      path: "/Community",
+      name: "Community",
+      component: () => import("../views/Community.vue"),
     },
+    //個人主頁
     {
-      path: "/ActivitySaved",
-      name: "ActivitySaveRecord",
-      component: import("../views/Record/ActivitySaved.vue"),
+      name: "personalPage",
+      component: () => import("../views/PersonalPage.vue"),
+      children: [
+        {
+          path: "/Community/PersonalPage/Photos",
+          name: "photos",
+          component: PhotoGrid,
+          alias: ["/Community/PersonalPage"],
+        },
+        {
+          path: "/Community/PersonalPage/Albums",
+          name: "albums",
+          component: AlbumGrid,
+        },
+        {
+          path: "/Community/PersonalPage/Albums/AlbumPhoto",
+          name: "albumphoto",
+          component: AlbumPhoto,
+        },
+        {
+          path: "/Community/PersonalPage/Collections",
+          name: "collection",
+          component: Collection,
+        },
+        {
+          path: "/Community/PersonalPage/Statics",
+          name: "statics",
+          component: Statics,
+        },
+      ],
     },
+    //我的紀錄
     {
-      path: "/ActivityEnrolled",
-      name: "ActivityEnrolledRecord",
-      component: import("../views/Record/ActivityEnrolled.vue"),
+      path: "/Record",
+      name: "Record",
+      component: () => import("../views/Record.vue"),
+      children: [
+        //預設顯示活動收藏
+        {
+          path: "",
+          name: "ActivitySaveRecord",
+          component: import("../views/Record/ActivitySaved.vue"),
+        },
+        {
+          path: "/ActivitySaved",
+          name: "ActivitySaveRecord",
+          component: import("../views/Record/ActivitySaved.vue"),
+        },
+        {
+          path: "/ActivityEnrolled",
+          name: "ActivityEnrolledRecord",
+          component: import("../views/Record/ActivityEnrolled.vue"),
+        },
+      ],
     },
-  ],
-},
     //要在最後一個(可能被動態router攔截)
     // 網址錯誤會跑到404那頁
     {
