@@ -11,7 +11,18 @@ const router = createRouter({
       //適合一般靜態網頁
       component: HomeView,
     },
-    
+    {
+      path: "/Register",
+      name: "Register",
+      //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
+      component: () => import("../views/Member/Register.vue"),
+    },
+    {
+      path: "/Profile",
+      name: "Profile",
+      //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
+      component: () => import("../views/Member/Profile.vue"),
+    },
     {
       path: "/Activity",
       name: "Activity",

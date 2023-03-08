@@ -91,7 +91,7 @@ export default {
         })
           .then((response) => response.json())
           .then((data) => {
-            console.log(data);
+            //console.log(data);
             if (data.photoSticker != null)
               $(".userButton").css(
                 "background-image",
@@ -102,6 +102,10 @@ export default {
             console.error(error);
           });
       }
+    },
+    logout(){
+     document.cookie = "token=''; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+     this.$router.go(0)
     },
     userLogin() {
       if (!this.user.email && !this.user.password) {
@@ -203,7 +207,7 @@ export default {
           ></button>
           <ul class="dropdown-menu dropdown-menu-end">
             <li>
-              <RouterLink to="" class="dropdown-item personalList"
+              <RouterLink to="/Profile" class="dropdown-item personalList"
                 >帳戶管理</RouterLink
               >
             </li>
@@ -227,7 +231,7 @@ export default {
             <li><hr class="dropdown-divider" /></li>
             <li>
               <RouterLink to="" class="dropdown-item personalList" href="#"
-                >登出</RouterLink
+               @click="logout" >登出</RouterLink
               >
             </li>
           </ul>
@@ -308,7 +312,7 @@ export default {
             ></button>
             <ul class="dropdown-menu dropdown-menu-end">
               <li>
-                <RouterLink to="" class="dropdown-item personalList"
+                <RouterLink to="/Profile" class="dropdown-item personalList"
                   >帳戶管理</RouterLink
                 >
               </li>
@@ -332,7 +336,7 @@ export default {
               <li><hr class="dropdown-divider" /></li>
               <li>
                 <RouterLink to="" class="dropdown-item personalList"
-                  >登出</RouterLink
+                @click="logout">登出</RouterLink
                 >
               </li>
             </ul>
@@ -343,7 +347,6 @@ export default {
   </nav>
 
   <main><RouterView /></main>
-
   <!-- login modal -->
   <div
     class="modal fade"
@@ -390,11 +393,17 @@ export default {
                 value="登入"
               />
             </div>
-            <router-link to="" class="mt-3">忘記密碼？</router-link>
+            <router-link to="" class="mt-3"
+              >忘記密碼？</router-link
+            >
           </div>
         </div>
 
-        <p>還沒加入會員？<router-link to="">註冊</router-link></p>
+        <p>
+          還沒加入會員？<router-link to="/Register"
+          ><span data-bs-dismiss="modal">註冊</span></router-link
+          >
+        </p>
       </div>
     </div>
   </div>
