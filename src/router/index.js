@@ -16,13 +16,13 @@ const router = createRouter({
       path: "/Register",
       name: "Register",
       //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
-      component: () => import("../views/member/Register.vue"),
+      component: () => import("../views/Member/Register.vue"),
     },
     {
       path: "/Profile",
       name: "Profile",
       //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
-      component: () => import("../views/member/Profile.vue"),
+      component: () => import("../views/Member/Profile.vue"),
     },
     {
       path: "/Activity",

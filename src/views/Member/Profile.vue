@@ -1,53 +1,56 @@
 <template>
-   <div>
-    <table>
-      <thead>
-        <tr>
-          <th>帳號</th>
-          <th>密碼</th>
-          <th>姓名</th>
-          <th>生日</th>
-          <th>暱稱</th>
-          <th>電話</th>
-          <th>地址</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(user, index) in users" :key="index">
-          <td>{{ user.username }}</td>
-          <td>{{ user.password }}</td>
-          <td>{{ user.name }}</td>
-          <td>{{ user.birthday }}</td>
-          <td>{{ user.nickname }}</td>
-          <td>{{ user.phone }}</td>
-          <td>{{ user.address }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div>
+    <h1>帳戶設定</h1>
+    <h2>個人資訊</h2>
+    <p>姓名:{{ users.realName }}</p>
+    <p>暱稱:{{ users.nickName }}</p>
+    <p>生日:{{ users.birthOfDate }}</p>
+    <p>手機:{{ users.mobile }}</p>
+    <p>地址:{{ users.address }}</p>
+    <p>關於:{{ users.about }}</p>
+    
+       
+  </div>
+
+  <div class="float-right">
+    <p>帳號:{{ users.emailAccount }}</p>
+    <p>密碼:編輯密碼</p>
   </div>
 
 
 </template>
 
 <script>
+import utility from "../../../public/utility.js"
 import axios from 'axios'
 
 export default {
   data() {
     return {
-      users: []
-    }
+      users: {},
+    };
   },
-  mounted() {
-    axios.get('https://localhost:7259//api/Members/Profile').then(response => {
-      this.users = response.data
-    }).catch(error => {
-      console.log(error)
-    })
-  }
-}
+  mixins: [utility],
+ async mounted() {
+    let id = await this.fetchMemberId();
+
+    axios
+      .get(`https://localhost:7259/api/Members/Profile?id=${id}`, {
+        headers: {
+          Authorization: "Bearer " + $.cookie("token"),
+        },
+      })
+      .then((response) => {
+        this.users = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
+};
+
 </script>
 
-<style>
+<style scoped>
 
 </style>
