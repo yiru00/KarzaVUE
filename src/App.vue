@@ -103,9 +103,10 @@ export default {
           });
       }
     },
-    logout(){
-     document.cookie = "token=''; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
-     this.$router.go(0)
+    logout() {
+      document.cookie =
+        "token=''; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      this.$router.go(0);
     },
     userLogin() {
       if (!this.user.email && !this.user.password) {
@@ -144,7 +145,7 @@ export default {
           ) {
             this.user.erromsg = response;
           } else {
-            document.cookie = `token=${response}`;
+            document.cookie = `token=${response}; path=/`;
             this.navigateTo();
           }
         })
@@ -230,8 +231,12 @@ export default {
             </li>
             <li><hr class="dropdown-divider" /></li>
             <li>
-              <RouterLink to="" class="dropdown-item personalList" href="#"
-               @click="logout" >登出</RouterLink
+              <RouterLink
+                to=""
+                class="dropdown-item personalList"
+                href="#"
+                @click="logout"
+                >登出</RouterLink
               >
             </li>
           </ul>
@@ -335,8 +340,11 @@ export default {
               </li>
               <li><hr class="dropdown-divider" /></li>
               <li>
-                <RouterLink to="" class="dropdown-item personalList"
-                @click="logout">登出</RouterLink
+                <RouterLink
+                  to=""
+                  class="dropdown-item personalList"
+                  @click="logout"
+                  >登出</RouterLink
                 >
               </li>
             </ul>
@@ -393,15 +401,13 @@ export default {
                 value="登入"
               />
             </div>
-            <router-link to="" class="mt-3"
-              >忘記密碼？</router-link
-            >
+            <router-link to="" class="mt-3">忘記密碼？</router-link>
           </div>
         </div>
 
         <p>
           還沒加入會員？<router-link to="/Register"
-          ><span data-bs-dismiss="modal">註冊</span></router-link
+            ><span data-bs-dismiss="modal">註冊</span></router-link
           >
         </p>
       </div>
