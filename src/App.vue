@@ -140,7 +140,7 @@ export default {
           ) {
             this.user.erromsg = response;
           } else {
-            document.cookie = `token=${response}`;
+            document.cookie = `token=${response}; path=/`;
             this.navigateTo();
           }
         })

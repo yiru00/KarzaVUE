@@ -126,16 +126,6 @@ export default {
     },
     //#endregion
 
-    // getNewSum() {
-    //   let carouselarr = [];
-    //   let carouselItem = 0;
-    //   this.new.forEach((element) => {
-    //     carouselarr.push(carouselItem);
-    //     carouselItem++;
-    //   });
-    //   this.carousel = carouselarr;
-    // },
-
     //#region 取得熱門活動
     getPopularActivity() {
       fetch("https://localhost:7259/api/Activity/Popular")
