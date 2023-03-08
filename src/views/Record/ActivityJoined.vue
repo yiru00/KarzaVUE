@@ -111,6 +111,11 @@ export default {
 </script>
 
 <style scoped>
+@media (max-width: 576px) {
+  .coverImg {
+    display: none;
+  }
+}
 a {
   text-decoration: none;
 }
@@ -146,7 +151,7 @@ a {
   color: #444;
 }
 .list {
-  background-color: #afc7d81d;
+  background-color: #b9c9d61d;
   border-radius: 15px;
   padding: 15px;
   margin-bottom: 20px;
@@ -166,7 +171,7 @@ a {
 }
 .coverImg img {
   border-radius: 10px;
-  border: 0.5px solid #a3a3a3;
+  border: 0.5px solid gray;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -186,4 +191,5 @@ a {
   color: #444;
   margin-right: 5px;
 }
+
 </style>

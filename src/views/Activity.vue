@@ -2,7 +2,7 @@
   <div>
     <div
       id="newActivity"
-      class="carousel slide newActivityCarousel"
+      class="carousel slide carousel-fade newActivityCarousel"
       data-bs-ride="carousel"
     >
       <div class="carousel-indicators">
@@ -24,15 +24,29 @@
         </div>
       </div>
       <div class="carousel-inner">
-        <div
-          class="carousel-item active carouselImg"
-          data-bs-interval="1500"
-          v-for="(item, index) in this.new"
-          :key="index"
-        >
-          <router-link :to="item.route">
-            <img :src="item.coverImage" alt="活動圖" />
-          </router-link>
+        <div v-for="(item, index) in this.new" :key="index">
+          <div
+            v-if="index == 0"
+            class="carousel-item carouselImg active"
+            data-bs-interval="1500"
+          >
+            <router-link :to="item.route">
+              <img :src="item.coverImage" alt="活動圖" />
+              <!-- <div class="carousel-caption d-none d-md-block">
+                <h5>{{ item.activityName }}</h5>
+                <p>{{ item.description.slice(0, 10) }}...</p>
+              </div> -->
+            </router-link>
+          </div>
+          <div v-else class="carousel-item carouselImg" data-bs-interval="1500">
+            <router-link :to="item.route">
+              <img :src="item.coverImage" alt="活動圖" />
+              <!-- <div class="carousel-caption d-none d-md-block">
+                <h5>{{ item.activityName }}</h5>
+                <p>{{ item.description.slice(0, 10) }}...</p>
+              </div> -->
+            </router-link>
+          </div>
         </div>
       </div>
       <button
@@ -55,7 +69,9 @@
       </button>
     </div>
 
-    <button><router-link to="/Activity/Search">搜尋</router-link></button>
+    <button>
+      <router-link to="/Activity/Search">探索更多活動</router-link>
+    </button>
   </div>
 </template>
 

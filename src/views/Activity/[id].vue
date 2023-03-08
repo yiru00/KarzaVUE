@@ -807,6 +807,7 @@ export default {
 
     //#endregion
 
+    //#region 報名
     enroll(event) {
       let enrollData = {
         memberId: this.memberId,
@@ -845,7 +846,9 @@ export default {
           }
         });
     },
-
+    //#endregion
+    
+    //#region  取消報名
     unenroll(deleteId) {
       this.$swal
         .fire({
@@ -880,6 +883,7 @@ export default {
           }
         });
     },
+    //#endregion
   },
 };
 </script>

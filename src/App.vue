@@ -242,20 +242,42 @@ export default {
         <!-- Navbar nav -->
         <ul class="navbar-nav me-3 ms-3">
           <li class="nav-item">
-            <RouterLink to="/Activity" class="nav-link navLink"
+            <RouterLink
+              exact
+              active-class="active1"
+              to="/Activity"
+              class="nav-link navLink"
               >官方活動</RouterLink
             >
             <!-- <RouterLink to="/activity">activity</RouterLink> -->
           </li>
           <li class="nav-item">
-            <RouterLink to="" class="nav-link navLink">社群</RouterLink>
+            <RouterLink
+              exact
+              active-class="active1"
+              to="/"
+              class="nav-link navLink"
+              >社群</RouterLink
+            >
           </li>
 
           <li class="nav-item">
-            <RouterLink to="" class="nav-link navLink">商城</RouterLink>
+            <RouterLink
+              exact
+              active-class="active1"
+              to="/"
+              class="nav-link navLink"
+              >商城</RouterLink
+            >
           </li>
           <li class="nav-item">
-            <RouterLink to="/Forum" class="nav-link navLink">論壇</RouterLink>
+            <RouterLink
+              exact
+              active-class="active1"
+              to="/Forum"
+              class="nav-link navLink"
+              >論壇</RouterLink
+            >
           </li>
         </ul>
 
@@ -368,17 +390,11 @@ export default {
                 value="登入"
               />
             </div>
-            <router-link to="" class="mt-3" href="./../forgetPassword.html"
-              >忘記密碼？</router-link
-            >
+            <router-link to="" class="mt-3">忘記密碼？</router-link>
           </div>
         </div>
 
-        <p>
-          還沒加入會員？<router-link to="" href="./../register.html"
-            >註冊</router-link
-          >
-        </p>
+        <p>還沒加入會員？<router-link to="">註冊</router-link></p>
       </div>
     </div>
   </div>
@@ -417,7 +433,7 @@ main {
 @media (min-width: 992px) {
   #mainNav {
     background: #fff;
-    transition: background-color 0.2s;
+    transition: background-color 0.5s;
     /* Force Hardware Acceleration in WebKit */
     transform: translate3d(0, 0, 0);
     -webkit-backface-visibility: hidden;
@@ -432,13 +448,16 @@ main {
     /* 往下滑時navbar固定在網頁上方隱藏 */
     position: fixed;
     top: -66px;
-    transition: transform 0.2s;
+    transition: transform 0.5s;
   }
 
   #mainNav.is-visible {
     /* 變化滑動方向時顯示出navbar */
     background-color: #ffffffae;
     transform: translate3d(0, 100%, 0);
+  }
+  .active1 {
+    border-bottom: 2px solid #afc7d8;
   }
 }
 
@@ -471,27 +490,6 @@ main {
   bottom: 0px;
   background-color: #8991a9;
 }
-.mail,
-.mail:active {
-  color: #fff;
-  text-decoration: none;
-}
-.mail:hover {
-  color: #fcf7f0;
-  cursor: pointer;
-}
-/* .notificationButton,
-  .messageButton {
-    background-color: transparent;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    border: 0;
-  }
-  .notificationButton:focus,
-  .messageButton:focus {
-    border: 0;
-  } */
 
 .modal-content {
   background-color: #fff;
