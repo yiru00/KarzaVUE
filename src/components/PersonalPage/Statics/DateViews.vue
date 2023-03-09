@@ -1,19 +1,22 @@
 <template>
-        <div class="chartCard">
-            <div class="chartBox">
-                <canvas id="myChart"></canvas>
-            </div>
-        </div>
+  <div class="chartCard">
+    <div class="chartBox">
+      <canvas id="myChart"></canvas>
+    </div>
+  </div>
 </template>
 
 <script setup>
 // 七天內照片總瀏覽次數
+import { useRoute } from "vue-router";
+const route = useRoute();
+const memberId = route.params.memberId;
 let dated;
 
 axios({
   method: "POST",
   url: "https://localhost:7259/api/Statistic/DateViews",
-  data: { Id: 1 },
+  data: { Id: memberId },
 })
   .then((response) => {
     console.log(response.data);

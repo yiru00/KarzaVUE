@@ -4,10 +4,8 @@
     <!-- Personal information overlay -->
     <div class="about">
       <h4 class="text-light">關於</h4>
-      <p class="text-light ms-1">
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquid
-        tempore ullam ipsum et, rerum porro sint id blanditiis optio nemo sequi
-        obcaecati atque iure quis at ipsa facilis quasi similique.
+      <p class="text-light">
+        {{ memberProfile.about }}
       </p>
     </div>
   </div>
@@ -23,12 +21,19 @@
             <div class="userText">
               <div class="userProfile">
                 <img
+                  v-if="memberProfile.source != null"
                   class="imgPhoto mb-3 mb-sm-3 me-md-3 me-xl-0 mb-lg-2"
-                  src="https://picsum.photos/500/400?random=1"
-                  alt=""
+                  :src="memberProfile.source"
+                  :alt="memberProfile.source"
                 />
-                <p class="fs-5 m-0">用戶的暱稱</p>
-                <p></p>
+                <img
+                  v-else
+                  class="imgPhoto mb-3 mb-sm-3 me-md-3 me-xl-0 mb-lg-2"
+                  src="../assets/userPic.png"
+                  alt="1"
+                />
+                <p class="fs-5 m-0">{{ memberProfile.name }}</p>
+                <!-- <p>{{ memberProfile }}</p> -->
               </div>
 
               <div class="userBtn">
@@ -45,28 +50,56 @@
           <div class="row gy-4">
             <!-- 選單 切換component-->
             <div class="col-12 userLinkGroup">
-              <RouterLink to="/Community/PersonalPage/Photos" class="userLink"
+              <RouterLink
+                :to="`/Community/PersonalPage/${memberId}/Photos`"
+                class="userLink"
                 >相片</RouterLink
               >
-              <RouterLink to="/Community/PersonalPage/Albums" class="userLink"
+              <RouterLink
+                :to="`/Community/PersonalPage/${memberId}/Albums`"
+                class="userLink"
                 >相簿</RouterLink
               >
               <RouterLink
-                to="/Community/PersonalPage/Collections"
+                :to="`/Community/PersonalPage/${memberId}/Collections`"
                 class="userLink"
                 >收藏</RouterLink
               >
               <div class="dropdown">
-                <button  role="button" class="userLink dropdown-toggle toggle" data-bs-toggle="dropdown"  aria-expanded="false">
-                  <RouterLink :to="{ name: 'dateViews' } " class="link" >統計</RouterLink>
+                <button
+                  role="button"
+                  class="userLink dropdown-toggle toggle"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <RouterLink
+                    :to="`/Community/PersonalPage/${memberId}/Statics/DateViews`"
+                    class="link"
+                    >統計</RouterLink
+                  >
                 </button>
-                <ul class="dropdown-menu staticBtnGroup" >
-                  <li><RouterLink  :to="{ name: 'dateViews' }" >7天總瀏覽</RouterLink></li>
-                  <li><RouterLink  :to="{ name: 'cameraUse' }" >相機使用率</RouterLink></li>
-                  <li><RouterLink  :to="{ name: 'topPhotoViews' }" >最高瀏覽照片</RouterLink></li>
+                <ul class="dropdown-menu staticBtnGroup">
+                  <li>
+                    <RouterLink
+                      :to="`/Community/PersonalPage/${memberId}/Statics/DateViews`"
+                      >7天總瀏覽</RouterLink
+                    >
+                  </li>
+                  <li>
+                    <RouterLink
+                      :to="`/Community/PersonalPage/${memberId}/Statics/CameraUse`"
+                      >相機使用率</RouterLink
+                    >
+                  </li>
+                  <li>
+                    <RouterLink
+                      :to="`/Community/PersonalPage/${memberId}/Statics/TopPhotoViews`"
+                      >最高瀏覽照片</RouterLink
+                    >
+                  </li>
                 </ul>
-              </div>          
-            </div>    
+              </div>
+            </div>
 
             <!-- 呈現內容 component使用-->
             <RouterView></RouterView>
@@ -77,19 +110,36 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { useRoute } from "vue-router";
+import { ref } from "vue";
+const route = useRoute();
+const memberId = route.params.memberId;
+const memberProfile = ref();
+
+console.log(memberId);
+axios({
+  method: "GET",
+  url: `https://localhost:7259/api/Photo/GetProfile?memberId=${memberId}`,
+})
+  .then((response) => {
+    memberProfile.value = response.data;
+    console.log(memberProfile);
+  })
+  .catch((error) => console.log(error));
+</script>
 
 <style scoped>
-.toggle{
+.toggle {
   z-index: 0;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.link{
+.link {
   z-index: 1;
   text-decoration: none;
-  color:#444444;
+  color: #444444;
   padding: 8px;
   width: 100%;
   text-align: center;
@@ -102,7 +152,6 @@
 
 .imgPhoto {
   border-radius: 50%;
-  height: 100%;
   width: 110px;
   height: 110px;
 }
@@ -209,33 +258,34 @@
   justify-content: center;
   align-items: center;
 }
-.userLink:hover{
+.userLink:hover {
   transition: 0.3s ease-in-out;
   border-radius: 15px;
   background-color: #dbe5e1eb;
   color: #444444;
 }
-.userLink.router-link-active,.link.router-link-active {
+.userLink.router-link-active,
+.link.router-link-active {
   border-radius: 15px;
   background-color: #dbe5e1eb;
   color: #444444;
   border: 0;
 }
 
-.staticBtnGroup li .router-link-active{
+.staticBtnGroup li .router-link-active {
   background-color: #dbe5e1eb;
   color: #444444;
 }
 
-.staticBtnGroup li:hover{
+.staticBtnGroup li:hover {
   background-color: #b6cac2eb;
 }
 
-.staticBtnGroup li{
+.staticBtnGroup li {
   display: flex;
   justify-content: center;
 }
-.staticBtnGroup li a{
+.staticBtnGroup li a {
   text-decoration: none;
   color: #444444;
   width: 100%;
@@ -315,7 +365,8 @@
     align-items: center;
   }
 
-  .userLink,.staticBtn {
+  .userLink,
+  .staticBtn {
     margin-top: 20px;
     margin-right: 0px;
   }

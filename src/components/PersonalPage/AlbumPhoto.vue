@@ -3,7 +3,7 @@
   <div class="col-12">
     <h3>相簿title</h3>
   </div>
-  <div class="col-12 col-sm-6 col-md-4 col-lg-3" v-for="i in 10">
+  <div class="col-12 col-sm-6 col-md-4 col-lg-3" v-for="i in 10" :key="i">
     <div class="card cardSize">
       <!-- <a href="#" class="w-100 h-100"> -->
       <img
@@ -19,7 +19,7 @@
   </div>
 </template>
 
-<script setup></script>
+<script></script>
 
 <style scoped>
 .photoGrid {

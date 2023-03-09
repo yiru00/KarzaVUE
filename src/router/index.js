@@ -56,38 +56,38 @@ const router = createRouter({
       component: () => import("../views/PersonalPage.vue"),
       children: [
         {
-          path: "/Community/PersonalPage/Photos",
+          path: "/Community/PersonalPage/:memberId/Photos",
           name: "photos",
           component: PhotoGrid,
           alias: ["/Community/PersonalPage"],
         },
         {
-          path: "/Community/PersonalPage/Albums",
+          path: "/Community/PersonalPage/:memberId/Albums",
           name: "albums",
           component: AlbumGrid,
         },
         {
-          path: "/Community/PersonalPage/Albums/AlbumPhoto",
+          path: "/Community/PersonalPage/:memberId/Albums/:albumId/AlbumPhoto",
           name: "albumphoto",
           component: AlbumPhoto,
         },
         {
-          path: "/Community/PersonalPage/Collections",
+          path: "/Community/PersonalPage/:memberId/Collections",
           name: "collection",
           component: Collection,
         },
         {
-          path: "/Community/PersonalPage/Statics/DateViews",
+          path: "/Community/PersonalPage/:memberId/Statics/DateViews",
           name: "dateViews",
           component: DateViews,
         },
         {
-          path: "/Community/PersonalPage/Statics/CameraUse",
+          path: "/Community/PersonalPage/:memberId/Statics/CameraUse",
           name: "cameraUse",
           component: CameraUse,
         },
         {
-          path: "/Community/PersonalPage/Statics/TopPhotoViews",
+          path: "/Community/PersonalPage/:memberId/Statics/TopPhotoViews",
           name: "topPhotoViews",
           component: TopPhotoViews,
         },

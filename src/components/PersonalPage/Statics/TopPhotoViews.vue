@@ -1,17 +1,20 @@
 <template>
-    <div class="chartCard">
-      <div class="chartBox">
-        <canvas id="myChart"></canvas>
-      </div>
+  <div class="chartCard">
+    <div class="chartBox">
+      <canvas id="myChart"></canvas>
     </div>
+  </div>
 </template>
 
 <script setup>
+import { useRoute } from "vue-router";
+const route = useRoute();
+const memberId = route.params.memberId;
 let dated;
 axios({
   method: "POST",
   url: "https://localhost:7259/api/Statistic/TopViews",
-  data: { Id: 1 },
+  data: { Id: memberId },
 })
   .then((response) => {
     console.log(response.data);
@@ -58,8 +61,7 @@ axios({
               context.mode === "default" &&
               !delayed
             ) {
-              delay =
-                context.dataIndex * 150 + context.datasetIndex * 100;
+              delay = context.dataIndex * 150 + context.datasetIndex * 100;
             }
             return delay;
           },
