@@ -1,57 +1,19 @@
 <template>
-    <div class="container article_banner">
-      <div class="contents row ">
-        <div class="forum col-2 ">
-          <div class="card">
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item forumall">
-                <a href="#">所有看板</a>
-              </li>
-              <li class="list-group-item forumother ">
-                <a href="#">Karza精選看板</a>
-              </li>
-              <li class="list-group-item forumother">
-                <a href="#">旅遊照片</a>
-              </li>
-            </ul>
-          </div>
+    <div class="post">
+        <div class="d-flex align-items-center mb-2">
+        <p class="author">作者：使用者名稱</p>
+        <p class="date ms-2">發布時間：2023/03/07</p>
+        <p class="author ms-2">看板</p>
         </div>
-        <div class="col-10 ">
-          <div class="articl_search">
-            <div class="article_text" >
-                <p>搜尋文章</p>
-            </div>
-            <div class="icon">icon</div>
-          </div>
-          <div class="article" >
-              <div class="card-header d-flex justify-content-between article_title">
-                <a class="nav-link active " aria-current="true" href="#">
-                  全部文章
-                </a>
-                <button class="article_create">新增文章</button>
-                <div class="article_change" >
-                  <p class="m-0 me-3" >文章篩選 : </p>
-                  <select class="article_category" >
-                    <option value="1" class="choice">熱門</option>
-                    <option value="2" class="choice">最新</option>
-                  </select>
-                </div>
-              </div>
-              <!-- 內容在這 -->
-              <Forumarticle v-for="i in 5" :key="i"></Forumarticle>
-          </div>
-        </div>
-      </div>
+        <h2 class= "mb-2"><a>標題</a></h2>
+        <p class="content mb-2">文章內容</p>
+        <p class="comments">留言數：10</p>
     </div>
-
 </template>
 
 <script>
-import Forumarticle from './Forum/Forumarticle.vue';
 export default {
-    components: {
-        Forumarticle
-    }
+    name: "ForumArticle"
 }
 </script>
 
