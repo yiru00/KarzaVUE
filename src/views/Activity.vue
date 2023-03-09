@@ -24,13 +24,13 @@
         </div>
       </div>
       <div class="carousel-inner">
-        <div v-for="(item, index) in this.new" :key="index">
+        <div v-for="(item, index) in this.newActivity" :key="index">
           <div
             v-if="index == 0"
             class="carousel-item carouselImg active"
             data-bs-interval="1500"
           >
-            <router-link :to="item.route">
+            <router-link :to="'/Activity/' + item.activityId">
               <img :src="item.coverImage" alt="活動圖" />
               <!-- <div class="carousel-caption d-none d-md-block">
                 <h5>{{ item.activityName }}</h5>
@@ -39,7 +39,7 @@
             </router-link>
           </div>
           <div v-else class="carousel-item carouselImg" data-bs-interval="1500">
-            <router-link :to="item.route">
+            <router-link :to="'/Activity/' + item.activityId">
               <img :src="item.coverImage" alt="活動圖" />
               <!-- <div class="carousel-caption d-none d-md-block">
                 <h5>{{ item.activityName }}</h5>
@@ -98,7 +98,7 @@
                   <!-- <div></div> -->
                 </div>
               </div>
-              <router-link :to="item.route">
+              <router-link :to="`/Activity/${item.activityId}`">
                 <div class="arrow">
                   <i class="fa-solid fa-arrow-right-to-bracket fs-4"></i>
                 </div>
@@ -112,13 +112,13 @@
 </template>
 
 <script>
-import { RouterLink } from "vue-router";
+//import { RouterLink } from "vue-router";
 import utility from "../../public/utility.js";
 export default {
   mixins: [utility],
   data() {
     return {
-      new: [],
+      newActivity: [],
       popular: [],
       willbeheld: [],
       memberId: 0,
@@ -129,7 +129,7 @@ export default {
     getNewSum() {
       const carousel = [];
       let carouselItem = 0;
-      this.new.forEach((element) => {
+      this.newActivity.forEach((element) => {
         carousel.push(carouselItem);
         carouselItem++;
       });
@@ -138,9 +138,7 @@ export default {
     },
   },
   mounted() {
-    // this.getMemberId();
     this.getNewActivity();
-    // this.getNewSum();
     this.getPopularActivity();
     this.getWillbeheld();
   },
@@ -153,16 +151,14 @@ export default {
     //#endregion
     //#region 取得最新活動（輪播圖用）
     async getNewActivity() {
-      fetch("https://localhost:7259/api/Activity/New")
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(`new${data}`);
-          this.new = data;
-        });
+      let response = await fetch("https://localhost:7259/api/Activity/New");
+      let data = await response.json();
+
+      this.newActivity = data;
     },
     //#endregion
     //#region 取得熱門活動
-    getPopularActivity() {
+    async getPopularActivity() {
       fetch("https://localhost:7259/api/Activity/Popular")
         .then((response) => response.json())
         .then((data) => {
@@ -182,7 +178,7 @@ export default {
     },
     //#endregion
   },
-  components: { RouterLink },
+  // components: { RouterLink },
 };
 </script>
 
@@ -250,16 +246,14 @@ a {
   font-size: 14px;
 }
 .progressBar {
-  background-color: #dfd5b9b1;
+  background-color: #8991a930;
   height: 8px;
   border-radius: 5px;
   width: 100%;
   margin: 10px 0px;
 }
 .progressBar div {
-  background-color: #e9ca89;
-  /* background-color: #6f6144; */
-  /* width: 0%; */
+  background-color: #8991a9;
   height: 8px;
   border-radius: 5px;
 }

@@ -8,7 +8,7 @@
           <p class="month">{{ month }}</p>
           <div class="list">
             <div v-for="(item, index) in items" :key="index">
-              <router-link :to="item.route">
+              <router-link :to="'/Activity/'+item.activityId">
                 <div class="listContent">
                   <div class="coverImg">
                     <img :src="item.coverImage" alt="活動圖" />
