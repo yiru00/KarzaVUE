@@ -322,7 +322,7 @@
                 :key="index"
                 class="col-12 col-md-6"
               >
-                <router-link :to="e.route" class="sameLink">
+                <router-link :to="'/Activity/' + e.activityId" class="sameLink">
                   <div class="sameList">
                     <div>
                       <img
