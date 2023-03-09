@@ -69,45 +69,64 @@
         <span class="visually-hidden">Next</span>
       </button>
     </div>
-    <!-- 更多活動 -->
-    <div class="searchActivity">
-      <router-link to="/Activity/Search">探索更多活動</router-link>
+
+    <!-- 介紹 -->
+    <div class="infoDiv">
+      <div class="container justify-content-center align-items-center">
+        <div class="row justify-content-center align-items-center p-4">
+          <div class="h500 col-12 col-lg-4">1</div>
+          <div class="h500 col-12 col-lg-4">2</div>
+          <div class="h500 col-12 col-lg-4">3</div>
+        </div>
+      </div>
     </div>
 
     <!-- ｓｗｉｐｅｒ -->
-    <div class="container">
-      <h4>熱門活動</h4>
-      <swiper
-        :modules="modules"
-        :breakpoints="swiperOptions.breakpoints"
-        :scrollbar="{ draggable: true }"
-        @swiper="onSwiper"
-        @slideChange="onSlideChange"
-      >
-        <swiper-slide v-for="(item, index) in popular" :key="index"
-          ><div class="popularCard">
-            <div class="popularCardBody">
-              <div class="info">
-                <img :src="item.coverImage" alt="" />
-                <div class="content">
-                  <p class="activityName">{{ item.activityName }}</p>
-                  <p class="description">
-                    {{ item.description.slice(0, 9) }}...
-                  </p>
+    <div class="swiperDiv">
+      <div class="container">
+        <p class="h4">熱門活動</p>
+        <!-- @swiper="onSwiper"
+        @slideChange="onSlideChange" -->
+        <swiper
+          :modules="modules"
+          :breakpoints="swiperOptions.breakpoints"
+          :scrollbar="{ draggable: true }"
+          id="mySlider"
+        >
+          <swiper-slide v-for="(item, index) in popular" :key="index"
+            ><div class="popularCard">
+              <div class="popularCardBody">
+                <div class="info">
+                  <img :src="item.coverImage" alt="" />
+                  <div class="content">
+                    <p class="activityName">{{ item.activityName }}</p>
+                    <p class="description">
+                      {{ item.description.slice(0, 9) }}...
+                    </p>
+                  </div>
+                </div>
+                <div class="progressBar">
+                  <div :style="{ width: item.enrolmentRate + '%' }"></div>
+                  <!-- <div></div> -->
                 </div>
               </div>
-              <div class="progressBar">
-                <div :style="{ width: item.enrolmentRate + '%' }"></div>
-                <!-- <div></div> -->
-              </div>
-            </div>
-            <router-link :to="`/Activity/${item.activityId}`">
-              <div class="arrow">
-                <i class="fa-solid fa-arrow-right-to-bracket fs-4"></i>
-              </div>
-            </router-link></div
-        ></swiper-slide>
-      </swiper>
+              <router-link :to="`/Activity/${item.activityId}`">
+                <div class="arrow">
+                  <i class="fa-solid fa-arrow-right-to-bracket fs-4"></i>
+                </div>
+              </router-link></div
+          ></swiper-slide>
+        </swiper>
+      </div>
+    </div>
+
+    <!-- 更多活動 -->
+    <div class="searchDiv">
+      <div class="searchContent">
+        <router-link to="/Activity/Search" class="searchActivity"
+          >探索更多活動 <i class="fa-solid fa-magnifying-glass"></i
+        ></router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -115,14 +134,14 @@
 <script>
 //import { RouterLink } from "vue-router";
 // import Swiper core and required modules
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
+import { Scrollbar } from "swiper";
 
 // Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from "swiper/vue";
 
 // Import Swiper styles
 import "swiper/css";
-import "swiper/css/scrollbar";
+// import "swiper/css/scrollbar";
 import utility from "../../public/utility.js";
 export default {
   mixins: [utility],
@@ -131,16 +150,16 @@ export default {
     SwiperSlide,
   },
   setup() {
-    const onSwiper = (swiper) => {
-      console.log(swiper);
-    };
-    const onSlideChange = () => {
-      console.log("slide change");
-    };
+    // const onSwiper = (swiper) => {
+    //   console.log(swiper);
+    // };
+    // const onSlideChange = () => {
+    //   console.log("slide change");
+    // };
 
     return {
-      onSwiper,
-      onSlideChange,
+      // onSwiper,
+      // onSlideChange,
       modules: [Scrollbar],
     };
   },
@@ -235,6 +254,16 @@ export default {
 </script>
 
 <style scoped>
+.h500 {
+  height: 500px;
+}
+.h4 {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* 輪播圖 start*/
 .newActivityCarousel {
   height: 80vh;
 }
@@ -244,6 +273,10 @@ export default {
   height: 80vh;
   object-fit: cover;
 }
+
+/* 輪播圖 end*/
+
+/* 熱門活動卡片 start */
 .popularCard {
   background-color: #fff;
   height: 170px;
@@ -266,6 +299,7 @@ export default {
   align-items: center;
   text-decoration: none;
 }
+
 a {
   text-decoration: none;
 }
@@ -309,12 +343,82 @@ a {
   height: 8px;
   border-radius: 5px;
 }
-.searchActivity {
-  height: 400px;
+
+/* 熱門活動卡片 end */
+
+.infoDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  /* background-color: #fff; */
+}
+.swiperDiv {
+  /* background-color: #a6b6b0; */
+  height: 450px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.swiper-scrollbar {
+.searchDiv {
   position: relative;
-  border-top: 20px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 500px;
+
+  /* height: 400px; */
+  /* background-color: #fff; */
+}
+.searchDiv:before {
+  content: " ";
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.6;
+  background-image: url("../assets/pexels-mati-mango-6344884.jpg");
+  background-repeat: no-repeat;
+  background-position: 50% 0;
+  background-size: cover;
+}
+.searchContent {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.searchActivity {
+  height: 100px;
+  width: 50%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-radius: 20px;
+  color: #444;
+  font-size: 24px;
+  text-align: center;
+  background: linear-gradient(
+    to right,
+    #fcf7f0d7 50%,
+    rgba(255, 255, 255, 0.565) 50%
+  );
+  background-size: 200% 100%;
+  background-position: right bottom;
+  transition: all 0.5s ease-out;
+}
+
+.searchActivity:hover {
+  background-position: left bottom;
+}
+.searchActivity i {
+  color: #444;
 }
 </style>
