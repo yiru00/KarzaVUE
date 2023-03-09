@@ -250,7 +250,10 @@ export default {
           </li>
 
           <li class="nav-item">
-            <RouterLink to="" class="nav-link navLink">商城</RouterLink>
+            <RouterLink to="/Product" class="nav-link navLink">商城</RouterLink>
+          </li>
+          <li class="nav-item">
+            <RouterLink to="/DetailProduct" class="nav-link navLink">商品</RouterLink>
           </li>
           <li class="nav-item">
             <RouterLink to="/Forum" class="nav-link navLink">論壇</RouterLink>
