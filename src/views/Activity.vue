@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- 輪播圖 -->
     <div
       id="newActivity"
       class="carousel slide carousel-fade newActivityCarousel"
@@ -68,61 +69,109 @@
         <span class="visually-hidden">Next</span>
       </button>
     </div>
-
-    <div>
+    <!-- 更多活動 -->
+    <div class="searchActivity">
       <router-link to="/Activity/Search">探索更多活動</router-link>
     </div>
-    <div>
-      <div class="container">
-        <h3>熱門活動</h3>
-        <div class="row gy-4">
-          <div
-            class="col-lg-4 col-md-6 col-12"
-            v-for="(item, index) in popular"
-            :key="index"
-          >
-            <!-- 一張卡 -->
-            <div class="popularCard">
-              <div class="popularCardBody">
-                <div class="info">
-                  <img :src="item.coverImage" alt="" />
-                  <div class="content">
-                    <p class="activityName">{{ item.activityName }}</p>
-                    <p class="description">
-                      {{ item.description.slice(0, 9) }}...
-                    </p>
-                  </div>
-                </div>
-                <div class="progressBar">
-                  <div :style="{ width: item.enrolmentRate + '%' }"></div>
-                  <!-- <div></div> -->
+
+    <!-- ｓｗｉｐｅｒ -->
+    <div class="container">
+      <h4>熱門活動</h4>
+      <swiper
+        :modules="modules"
+        :breakpoints="swiperOptions.breakpoints"
+        :scrollbar="{ draggable: true }"
+        @swiper="onSwiper"
+        @slideChange="onSlideChange"
+      >
+        <swiper-slide v-for="(item, index) in popular" :key="index"
+          ><div class="popularCard">
+            <div class="popularCardBody">
+              <div class="info">
+                <img :src="item.coverImage" alt="" />
+                <div class="content">
+                  <p class="activityName">{{ item.activityName }}</p>
+                  <p class="description">
+                    {{ item.description.slice(0, 9) }}...
+                  </p>
                 </div>
               </div>
-              <router-link :to="`/Activity/${item.activityId}`">
-                <div class="arrow">
-                  <i class="fa-solid fa-arrow-right-to-bracket fs-4"></i>
-                </div>
-              </router-link>
+              <div class="progressBar">
+                <div :style="{ width: item.enrolmentRate + '%' }"></div>
+                <!-- <div></div> -->
+              </div>
             </div>
-          </div>
-        </div>
-      </div>
+            <router-link :to="`/Activity/${item.activityId}`">
+              <div class="arrow">
+                <i class="fa-solid fa-arrow-right-to-bracket fs-4"></i>
+              </div>
+            </router-link></div
+        ></swiper-slide>
+      </swiper>
     </div>
   </div>
 </template>
 
 <script>
 //import { RouterLink } from "vue-router";
+// import Swiper core and required modules
+import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
+
+// Import Swiper Vue.js components
+import { Swiper, SwiperSlide } from "swiper/vue";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/scrollbar";
 import utility from "../../public/utility.js";
 export default {
   mixins: [utility],
+  components: {
+    Swiper,
+    SwiperSlide,
+  },
+  setup() {
+    const onSwiper = (swiper) => {
+      console.log(swiper);
+    };
+    const onSlideChange = () => {
+      console.log("slide change");
+    };
+
+    return {
+      onSwiper,
+      onSlideChange,
+      modules: [Scrollbar],
+    };
+  },
   data() {
     return {
       newActivity: [],
       popular: [],
-      willbeheld: [],
+      // willbeheld: [],
       memberId: 0,
       carousel: [],
+      swiperOptions: {
+        breakpoints: {
+          320: {
+            slidesPerView: 1,
+            spaceBetween: 10,
+          },
+          576: {
+            slidesPerView: 1,
+            spaceBetween: 10,
+          },
+          768: {
+            slidesPerView: 2,
+            spaceBetween: 30,
+          },
+
+          1200: {
+            slidesPerView: 3,
+            spaceBetween: 40,
+          },
+        },
+      },
     };
   },
   computed: {
@@ -138,9 +187,10 @@ export default {
     },
   },
   mounted() {
+    this.scrollToTop();
     this.getNewActivity();
     this.getPopularActivity();
-    this.getWillbeheld();
+    // this.getWillbeheld();
   },
   methods: {
     //#region 取得memberId
@@ -149,14 +199,15 @@ export default {
       this.memberId = id;
     },
     //#endregion
-    //#region 取得最新活動（輪播圖用）
-    async getNewActivity() {
-      let response = await fetch("https://localhost:7259/api/Activity/New");
-      let data = await response.json();
 
-      this.newActivity = data;
+    //#region 取得最新活動（輪播圖用）
+    getNewActivity() {
+      fetch("https://localhost:7259/api/Activity/New")
+        .then((response) => response.json())
+        .then((data) => (this.newActivity = data));
     },
     //#endregion
+
     //#region 取得熱門活動
     async getPopularActivity() {
       fetch("https://localhost:7259/api/Activity/Popular")
@@ -167,15 +218,16 @@ export default {
         });
     },
     //#endregion
+
     //#region 取得即將舉辦活動
-    getWillbeheld() {
-      fetch("https://localhost:7259/api/Activity/WillBeHeld")
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-          this.willbeheld = data;
-        });
-    },
+    // getWillbeheld() {
+    //   fetch("https://localhost:7259/api/Activity/WillBeHeld")
+    //     .then((response) => response.json())
+    //     .then((data) => {
+    //       console.log(data);
+    //       this.willbeheld = data;
+    //     });
+    // },
     //#endregion
   },
   // components: { RouterLink },
@@ -256,5 +308,13 @@ a {
   background-color: #8991a9;
   height: 8px;
   border-radius: 5px;
+}
+.searchActivity {
+  height: 400px;
+}
+
+.swiper-scrollbar {
+  position: relative;
+  border-top: 20px;
 }
 </style>

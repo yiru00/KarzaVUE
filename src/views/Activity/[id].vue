@@ -420,12 +420,12 @@ export default {
     // this.loading();
   },
   methods: {
-    scrollToTop() {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth", // 平滑滚动
-      });
-    },
+    // scrollToTop() {
+    //   window.scrollTo({
+    //     top: 0,
+    //     behavior: "smooth", // 平滑滚动
+    //   });
+    // },
 
     //#region 取得memberId&activityId
     async getMemberId() {

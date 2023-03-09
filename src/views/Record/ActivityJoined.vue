@@ -77,6 +77,7 @@ export default {
     };
   },
   mounted() {
+    this.scrollToTop();
     this.getActivityJoined();
   },
   methods: {
