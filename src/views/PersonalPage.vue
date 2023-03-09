@@ -56,10 +56,17 @@
                 class="userLink"
                 >收藏</RouterLink
               >
-              <RouterLink to="/Community/PersonalPage/Statics" class="userLink"
-                >統計</RouterLink
-              >
-            </div>
+              <div class="dropdown">
+                <button  role="button" class="userLink dropdown-toggle toggle" data-bs-toggle="dropdown"  aria-expanded="false">
+                  <RouterLink :to="{ name: 'dateViews' } " class="link" >統計</RouterLink>
+                </button>
+                <ul class="dropdown-menu staticBtnGroup" >
+                  <li><RouterLink  :to="{ name: 'dateViews' }" >7天總瀏覽</RouterLink></li>
+                  <li><RouterLink  :to="{ name: 'cameraUse' }" >相機使用率</RouterLink></li>
+                  <li><RouterLink  :to="{ name: 'topPhotoViews' }" >最高瀏覽照片</RouterLink></li>
+                </ul>
+              </div>          
+            </div>    
 
             <!-- 呈現內容 component使用-->
             <RouterView></RouterView>
@@ -73,6 +80,20 @@
 <script setup></script>
 
 <style scoped>
+.toggle{
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.link{
+  z-index: 1;
+  text-decoration: none;
+  color:#444444;
+  padding: 8px;
+  width: 100%;
+  text-align: center;
+}
 .bag {
   background-color: #afc7d8;
   width: 100%;
@@ -88,7 +109,7 @@
 
 .about {
   position: relative;
-  left: 27%;
+  left: 25%;
   top: 43%;
   word-wrap: break-word;
   max-width: 70%;
@@ -181,28 +202,50 @@
   border: 0px;
   text-align: center;
   text-decoration: none;
-  color: #575d6d;
+  color: #444444;
   border-bottom: 1.5px solid #afc7d8;
   background-color: transparent;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.userLink:hover {
+.userLink:hover{
   transition: 0.3s ease-in-out;
   border-radius: 15px;
   background-color: #dbe5e1eb;
-  color: #515956;
+  color: #444444;
 }
-.userLinkGroup .router-link-active {
+.userLink.router-link-active,.link.router-link-active {
   border-radius: 15px;
   background-color: #dbe5e1eb;
-  color: #515956;
+  color: #444444;
+  border: 0;
+}
+
+.staticBtnGroup li .router-link-active{
+  background-color: #dbe5e1eb;
+  color: #444444;
+}
+
+.staticBtnGroup li:hover{
+  background-color: #b6cac2eb;
+}
+
+.staticBtnGroup li{
+  display: flex;
+  justify-content: center;
+}
+.staticBtnGroup li a{
+  text-decoration: none;
+  color: #444444;
+  width: 100%;
+  text-align: center;
 }
 
 .userLinkGroup {
   display: flex;
   justify-content: flex-start;
+  align-items: center;
 }
 
 .photoGrid {
@@ -272,7 +315,7 @@
     align-items: center;
   }
 
-  .userLink {
+  .userLink,.staticBtn {
     margin-top: 20px;
     margin-right: 0px;
   }

@@ -5,6 +5,10 @@ import AlbumGrid from "../components/PersonalPage/AlbumGrid.vue";
 import AlbumPhoto from "../components/PersonalPage/AlbumPhoto.vue";
 import Collection from "../components/PersonalPage/Collection.vue";
 import Statics from "../components/PersonalPage/Statics.vue";
+import DateViews from "../components/PersonalPage/Statics/DateViews.vue";
+import TopPhotoViews from "../components/PersonalPage/Statics/TopPhotoViews.vue";
+import CameraUse from "../components/PersonalPage/Statics/CameraUse.vue";
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -73,9 +77,19 @@ const router = createRouter({
           component: Collection,
         },
         {
-          path: "/Community/PersonalPage/Statics",
-          name: "statics",
-          component: Statics,
+          path: "/Community/PersonalPage/Statics/DateViews",
+          name: "dateViews",
+          component: DateViews,
+        },
+        {
+          path: "/Community/PersonalPage/Statics/CameraUse",
+          name: "cameraUse",
+          component: CameraUse,
+        },
+        {
+          path: "/Community/PersonalPage/Statics/TopPhotoViews",
+          name: "topPhotoViews",
+          component: TopPhotoViews,
         },
       ],
     },

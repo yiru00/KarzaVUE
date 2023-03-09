@@ -1,76 +1,36 @@
 <template>
-  <div col-12>七天內相片總瀏覽</div>
-  <div class="chartCard">
-    <div class="chartBox">
-      <canvas id="myChart"></canvas>
-    </div>
+  <div class="col-12 staticsBtns">
+    <RouterLink :to="{ name: 'dateViews' }" class="userLink">7天總瀏覽</RouterLink>
+    <RouterLink :to="{ name: 'cameraUse' }" class="userLink">最高瀏覽照片</RouterLink>
+    <RouterLink :to="{ name: 'topPhotoViews' }" class="userLink">相機使用率</RouterLink>
   </div>
+  <RouterView></RouterView>
 </template>
+
 <script setup>
-// 七天內照片總瀏覽次數
-let dated;
 
-axios({
-  method: "POST",
-  url: "https://localhost:7259/api/Statistic/DateViews",
-  data: { Id: 1 },
-})
-  .then((response) => {
-    console.log(response.data);
-    dated = response.data;
-    // console.log(dated);
-
-    const data = {
-      labels: dated.date,
-      datasets: [
-        {
-          label: "瀏覽次數",
-          // Making each element take up full width, equally divided
-          data: dated.dateViews,
-          backgroundColor: "rgb(248, 226, 182,0.9)",
-          borderRadius: 15,
-          borderSkipped: false,
-        },
-      ],
-    };
-
-    let delayed;
-    const config = {
-      type: "bar",
-      data,
-      options: {
-        animation: {
-          onComplete: () => {
-            delayed = true;
-          },
-          delay: (context) => {
-            let delay = 0;
-            if (
-              context.type === "data" &&
-              context.mode === "default" &&
-              !delayed
-            ) {
-              delay = context.dataIndex * 100 + context.datasetIndex * 100;
-            }
-            return delay;
-          },
-        },
-        responsive: true,
-        plugins: {
-          title: {
-            display: true,
-            text: "七天內照片總瀏覽次數",
-          },
-        },
-      },
-    };
-
-    // render init block
-    const myChart = new Chart(
-      document.getElementById("myChart").getContext("2d"),
-      config
-    );
-  })
-  .catch((error) => console.log(error));
 </script>
-<style scoped></style>
+<style scoped>
+.staticsBtns a{
+  text-decoration: none;
+}
+.userLink {
+  width: 80px;
+  height: 40px;
+  border: 0px;
+  text-align: center;
+  text-decoration: none;
+  color: #575d6d;
+  border-bottom: 1.5px solid #afc7d8;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.userLink:hover {
+  transition: 0.3s ease-in-out;
+  border-radius: 15px;
+  background-color: #dbe5e1eb;
+  color: #444444;
+}
+</style>
