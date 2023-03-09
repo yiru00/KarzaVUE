@@ -71,12 +71,48 @@
     </div>
 
     <!-- 介紹 -->
-    <div class="infoDiv">
-      <div class="container justify-content-center align-items-center">
-        <div class="row justify-content-center align-items-center p-4">
-          <div class="h500 col-12 col-lg-4">1</div>
-          <div class="h500 col-12 col-lg-4">2</div>
-          <div class="h500 col-12 col-lg-4">3</div>
+
+    <div class="container">
+      <div class="infoDiv">
+        <div
+          class="row d-flex justify-content-space-between align-items-center p-4"
+        >
+          <div class="h500 col-12 col-lg-4 d-flex justify-content-center">
+            <div class="infoContent">
+              <img
+                src="../assets/activity/8201369_check_done_approve_ui_ux_icon.jpg"
+                alt=""
+              />
+              <p class="infoTitle">免費活動</p>
+              <p class="infoText">
+                加入會員並填寫基本資料， 即可報名參加免費活動
+              </p>
+            </div>
+          </div>
+          <div class="h500 col-12 col-lg-4 d-flex justify-content-center">
+            <div class="infoContent">
+              <img
+                src="../assets/activity/8103318_office_message_chat_communication_user_icon.jpg"
+                alt=""
+              />
+              <p class="infoTitle">尋找同伴</p>
+              <p class="infoText">
+                參加有興趣的活動， 與志同道合的攝影夥伴交流
+              </p>
+            </div>
+          </div>
+          <div class="h500 col-12 col-lg-4 d-flex justify-content-center">
+            <div class="infoContent">
+              <img
+                src="../assets/activity/8757642_camera_cam_photo_media_device_icon.jpg"
+                alt=""
+              />
+              <p class="infoTitle">增進攝影技巧</p>
+              <p class="infoText">
+                活動種類豐富皆有專業講師參與，用不同角度看世界
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -255,7 +291,7 @@ export default {
 
 <style scoped>
 .h500 {
-  height: 500px;
+  height: 300px;
 }
 .h4 {
   font-size: 24px;
@@ -348,15 +384,41 @@ a {
 
 .infoDiv {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   width: 100%;
-
+  margin: 30px 0px 10px 0px;
   /* background-color: #fff; */
+}
+
+.infoContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  border-radius: 15px;
+  padding: 40px 20px 20px 20px;
+  width: 100%;
+}
+.infoContent img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+}
+.infoTitle {
+  font-size: 20px;
+  padding: 0;
+
+  margin: 20px 0px;
+}
+.infoText {
+  text-align: center;
+  width: 80%;
 }
 .swiperDiv {
   /* background-color: #a6b6b0; */
-  height: 450px;
+  height: 400px;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -365,7 +427,6 @@ a {
 
 .searchDiv {
   position: relative;
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -384,7 +445,7 @@ a {
   width: 100%;
   height: 100%;
   opacity: 0.6;
-  background-image: url("../assets/pexels-mati-mango-6344884.jpg");
+  background-image: url("../assets/activity/pexels-mati-mango-6344884.jpg");
   background-repeat: no-repeat;
   background-position: 50% 0;
   background-size: cover;
