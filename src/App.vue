@@ -225,7 +225,7 @@ export default {
               >
             </li>
             <li>
-              <RouterLink to="" class="dropdown-item personalList"
+              <RouterLink to="/ShoppingCart" class="dropdown-item personalList"
                 >購物車</RouterLink
               >
             </li>
@@ -334,7 +334,7 @@ export default {
                 >
               </li>
               <li>
-                <RouterLink to="" class="dropdown-item personalList"
+                <RouterLink to="/ShoppingCart" class="dropdown-item personalList"
                   >購物車</RouterLink
                 >
               </li>

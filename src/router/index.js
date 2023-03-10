@@ -14,6 +14,12 @@ const router = createRouter({
       component: HomeView,
     },
     {
+      path: "/ShoppingCart",
+      name: "ShoppingCart",
+      //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
+      component: () => import("../views/ShoppingCart.vue"),
+    },
+    {
       path: "/Register",
       name: "Register",
       //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
@@ -78,6 +84,11 @@ const router = createRouter({
               component: () => import("../views/Record/ActivityJoined.vue"),
             },
           ],
+        },
+        {
+          path: "/Record/OrderPage",
+              name: "OrderPage",
+              component: () => import("../views/Record/OrderPage.vue"),
         },
       ],
     },
