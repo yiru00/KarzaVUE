@@ -43,7 +43,19 @@ const router = createRouter({
       //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
       component: () => import("../views/Forum.vue"),
     },
-
+    {
+      path: "/Product",
+      name: "Product",
+      //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
+      component: () => import("../views/Show-product.vue"),
+    },
+    {
+      path: "/Product/:id",
+      name: "DetailProduct",
+      //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
+      component: () => import("../views/Product/DetailProduct.vue"),
+    },
+    
     //活動詳細頁面(動態router
     {
       path: "/Activity/:id",

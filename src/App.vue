@@ -274,7 +274,7 @@ export default {
             <RouterLink
               exact
               active-class="active1"
-              to="/"
+              to="/product"
               class="nav-link navLink"
               >商城</RouterLink
             >
