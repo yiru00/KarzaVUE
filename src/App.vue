@@ -95,7 +95,7 @@ export default {
             if (data.photoSticker != null)
               $(".userButton").css(
                 "background-image",
-                `url(${data.photoSticker})`
+                `url(https://localhost:7259/Images/${data.photoSticker})`
               );
           })
           .catch((error) => {
@@ -144,7 +144,12 @@ export default {
           ) {
             this.user.erromsg = response;
           } else {
-            document.cookie = `token=${response}`;
+
+            var d = new Date();
+            d.setTime(d.getTime() + (2 * 24 * 60 * 60 * 1000));
+            var expires = "expires="+ d.toUTCString();
+            
+            document.cookie = `token=${response}; ${expires}; path=/;`;
             this.navigateTo();
           }
         })
@@ -367,8 +372,8 @@ export default {
                 value="登入"
               />
             </div>
-            <router-link to="" class="mt-3"
-              >忘記密碼？</router-link
+            <router-link to="/ForgotPassword" class="mt-3"
+              ><span data-bs-dismiss="modal">忘記密碼？</span></router-link
             >
           </div>
         </div>

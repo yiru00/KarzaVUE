@@ -1,63 +1,50 @@
 <template>
-    
-    <section>
+  <section>
         <div class="container">
           <div class="content ">
-            <div class=" insert_register">
-                <div class="register_user">註冊會員</div>
+            <div class=" insert_forgotpassword">
+                <div class="forgotpassword_user">忘記密碼</div>
                 <div class="flex_middle">
-                    <label for="" class="register_text">會員暱稱 :　</label>
-                    <input type="text" v-model="nickname" placeholder="請輸入暱稱" class="form-control" required>
+                    <label for="" class="forgotpassword_text">會員姓名 :　</label>
+                    <input type="text" v-model="realname" placeholder="請輸入姓名" class="form-control" required>
                 </div>
                 <div class="flex_middle">
-                    <label for="" class="register_text">會員帳號 :　</label>
+                    <label for="" class="forgotpassword_text">會員帳號 :　</label>
                     <input type="email" v-model="account" placeholder="請輸入Email" class="form-control" required>
                 </div>
                 <div class="flex_middle">
-                    <label for="" class="register_text">會員密碼 :　</label>
-                    <input type="password" v-model="password" placeholder="請輸入密碼" class="form-control" required>
-                </div>
-                <div class="flex_middle">
-                    <label for="" class="register_text">確認密碼 :　</label>
-                    <input type="password" v-model="confirmPassword" placeholder="請確認密碼" class="form-control" required>
-                </div>
-               
-                <div class="register_btn">
-                    <button @click="register" >註冊</button>
+                    <label for="" class="forgotpassword_text">會員電話 :　</label>
+                    <input type="text" v-model="mobilenumber" placeholder="請輸入手機號碼" class="form-control" required>
+                </div>             
+                <div class="forgotpassword_btn">
+                    <button @click="forgotpassword" >送出</button>
                 </div>
               </div>
             
           </div>
         </div>
       </section >
-
 </template>
 
 <script>
- import axios from 'axios';
+import axios from 'axios';
   export default {
     data(){
         return{
+            realname:'',
             account:'',
-            password:'',
-            confirmPassword:'',
-            nickname:''
+            mobilenumber:''
         }
     },
     methods:{
-        register(){
-            if(this.password !== this.confirmPassword)
-            {alert('密碼不相符')}
-            else
-            
-            axios.post('https://localhost:7259/api/Members/SignUp', {
+        forgotpassword(){
+
+            axios.post('https://localhost:7259/api/Members/ForgotPassword', {
+                RealName:this.realname,
                 EmailAccount:this.account,
-                EncryptedPassword:this.password,
-                ConfirmEncryptedPassword:this.confirmPassword,
-                NickName:this.nickname
+                Mobile:this.mobilenumber             
                 }).then(response => {
                 this.$router.push('/HomeView');
-                //console.log(response.data);
                 }).catch(error => {
                 console.log(error);
                 });
@@ -72,12 +59,12 @@
     margin: 69px auto;
     width: 450px;
   }
-  .insert_register{
+  .insert_forgotpassword{
     padding: 40px 60px 50px;
     border: 5px solid #afc7d8;
     border-radius: 20px;
   }
-  .register_user{
+  .forgotpassword_user{
     text-align: center;
     font-size: 30px;
     margin-bottom: 35px;
@@ -109,7 +96,7 @@
     background: none;
     color:#8991a9;
   }
-  .register_btn{
+  .forgotpassword_btn{
     display: flex;
     justify-content: center;
     height: 40px;
@@ -118,7 +105,7 @@
     background: #afc7d8;
     margin-top: 30px;
   }
-  .register_btn button{
+  .forgotpassword_btn button{
     border: none;
     background: none;
     color: #fff;
