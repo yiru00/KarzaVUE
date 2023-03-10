@@ -1,29 +1,40 @@
 <template>
-        <div class="col-md-3" v-for="item in products" :key="item.id">
+   
+  <div class="col-md-3 justify-content-center" v-for="item in products" :key="item.id" >
+  
             <div class="card card1">
+              <router-link :to="/Product/ +item.id">
               <div class="card-img-top">
-                <img class="d-block w-100 h-236px " src="https://www.bigcamera.com.tw/data/goods/201311/1384338680718085767.jpg" alt="">
+                <img class="d-block w-100 h-236px "   
+                :src="'https://localhost:7027/ProductImgFiles/'+item.source" 
+                style="width:100%; object-fit: cover;"
+                alt="">
               </div>
               <!-- <img class="card-img-top d-block w-100 h200px object-fit-cover" src="./BS02/DQS-1.webp" alt=""> -->
                 <div class="card-body">
-                      <a class="text-dark text-decoration-none stretched-link" href="https://www.bigcamera.com.tw/goods_view.php?no=182" target="_blank">
-                        {{ item.name }}
-                      </a>
+                      
+                        {{ item.name.slice(0,18) }}...
+                      
                 </div>
-                <div class="card-footer bg-white border-top-0 d-flex">
-                  <span class="me-auto">{{item.price}}</span>
+                <div class="card-footer bg-white border-top-0 price">
+                  <span>NTD  {{item.price}}</span>
                 </div>
+
+              </router-link>
             </div>
+         
+
+          
           </div>
+        
 </template>
 
 <script>
-import axios from "axios"
 export default {
     data() {
     return {
-      products: null
-         
+      products: null,
+     
     };
   },
   created(){
@@ -34,6 +45,7 @@ export default {
         await axios.get("https://localhost:7259/api/Product/NewProducts")
           .then(response=>{
             this.products = response.data
+           
           })
           .catch(error => {
             console.log(error);
@@ -45,15 +57,25 @@ export default {
 </script>
 
 <style scoped>
+a{
+  text-decoration: none;
+  color: #070707;
+}
  .card{
-    margin-top: 45px;
-    width:15rem;
+    margin-bottom: 45px;
+   
+    padding: 0;
   } 
   .card1 img{
     transition: all 0.2s;
   }
   /* 放大效果 */
-  .card1:hover img{
+  .card1:hover {
       transform: scale(1.1);
+  }
+  .price{
+    display: flex;
+    justify-content: end;
+
   }
 </style>

@@ -2,14 +2,12 @@
     <div class="container h-100 py-5">
         <div class="slider">
           <img src="https://www.bigcamera.com.tw/data/flash/202302/1675329292385310396.png" alt="slider-1">
-          <img src="https://www.bigcamera.com.tw/data/flash/202207/1657704437671146134.jpg" alt="slider-2">
-          <img src="https://www.bigcamera.com.tw/data/flash/202112/1638432752754984139.jpg" alt="slider-3">
         </div>
       
         <!-- 新品 -->
         <div class="newproduct">新品上市</div>
         <!-- 新品CARD -->
-        <div class="row  m-3">
+        <div class="row d-flex justify-content-center">
           <NewProduct></NewProduct>
         </div> 
           <!-- 產品全站篩選 -->
@@ -119,6 +117,15 @@ created(){
           console.log(error);
         })
       },
+      async CallEventphotos(){
+        await axios.get("")
+        .then(response=>{
+          this.eventimg = response.data
+        })
+        .catch(error => {
+          console.log(error);
+        })
+      }
 
   },
 
@@ -136,7 +143,7 @@ created(){
     font-weight: 800;
     background:#AFC7D8 ;
     margin-top: 10px;
-    margin-bottom:0px ;
+    margin-bottom:20px ;
   }
   .search_icon{
     font-size: 20px;
