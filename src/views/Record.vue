@@ -123,6 +123,7 @@ a {
 a:hover {
   background-color: #8991a9;
   color: #fff;
+  border-radius: 10px;
 }
 @media (max-width: 992px) {
   .reordpanel {

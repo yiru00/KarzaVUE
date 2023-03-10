@@ -92,7 +92,7 @@
         >
           <div class="card" :activityId="card.activityId">
             <div class="card-header">
-              <router-link :to="card.route"
+              <router-link :to="'/Activity/' + card.activityId"
                 ><img :src="card.coverImage" alt="cover"
               /></router-link>
             </div>
@@ -200,6 +200,9 @@ export default {
     //取得memberId
     this.getMemberId();
 
+    //滑到最上面
+    this.scrollToTop();
+
     //取得分類選單
     this.getCategory();
 
@@ -230,8 +233,6 @@ export default {
     });
   },
   methods: {
-  
-
     //#region 取得活動資訊、設定搜尋結果狀態
 
     async fetchActivityData() {

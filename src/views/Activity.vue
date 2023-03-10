@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- 輪播圖 -->
     <div
       id="newActivity"
       class="carousel slide carousel-fade newActivityCarousel"
@@ -24,13 +25,13 @@
         </div>
       </div>
       <div class="carousel-inner">
-        <div v-for="(item, index) in this.new" :key="index">
+        <div v-for="(item, index) in this.newActivity" :key="index">
           <div
             v-if="index == 0"
             class="carousel-item carouselImg active"
             data-bs-interval="1500"
           >
-            <router-link :to="item.route">
+            <router-link :to="'/Activity/' + item.activityId">
               <img :src="item.coverImage" alt="活動圖" />
               <!-- <div class="carousel-caption d-none d-md-block">
                 <h5>{{ item.activityName }}</h5>
@@ -39,7 +40,7 @@
             </router-link>
           </div>
           <div v-else class="carousel-item carouselImg" data-bs-interval="1500">
-            <router-link :to="item.route">
+            <router-link :to="'/Activity/' + item.activityId">
               <img :src="item.coverImage" alt="活動圖" />
               <!-- <div class="carousel-caption d-none d-md-block">
                 <h5>{{ item.activityName }}</h5>
@@ -69,30 +70,170 @@
       </button>
     </div>
 
-    <button>
-      <router-link to="/Activity/Search">探索更多活動</router-link>
-    </button>
+    <!-- 介紹 -->
+
+    <div class="container">
+      <div class="infoDiv">
+        <div
+          class="row d-flex justify-content-space-between align-items-center p-4"
+        >
+          <div class="h500 col-12 col-lg-4 d-flex justify-content-center">
+            <div class="infoContent">
+              <img
+                src="../assets/activity/8201369_check_done_approve_ui_ux_icon.jpg"
+                alt=""
+              />
+              <p class="infoTitle">免費活動</p>
+              <p class="infoText">
+                加入會員並填寫基本資料， 即可報名參加免費活動
+              </p>
+            </div>
+          </div>
+          <div class="h500 col-12 col-lg-4 d-flex justify-content-center">
+            <div class="infoContent">
+              <img
+                src="../assets/activity/8103318_office_message_chat_communication_user_icon.jpg"
+                alt=""
+              />
+              <p class="infoTitle">尋找同伴</p>
+              <p class="infoText">
+                參加有興趣的活動， 與志同道合的攝影夥伴交流
+              </p>
+            </div>
+          </div>
+          <div class="h500 col-12 col-lg-4 d-flex justify-content-center">
+            <div class="infoContent">
+              <img
+                src="../assets/activity/8757642_camera_cam_photo_media_device_icon.jpg"
+                alt=""
+              />
+              <p class="infoTitle">增進攝影技巧</p>
+              <p class="infoText">
+                活動種類豐富皆有專業講師參與，用不同角度看世界
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ｓｗｉｐｅｒ -->
+    <div class="swiperDiv">
+      <div class="container">
+        <p class="h4">熱門活動</p>
+        <!-- @swiper="onSwiper"
+        @slideChange="onSlideChange" -->
+        <swiper
+          :modules="modules"
+          :breakpoints="swiperOptions.breakpoints"
+          :scrollbar="{ draggable: true }"
+          id="mySlider"
+        >
+          <swiper-slide v-for="(item, index) in popular" :key="index"
+            ><div class="popularCard">
+              <div class="popularCardBody">
+                <div class="info">
+                  <img :src="item.coverImage" alt="" />
+                  <div class="content">
+                    <p class="activityName">{{ item.activityName }}</p>
+                    <p class="description">
+                      {{ item.description.slice(0, 9) }}...
+                    </p>
+                  </div>
+                </div>
+                <div class="progressBar">
+                  <div :style="{ width: item.enrolmentRate + '%' }"></div>
+                  <!-- <div></div> -->
+                </div>
+              </div>
+              <router-link :to="`/Activity/${item.activityId}`">
+                <div class="arrow">
+                  <i class="fa-solid fa-arrow-right-to-bracket fs-4"></i>
+                </div>
+              </router-link></div
+          ></swiper-slide>
+        </swiper>
+      </div>
+    </div>
+
+    <!-- 更多活動 -->
+    <div class="searchDiv">
+      <div class="searchContent">
+        <router-link to="/Activity/Search" class="searchActivity"
+          >探索更多活動 <i class="fa-solid fa-magnifying-glass"></i
+        ></router-link>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+//import { RouterLink } from "vue-router";
+// import Swiper core and required modules
+import { Scrollbar } from "swiper";
+
+// Import Swiper Vue.js components
+import { Swiper, SwiperSlide } from "swiper/vue";
+
+// Import Swiper styles
+import "swiper/css";
+// import "swiper/css/scrollbar";
 import utility from "../../public/utility.js";
 export default {
   mixins: [utility],
+  components: {
+    Swiper,
+    SwiperSlide,
+  },
+  setup() {
+    // const onSwiper = (swiper) => {
+    //   console.log(swiper);
+    // };
+    // const onSlideChange = () => {
+    //   console.log("slide change");
+    // };
+
+    return {
+      // onSwiper,
+      // onSlideChange,
+      modules: [Scrollbar],
+    };
+  },
   data() {
     return {
-      new: [],
+      newActivity: [],
       popular: [],
-      willbeheld: [],
+      // willbeheld: [],
       memberId: 0,
       carousel: [],
+      swiperOptions: {
+        breakpoints: {
+          320: {
+            slidesPerView: 1,
+            spaceBetween: 10,
+          },
+          576: {
+            slidesPerView: 1,
+            spaceBetween: 10,
+          },
+          768: {
+            slidesPerView: 2,
+            spaceBetween: 30,
+          },
+
+          1200: {
+            slidesPerView: 3,
+            spaceBetween: 40,
+          },
+        },
+      },
     };
   },
   computed: {
     getNewSum() {
       const carousel = [];
       let carouselItem = 0;
-      this.new.forEach((element) => {
+      this.newActivity.forEach((element) => {
         carousel.push(carouselItem);
         carouselItem++;
       });
@@ -101,11 +242,10 @@ export default {
     },
   },
   mounted() {
-    // this.getMemberId();
+    this.scrollToTop();
     this.getNewActivity();
-    // this.getNewSum();
     this.getPopularActivity();
-    this.getWillbeheld();
+    // this.getWillbeheld();
   },
   methods: {
     //#region 取得memberId
@@ -116,28 +256,15 @@ export default {
     //#endregion
 
     //#region 取得最新活動（輪播圖用）
-    async getNewActivity() {
+    getNewActivity() {
       fetch("https://localhost:7259/api/Activity/New")
         .then((response) => response.json())
-        .then((data) => {
-          console.log(`new${data}`);
-          this.new = data;
-        });
+        .then((data) => (this.newActivity = data));
     },
     //#endregion
 
-    // getNewSum() {
-    //   let carouselarr = [];
-    //   let carouselItem = 0;
-    //   this.new.forEach((element) => {
-    //     carouselarr.push(carouselItem);
-    //     carouselItem++;
-    //   });
-    //   this.carousel = carouselarr;
-    // },
-
     //#region 取得熱門活動
-    getPopularActivity() {
+    async getPopularActivity() {
       fetch("https://localhost:7259/api/Activity/Popular")
         .then((response) => response.json())
         .then((data) => {
@@ -148,20 +275,31 @@ export default {
     //#endregion
 
     //#region 取得即將舉辦活動
-    getWillbeheld() {
-      fetch("https://localhost:7259/api/Activity/WillBeHeld")
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-          this.willbeheld = data;
-        });
-    },
+    // getWillbeheld() {
+    //   fetch("https://localhost:7259/api/Activity/WillBeHeld")
+    //     .then((response) => response.json())
+    //     .then((data) => {
+    //       console.log(data);
+    //       this.willbeheld = data;
+    //     });
+    // },
     //#endregion
   },
+  // components: { RouterLink },
 };
 </script>
 
 <style scoped>
+.h500 {
+  height: 300px;
+}
+.h4 {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* 輪播圖 start*/
 .newActivityCarousel {
   height: 80vh;
 }
@@ -170,5 +308,178 @@ export default {
   width: 100%;
   height: 80vh;
   object-fit: cover;
+}
+
+/* 輪播圖 end*/
+
+/* 熱門活動卡片 start */
+.popularCard {
+  background-color: #fff;
+  height: 170px;
+  border-radius: 15px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+
+  align-items: center;
+}
+.popularCardBody {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+}
+.arrow {
+  height: 170px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+}
+
+a {
+  text-decoration: none;
+}
+.arrow i {
+  color: #444;
+}
+
+.info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.info img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 15px;
+  margin-right: 20px;
+}
+.activityName {
+  padding: 0;
+  margin: 0;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+.description {
+  padding: 0;
+  margin: 0;
+  color: gray;
+  font-size: 14px;
+}
+.progressBar {
+  background-color: #8991a930;
+  height: 8px;
+  border-radius: 5px;
+  width: 100%;
+  margin: 10px 0px;
+}
+.progressBar div {
+  background-color: #8991a9;
+  height: 8px;
+  border-radius: 5px;
+}
+
+/* 熱門活動卡片 end */
+
+.infoDiv {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: 30px 0px 10px 0px;
+  /* background-color: #fff; */
+}
+
+.infoContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  border-radius: 15px;
+  padding: 40px 20px 20px 20px;
+  width: 100%;
+}
+.infoContent img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+}
+.infoTitle {
+  font-size: 20px;
+  padding: 0;
+
+  margin: 20px 0px;
+}
+.infoText {
+  text-align: center;
+  width: 80%;
+}
+.swiperDiv {
+  /* background-color: #a6b6b0; */
+  height: 400px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.searchDiv {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 500px;
+
+  /* height: 400px; */
+  /* background-color: #fff; */
+}
+.searchDiv:before {
+  content: " ";
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.6;
+  background-image: url("../assets/activity/pexels-mati-mango-6344884.jpg");
+  background-repeat: no-repeat;
+  background-position: 50% 0;
+  background-size: cover;
+}
+.searchContent {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.searchActivity {
+  height: 100px;
+  width: 50%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-radius: 20px;
+  color: #444;
+  font-size: 24px;
+  text-align: center;
+  background: linear-gradient(
+    to right,
+    #fcf7f0d7 50%,
+    rgba(255, 255, 255, 0.565) 50%
+  );
+  background-size: 200% 100%;
+  background-position: right bottom;
+  transition: all 0.5s ease-out;
+}
+
+.searchActivity:hover {
+  background-position: left bottom;
+}
+.searchActivity i {
+  color: #444;
 }
 </style>

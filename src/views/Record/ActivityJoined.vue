@@ -6,7 +6,7 @@
         <p class="month">{{ month }}</p>
         <div class="list">
           <div v-for="(item, index) in items" :key="index">
-            <router-link :to="item.route">
+            <router-link :to="'/Activity/' +item.activityId">
               <div class="listContent">
                 <div class="coverImg">
                   <img :src="item.coverImage" alt="活動圖" />
@@ -77,6 +77,7 @@ export default {
     };
   },
   mounted() {
+    this.scrollToTop();
     this.getActivityJoined();
   },
   methods: {
@@ -165,8 +166,8 @@ a {
 } */
 
 .coverImg {
-  width: 80px;
-  height: 80px;
+  width: 110px;
+  height: 90px;
   margin-right: 20px;
 }
 .coverImg img {

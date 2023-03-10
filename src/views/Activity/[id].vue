@@ -322,7 +322,7 @@
                 :key="index"
                 class="col-12 col-md-6"
               >
-                <router-link :to="e.route" class="sameLink">
+                <router-link :to="'/Activity/' + e.activityId" class="sameLink">
                   <div class="sameList">
                     <div>
                       <img
@@ -407,6 +407,7 @@ export default {
   },
 
   mounted() {
+    this.scrollToTop();
     this.getMemberId();
 
     this.fetchDetails();
@@ -419,12 +420,12 @@ export default {
     // this.loading();
   },
   methods: {
-    scrollToTop() {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth", // 平滑滚动
-      });
-    },
+    // scrollToTop() {
+    //   window.scrollTo({
+    //     top: 0,
+    //     behavior: "smooth", // 平滑滚动
+    //   });
+    // },
 
     //#region 取得memberId&activityId
     async getMemberId() {
@@ -847,7 +848,7 @@ export default {
         });
     },
     //#endregion
-    
+
     //#region  取消報名
     unenroll(deleteId) {
       this.$swal
