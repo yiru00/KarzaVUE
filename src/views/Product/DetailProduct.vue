@@ -2,7 +2,7 @@
   <div class="container h-100 py-5">
     <div class="topProduct">
       <div class="ProName">
-        <p class="ProName-P">品名 : {{}}</p>
+        <p class="ProName-P">品名 : {{detail.name}}</p>
       </div>
       <div>
         <div class="Pro-lef d-flex">
@@ -14,7 +14,7 @@
           />
           <div class="Pro-right">加寬</div>
           <div>
-            <p class="Id-Pborder">商品編號 : {{ }}</p>
+            <p class="Id-Pborder">商品編號 : {{detail.id}}</p>
             <p>商品類別 : {{  }}</p>
             <p>品牌 : {{  }}</p>
             <p>庫存量 : {{  }}</p>
@@ -58,26 +58,28 @@ Fujifilm instax mini 90 搭載高性能智慧型閃光燈，依照被照物體�
 <script>
 
 export default {
-  // name:"DetailProduct",
-    // data(){
-    //   return{
-    //     detail:[],
-    //   }
-    // },
-    // created(){
-    //   this.CallDetailProductsApi();
-    // },
-    // methods: {
-    //   async CallDetailProductsApi(){
-    //     await axios.get(`https://localhost:7259/api/Product/DetailProducts?Id=${item.id}`)
-    //     .then(response=>{
-    //         this.detail = response.data
-    //       })
-    //       .catch(error => {
-    //         console.log(error);
-    //       });
-    //   }
-    // }
+  name:"DetailProduct",
+    data(){
+      return{
+        detail:[],
+      }
+    },
+    created(){
+      this.CallDetailProductsApi();
+    },
+    methods: {
+      async CallDetailProductsApi(){
+        let detailId=this.$route.path.slice(9)
+        console.log(detailId)
+         axios.get(`https://localhost:7259/api/Product/DetailProducts?Id=${detailId}`)
+        .then(response=>{
+            this.detail = response.data
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
+    }
 
 };
 </script>

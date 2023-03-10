@@ -35,7 +35,7 @@
                         <span class="pe-3 text-muted">數量</span>
                         <span class="pe-3">
                           <input class="ps-2" type="number" value="2"
-                        /></span>
+                        /></span>                       
                       </div>
                     </td>
                   </tr>
@@ -69,6 +69,7 @@
                               addToCart(item, 1, `.count-input-${i}`)
                             "
                           />
+                          <i class="fas fa-minus">dsfsd</i>
                         </button>
 
                         <span class="pe-3">
@@ -82,12 +83,10 @@
                         </span>
 
                         <button class="btn btn-link px-2 pointer">
-                          <font-awesome-icon
-                            icon="fas fa-plus"
-                            @click.stop="
+                          
+                          <i class="fa-solid fa-plus" @click.stop="
                               addToCart(item, 0, `.count-input-${i}`)
-                            "
-                          />
+                            "></i>
                         </button>
 
                         <div class="ms-4 pointer">
@@ -202,11 +201,8 @@ export default {
       },
       buySweetConfirm: {
         title: "確定要購買嗎",
-        // text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#41b882",
-        cancelButtonColor: "#777",
+        // text: "You won't be able to revert this!",        
+        showCancelButton: true,        
         confirmButtonText: "購買",
         cancelButtonText: "取消",
       },
@@ -302,8 +298,8 @@ export default {
     //呼叫折價券api
     async getCoupon() {
       if (this.couponinput) {
-        this.$axios
-          .get(`api/ShoppingCart/CatchCoupon?CouponCode=${this.couponinput}`)
+        axios
+          .get(`https://localhost:7259/api/ShoppingCart/CatchCoupon?CouponCode=${this.couponinput}`)
           .then((res) => {
             if (res.status == 204 || res.status == 200) {
               //折扣數
@@ -466,7 +462,7 @@ export default {
 
           this.loading = true;
           this.$axios
-            .post(`api/ShoppingCart/SaveShoppingCart`, model)
+            .post(`https://localhost:7259/api/ShoppingCart/SaveShoppingCart`, model)
             .then((res) => {
               if (res.status == 204 || res.status == 200) {
                 if ((res.data !== null) & (res.data !== undefined)) {
@@ -665,7 +661,6 @@ export default {
 
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap");
 * {
   margin: 0;
   padding: 0;
