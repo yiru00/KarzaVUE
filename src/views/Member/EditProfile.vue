@@ -116,6 +116,18 @@ export default {
 
     },
     async submitForm() {
+      if(!this.selectedFile ||
+     !this.realname ||
+     !this.nickname ||
+     !this.birthday ||
+     !this.mobile ||
+     !this.address ||
+     !this.about
+  ){
+    this.showAlert("填完所有資料開始最好體驗");
+    return;
+  }
+
       const formData = new FormData();
       formData.append('file', this.selectedFile);
       formData.append('RealName', this.realname);
@@ -132,7 +144,7 @@ export default {
             'Authorization': 'Bearer ' + $.cookie('token')
           }
         });
-        // this.showAlert("大成功!!!!");
+        
         this.$router.push("/Profile")
       } catch (error) {
         console.error(error);
@@ -171,9 +183,9 @@ export default {
           justify-content: space-around;
           align-items: center;
         }
-        .edit_profile_left{
+        /* .edit_profile_left{
 
-        }
+        } */
         .edit_profile_left img{
           width: 250px;
           height: 250px;

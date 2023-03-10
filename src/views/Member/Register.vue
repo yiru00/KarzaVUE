@@ -34,6 +34,7 @@
 </template>
 
 <script>
+ import utility from "../../../public/utility.js"
  import axios from 'axios';
   export default {
     data(){
@@ -43,7 +44,7 @@
             confirmPassword:'',
             nickname:''
         }
-    },
+    },mixins:[utility],
     methods:{
         register(){
             if(this.password !== this.confirmPassword)
@@ -56,6 +57,7 @@
                 ConfirmEncryptedPassword:this.confirmPassword,
                 NickName:this.nickname
                 }).then(response => {
+                this.showAlert("註冊成功")
                 this.$router.push('/HomeView');
                 //console.log(response.data);
                 }).catch(error => {

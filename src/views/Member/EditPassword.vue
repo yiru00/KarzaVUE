@@ -14,7 +14,7 @@
                     <input type="password" v-model="password" placeholder="輸入密碼" class="form-control" required>
                 </div>
                 <div class="flex_middle">
-                    <label for="" class="editpassword_text">確認密碼 :　</label>
+                    <label for="" class="editpassword_text">確認新密碼 :　</label>
                     <input type="password" v-model="confirmpassword" placeholder="重複密碼" class="form-control" required>
                 </div>       
                 <div class="editpassword_btn">
@@ -41,27 +41,29 @@ import utility from '../../../public/utility';
     },
     methods:{
         editpassword(){
-          if(this.oldpassword !== response.data.EncryptedPassword)
+          if(this.password !== this.confirmpassword)
           {
-            this.oldpassword.erromsg = "與原先密碼不一樣";
-          }
-          else if(this.password !== this.confirmpassword)
-          {
-            this.user.erromsg = "兩次密碼不一樣";
-            return;
+            
+            this.showAlert("兩次密碼不一樣")
+            
           }
           else
             axios.post('https://localhost:7259/api/Members/EditPassword', {
+                OldEncryptedPassword:this.oldpassword,
                 EncryptedPassword:this.password,
                 ConfirmEncryptedPassword:this.confirmpassword,
                 },
                 {
                 headers: {
                     Authorization: "Bearer " + $.cookie("token"),
-                },
+                 },
                 }).then(response => {
-                this.showAlert("成功")
-                //this.$router.go(0)
+                if (response.data === "密碼有誤") {
+                  this.showAlert("密碼有誤");
+                } else {
+                  this.showAlert("密碼已修改");
+                  this.$router.push("/HomeVie")
+                }
                 }).catch(error => {
                 console.log(error);
                 });

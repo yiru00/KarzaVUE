@@ -5,15 +5,15 @@
             <div class=" insert_forgotpassword">
                 <div class="forgotpassword_user">忘記密碼</div>
                 <div class="flex_middle">
-                    <label for="" class="forgotpassword_text">會員姓名 :　</label>
+                    <label for="" class="forgotpassword_text">姓名 :　</label>
                     <input type="text" v-model="realname" placeholder="請輸入姓名" class="form-control" required>
                 </div>
                 <div class="flex_middle">
-                    <label for="" class="forgotpassword_text">會員帳號 :　</label>
+                    <label for="" class="forgotpassword_text">帳號 :　</label>
                     <input type="email" v-model="account" placeholder="請輸入Email" class="form-control" required>
                 </div>
                 <div class="flex_middle">
-                    <label for="" class="forgotpassword_text">會員電話 :　</label>
+                    <label for="" class="forgotpassword_text">電話 :　</label>
                     <input type="text" v-model="mobilenumber" placeholder="請輸入手機號碼" class="form-control" required>
                 </div>             
                 <div class="forgotpassword_btn">
@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import utility from "../../../public/utility.js"
 import axios from 'axios';
   export default {
     data(){
@@ -36,6 +37,7 @@ import axios from 'axios';
             mobilenumber:''
         }
     },
+  mixins: [utility],
     methods:{
         forgotpassword(){
 
@@ -44,7 +46,14 @@ import axios from 'axios';
                 EmailAccount:this.account,
                 Mobile:this.mobilenumber             
                 }).then(response => {
-                this.$router.push('/HomeView');
+                if(response.data==="資料有誤")
+                {
+                  this.showAlert("資料有誤")
+                }else
+                {
+                  this.showAlert("請至信箱查看新密碼")
+                  this.$router.push("/HomeVie")
+                }
                 }).catch(error => {
                 console.log(error);
                 });
