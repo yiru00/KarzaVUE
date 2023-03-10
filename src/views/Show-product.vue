@@ -11,7 +11,8 @@
           <NewProduct></NewProduct>
         </div> 
           <!-- 產品全站篩選 -->
-          <div class=" d-flex justify-content-center m-5">
+          <div class="search_div">
+          <div class=" d-flex justify-content-center">
           <select name="type" class="type_select m-2" v-model="optionCate">
             <option value="0">所有類別</option>
             <option  v-for="cate in Categorylist" :key="cate.name" :value="cate.id" >{{cate.name}}</option>
@@ -25,6 +26,7 @@
             <input  v-model="inputProName" type="text"  placeholder="輸入商品關鍵字..." @keyup="CallSearchApi" class="search_input">
           </div>
         </div>
+      </div>
 
             <!-- 篩選在這 -->
             <div class="newproduct">
@@ -116,17 +118,8 @@ created(){
         .catch(error => {
           console.log(error);
         })
-      },
-      async CallEventphotos(){
-        await axios.get("")
-        .then(response=>{
-          this.eventimg = response.data
-        })
-        .catch(error => {
-          console.log(error);
-        })
       }
-
+    
   },
 
 
@@ -134,6 +127,17 @@ created(){
 </script>
 
 <style scoped>
+.search_div{
+  border-radius: 10px;
+  border: 1px solid #fcf7f0;
+  background-color: #ffffffa9;
+  max-width: 800px;
+  display: flex;
+
+  justify-content: center;
+  margin: 20px auto;
+ 
+}
   .slider img{
     width:100%;
   }
@@ -151,12 +155,17 @@ created(){
   .search_input{
     background: none;
     border: none;
-    border-bottom:2px solid #899EA9;
+    outline: none;
+  box-shadow: none;
+  background-color: transparent;
   }
   .type_select{
-    background: #899EA9;
+    background:none;
     padding: 10px 15px;
     border: none;
+    outline: none;
+    box-shadow: none;
+    background-color: transparent;
 
   }
   .filter_btn{
