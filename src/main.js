@@ -2,6 +2,13 @@ import { createApp } from "vue";
 
 import App from "./App.vue";
 import router from "./router";
+//組件區
+import CashView from "./components/CashView.vue";
+
+//購物車區
+//地址組件
+import '@andy922200/vue-tw-zip-code-selector/dist/vue-tw-zip-code-selector.css';
+import VueTwZipCodeSelector from '@andy922200/vue-tw-zip-code-selector'
 
 //引入sweetalert2 設定
 import VueSweetalert2 from "vue-sweetalert2";
@@ -14,7 +21,10 @@ const options = {
 };
 
 const app = createApp(App);
+app.component('CashView',CashView)
 app.use(VueSweetalert2, options);
+app.use(VueTwZipCodeSelector)
 app.use(router);
+
 
 app.mount("#app");

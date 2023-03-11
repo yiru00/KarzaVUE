@@ -1,0 +1,239 @@
+<template>
+    <div class="container h-100 py-5">
+      <!-- 輪播圖 -->
+      <div
+      id="newProduct"
+      class="carousel slide carousel-fade newActivityCarousel"
+      data-bs-ride="carousel"
+    >
+      <div class="carousel-indicators">
+        <div>
+          <button
+     
+            type="button"
+            data-bs-target="#newProduct"
+            class="active"
+            aria-current="true"
+            :data-bs-slide-to="index"
+          ></button>
+          <button
+            type="button"
+            data-bs-target="#newProduct"
+            :data-bs-slide-to="index"
+          ></button>
+        </div>
+      </div>
+      <div class="carousel-inner">
+        <div>
+          <div
+    
+            class="carousel-item carouselImg active"
+            data-bs-interval="1500"
+          >
+            <router-link to="/Product/13">
+              <img src="src\assets\ProEvent\01.png" alt="商城活動圖" />
+
+
+            </router-link>
+          </div>
+          <div class="carousel-item carouselImg" data-bs-interval="1500">
+            <router-link to="/DeatailProduct/">
+              <img src="src\assets\ProEvent\02.jpg" alt="商城活動圖" />
+            </router-link>
+          </div>
+        </div>
+      </div>
+      <button
+        class="carousel-control-prev"
+        type="button"
+        data-bs-target="#newProduct"
+        data-bs-slide="prev"
+      >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button
+        class="carousel-control-next"
+        type="button"
+        data-bs-target="#newProduct"
+        data-bs-slide="next"
+      >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+        <!-- 新品 -->
+        <div class="newproduct">新品上市</div>
+        <!-- 新品CARD -->
+        <div class="row d-flex justify-content-center">
+          <NewProduct></NewProduct>
+        </div> 
+          <!-- 產品全站篩選 -->
+          <div class="search_div">
+          <div class=" d-flex justify-content-center">
+          <select name="type" class="type_select m-2" v-model="optionCate">
+            <option value="0">所有類別</option>
+            <option  v-for="cate in Categorylist" :key="cate.name" :value="cate.id" >{{cate.name}}</option>
+          </select>
+          <select name="brand" class="type_select m-2" v-model="optionbrand">
+            <option value="0">所有品牌</option>
+            <option v-for="brand in Brandlist" :key="brand.name" :value="brand.id" >{{brand.name}}</option>
+          </select>
+          <div class="search d-flex  m-2">
+            <div class="search_icon" @click="CallSearchApi">**</div>
+            <input  v-model="inputProName" type="text"  placeholder="輸入商品關鍵字..." @keyup="CallSearchApi" class="search_input">
+          </div>
+        </div>
+      </div>
+
+            <!-- 篩選在這 -->
+            <div class="newproduct">
+          <!-- <button class="filter_btn border_btn ">最新*</button> -->
+          <button  @click  ="CallOrderByPriceS" class="filter_btn">價格*</button>
+          <button  @click  ="CallOrderByPriceB" class="filter_btn">價格*</button>
+        </div>
+
+        <!-- 全部Card在這 -->
+
+        <div class="row  m-3 ">
+       <AllProduct :parentProduct="ProductResult"></AllProduct>
+        </div>
+  </div>
+</template>
+
+<script>
+import NewProduct from './Product/NewProduct.vue';
+import AllProduct from './Product/AllProduct.vue';
+
+export default {
+  components: {
+    NewProduct,
+    AllProduct
+  },
+  name:"AllProducts",
+  data(){
+    return{
+      Categorylist: [],
+      Brandlist:[],
+      optionCate:"0",
+      optionbrand:"0",
+      inputProName:"",
+      ProductResult:[],
+    }
+  },
+created(){
+  this.CallCategorylistApi();
+  this.CallBrandlistApi();
+  this.CallOrderByPriceS();
+},
+  methods: {
+      async CallCategorylistApi(){
+        await axios.get("https://localhost:7259/api/Category/Categorylist")
+        .then(response=>{
+          console.log(response.data)
+
+          this.Categorylist = response.data 
+        })
+        .catch(error=>{
+          console.log(error);
+        });
+      },
+      async CallBrandlistApi(){
+        await axios.get("https://localhost:7259/api/Brands/Brandlist")
+        .then(response=>{
+          console.log(response)
+          this.Brandlist = response.data 
+        })
+        .catch(error=>{
+          console.log(error);
+        });
+      },
+
+      async CallSearchApi() {
+        await axios.get(`https://localhost:7259/api/Product/Search?name=${this.inputProName}&categoryId=${this.optionCate}&brandId=${this.optionbrand}`)
+          .then(response=>{
+            console.log(response.data)
+            this.ProductResult = response.data
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      },
+      async CallOrderByPriceS(){
+        await axios.get("https://localhost:7259/api/Product/OrderByPriceS")
+        .then(response=>{
+          this.ProductResult = response.data
+        })
+        .catch(error => {
+          console.log(error);
+        })
+      },
+      async CallOrderByPriceB(){
+        await axios.get("https://localhost:7259/api/Product/OrderByPriceB")
+        .then(response=>{
+          this.ProductResult = response.data
+        })
+        .catch(error => {
+          console.log(error);
+        })
+      }
+    
+  },
+
+
+};
+</script>
+
+<style scoped>
+.carouselImg img{
+  width: 100%;
+
+}
+.search_div{
+  border-radius: 10px;
+  border: 1px solid #fcf7f0;
+  background-color: #ffffffa9;
+  max-width: 800px;
+  display: flex;
+
+  justify-content: center;
+  margin: 20px auto;
+ 
+}
+  .slider img{
+    width:100%;
+  }
+  .newproduct{
+    font-size: 22px;
+    padding: 5px 65px;
+    font-weight: 800;
+    background:#AFC7D8 ;
+    margin-top: 10px;
+    margin-bottom:20px ;
+  }
+  .search_icon{
+    font-size: 20px;
+  }
+  .search_input{
+    background: none;
+    border: none;
+    outline: none;
+  box-shadow: none;
+  background-color: transparent;
+  }
+  .type_select{
+    background:none;
+    padding: 10px 15px;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    background-color: transparent;
+
+  }
+  .filter_btn{
+  border: none;
+  background: none;
+  padding:  3px 15px;
+  font-weight: 800;
+}
+</style>

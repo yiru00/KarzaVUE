@@ -14,6 +14,12 @@ const router = createRouter({
       component: HomeView,
     },
     {
+      path: "/ShoppingCart",
+      name: "ShoppingCart",
+      //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
+      component: () => import("../views/ShoppingCart.vue"),
+    },
+    {
       path: "/Register",
       name: "Register",
       //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
@@ -37,7 +43,19 @@ const router = createRouter({
       //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
       component: () => import("../views/Forum.vue"),
     },
-
+    {
+      path: "/Product",
+      name: "Product",
+      //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
+      component: () => import("../views/Show-product.vue"),
+    },
+    {
+      path: "/Product/:id",
+      name: "DetailProduct",
+      //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
+      component: () => import("../views/Product/DetailProduct.vue"),
+    },
+    
     //活動詳細頁面(動態router
     {
       path: "/Activity/:id",
@@ -78,6 +96,16 @@ const router = createRouter({
               component: () => import("../views/Record/ActivityJoined.vue"),
             },
           ],
+        },
+        {
+          path: "/Record/OrderPage",
+              name: "OrderPage",
+              component: () => import("../views/Record/OrderPage.vue"),
+        },
+        {
+          path: "/Record/Favorite",
+              name: "Favorite",
+              component: () => import("../views/Record/Favorite.vue"),
         },
       ],
     },
