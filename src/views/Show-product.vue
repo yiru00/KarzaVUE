@@ -71,16 +71,18 @@
           <!-- 產品全站篩選 -->
           <div class="search_div">
           <div class=" d-flex justify-content-center">
-          <select name="type" class="type_select m-2" v-model="optionCate">
+          <select  @change="CallSearchApi" name="type" class="type_select m-2" v-model="optionCate">
             <option value="0">所有類別</option>
             <option  v-for="cate in Categorylist" :key="cate.name" :value="cate.id" >{{cate.name}}</option>
           </select>
-          <select name="brand" class="type_select m-2" v-model="optionbrand">
+          <select @change="CallSearchApi"  name="brand" class="type_select m-2" v-model="optionbrand">
             <option value="0">所有品牌</option>
             <option v-for="brand in Brandlist" :key="brand.name" :value="brand.id" >{{brand.name}}</option>
           </select>
           <div class="search d-flex  m-2">
-            <div class="search_icon" @click="CallSearchApi">**</div>
+            <!-- <div class="search_icon" @click="CallSearchApi">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </div> -->
             <input  v-model="inputProName" type="text"  placeholder="輸入商品關鍵字..." @keyup="CallSearchApi" class="search_input">
           </div>
         </div>
@@ -162,6 +164,7 @@ created(){
       },
 
       async CallSearchApi() {
+        console.log(this.optionCate,this.optionbrand,this.inputProName)
         await axios.get(`https://localhost:7259/api/Product/Search?name=${this.inputProName}&categoryId=${this.optionCate}&brandId=${this.optionbrand}`)
           .then(response=>{
             console.log(response.data)
@@ -218,9 +221,7 @@ created(){
   margin: 20px auto;
  
 }
-  .slider img{
-    width:100%;
-  }
+  
   .newproduct{
     font-size: 22px;
     padding: 5px 65px;
@@ -229,15 +230,20 @@ created(){
     margin-top: 10px;
     margin-bottom:20px ;
   }
-  .search_icon{
-    font-size: 20px;
+  .search{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
   }
+
   .search_input{
     background: none;
     border: none;
     outline: none;
   box-shadow: none;
   background-color: transparent;
+  margin-left: 50px;
   }
   .type_select{
     background:none;
