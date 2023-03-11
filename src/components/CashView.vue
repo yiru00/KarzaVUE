@@ -1,7 +1,4 @@
 <template>
-
-
-
   <div class="container mt-4 p-0">
     <div class="row px-md-4 px-2 pt-4">
       <div class="col-lg-8">
@@ -35,7 +32,7 @@
                         <span class="pe-3 text-muted">數量</span>
                         <span class="pe-3">
                           <input class="ps-2" type="number" value="2"
-                        /></span>                       
+                        /></span>
                       </div>
                     </td>
                   </tr>
@@ -63,13 +60,12 @@
                         <span class="pe-2 text-muted">數量</span>
 
                         <button class="btn btn-link px-2 pointer">
-                          <font-awesome-icon
-                            icon="fas fa-minus"
+                          <i
+                            class="fa-solid fa-minus"
                             @click.stop="
                               addToCart(item, 1, `.count-input-${i}`)
                             "
-                          />
-                          <i class="fas fa-minus">dsfsd</i>
+                          ></i>
                         </button>
 
                         <span class="pe-3">
@@ -83,10 +79,12 @@
                         </span>
 
                         <button class="btn btn-link px-2 pointer">
-                          
-                          <i class="fa-solid fa-plus" @click.stop="
+                          <i
+                            class="fa-solid fa-plus"
+                            @click.stop="
                               addToCart(item, 0, `.count-input-${i}`)
-                            "></i>
+                            "
+                          ></i>
                         </button>
 
                         <div class="ms-4 pointer">
@@ -94,7 +92,7 @@
                             class="text-dark"
                             @click.stop="removeCartItem(item)"
                           >
-                            <font-awesome-icon icon="fas fa-trash" />
+                            <i class="fa-solid fa-trash"></i>
                           </a>
                         </div>
                       </div>
@@ -163,10 +161,8 @@
       </div>
     </div>
   </div>
-
-
-
-
+  <div v-html="paymentForm"></div>
+  <loading :active="loading"></loading>
 </template>
 <script>
 import { useRouter, useRoute } from "vue-router";
@@ -180,7 +176,7 @@ export default {
       searchText: "",
       paymentForm: "",
       adressval: null,
-      adressinput:"",
+      adressinput: "",
       //折價券資料
       couponinput: "",
       couponmessage: "",
@@ -201,8 +197,8 @@ export default {
       },
       buySweetConfirm: {
         title: "確定要購買嗎",
-        // text: "You won't be able to revert this!",        
-        showCancelButton: true,        
+        // text: "You won't be able to revert this!",
+        showCancelButton: true,
         confirmButtonText: "購買",
         cancelButtonText: "取消",
       },
@@ -215,7 +211,6 @@ export default {
       },
       errSweetAlert: {
         title: "錯誤",
-        icon: "error",
         confirmButtonText: "確定",
         confirmButtonColor: "#41b882",
         // timer: 2000,
@@ -299,7 +294,9 @@ export default {
     async getCoupon() {
       if (this.couponinput) {
         axios
-          .get(`https://localhost:7259/api/ShoppingCart/CatchCoupon?CouponCode=${this.couponinput}`)
+          .get(
+            `https://localhost:7259/api/ShoppingCart/CatchCoupon?CouponCode=${this.couponinput}`
+          )
           .then((res) => {
             if (res.status == 204 || res.status == 200) {
               //折扣數
@@ -439,6 +436,20 @@ export default {
       // 確認購買
       await this.$swal.fire(this.buySweetConfirm).then((result) => {
         if (result.isConfirmed) {
+          if (
+            !this.adressval ||
+            !this.adressval.name ||
+            !this.adressval.zipCode ||
+            !this.adressval.county ||
+            !this.adressval.countyName ||
+            !this.adressinput
+          ) {
+            this.errSweetAlert.text = "請輸入完整地址";
+            this.$swal.fire(this.errSweetAlert);
+            this.errSweetAlert.text = "";
+            return;
+          }
+
           // 按下購買
           let model = {
             MemberId: 1,
@@ -461,8 +472,11 @@ export default {
           };
 
           this.loading = true;
-          this.$axios
-            .post(`https://localhost:7259/api/ShoppingCart/SaveShoppingCart`, model)
+          axios
+            .post(
+              `https://localhost:7259/api/ShoppingCart/SaveShoppingCart`,
+              model
+            )
             .then((res) => {
               if (res.status == 204 || res.status == 200) {
                 if ((res.data !== null) & (res.data !== undefined)) {
@@ -507,7 +521,7 @@ export default {
     },
 
     // 購買後將後端產的付款參數組成form post到綠界
-    async buildPaymentForm(trendModels) {
+    buildPaymentForm(trendModels) {
       let rtn = ``;
       rtn += `<form action="${trendModels.url}" method="post" id="payment">`;
       // 必要參數

@@ -19,9 +19,13 @@
             <p>品牌 : {{ detail.brandName }}</p>
             <p>庫存量 : {{ detail.inventory }}</p>
             <span> NT {{ detail.price }}</span>
-            <button class="add-btn">直接購買</button>
+            <button class="add-btn" @click.stop="this.toSoppingCart(detail)">
+              直接購買
+            </button>
             <div>
-              <button class="add-btn">購物車</button>
+              <button class="add-btn" @click.stop="buyDirectly(detail)">
+                購物車
+              </button>
               <button class="add-btn">
                 <i
                   v-if="MId == 0"
@@ -73,10 +77,22 @@
 <script>
 import axios from "axios";
 import utility from "../../../public/utility";
+import { useRouter, useRoute } from "vue-router";
 
 export default {
   mixins: [utility],
   name: "DetailProduct",
+  setup() {
+    const router = useRouter();
+    const route = useRoute();
+    const toSoppingCart = (productSelItem) => {
+      // 將本頁prdoctItem傳入並存sessionStorage
+      sessionStorage.setItem("productSelItem", JSON.stringify(productSelItem));
+      router.push(`/ShoppingCart`);
+    };
+
+    return { toSoppingCart };
+  },
   data() {
     return {
       detail: {},
@@ -85,6 +101,7 @@ export default {
       MId: 0,
       PId: 0,
       status: {},
+      cartsSelect: [],
     };
   },
   created() {
@@ -92,6 +109,7 @@ export default {
 
     this.CallDetailProductsApi();
     this.CallFavoritesStatus();
+    this.getStorageCart();
   },
   mounted() {
     this.GetMemberId();
@@ -167,6 +185,45 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+
+    // 購物車行為
+    saveLocalStorage(saveName, val) {
+      localStorage.setItem(saveName, JSON.stringify(val));
+    },
+    // 將localStorage 已存JSON字串轉回物件 存在指定data參數
+    // saveName與data相同
+    getlocalStorage(saveName) {
+      this[saveName] = JSON.parse(localStorage.getItem(saveName)); // 與this.saveName相同
+    },
+    // 從Storage取使用者購物車紀錄
+    getStorageCart() {
+      this.getlocalStorage("cartsSelect");
+      // 防呆 假如storage沒存過 將值存為空陣列
+      if (!this.cartsSelect) {
+        this.cartsSelect = [];
+      }
+    },
+    buyDirectly(item) {
+      // 防呆 依id確認購物車有沒有商品 有的話更新陣列數量+1 沒有新增一筆
+      let findProduct = this.cartsSelect.find((a) => a.Id == item.id);
+
+      if (findProduct) {
+        // 已在購物車 找到index 修改物件值
+        let index = this.cartsSelect.indexOf(findProduct);
+        this.cartsSelect[index].Qty++;
+      } else {
+        // 未在購物車 加入陣列
+        this.cartsSelect.push({
+          Id: item.id,
+          Qty: 1,
+          Name: item.name,
+          Price: item.price,
+        });
+      }
+
+      // 儲存到storage
+      this.saveLocalStorage("cartsSelect", this.cartsSelect);
     },
   },
 };

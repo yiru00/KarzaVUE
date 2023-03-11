@@ -31,14 +31,14 @@
             data-bs-interval="1500"
           >
             <router-link to="/Product/13">
-              <img src="src\assets\ProEvent\01.png" alt="商城活動圖" />
+              <img src="..\assets\ProEvent\01.png" alt="商城活動圖" />
 
 
             </router-link>
           </div>
           <div class="carousel-item carouselImg" data-bs-interval="1500">
             <router-link to="/DeatailProduct/">
-              <img src="src\assets\ProEvent\02.jpg" alt="商城活動圖" />
+              <img src="..\assets\ProEvent\02.jpg" alt="商城活動圖" />
             </router-link>
           </div>
         </div>
