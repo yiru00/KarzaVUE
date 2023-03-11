@@ -53,7 +53,7 @@ export default {
 
         <RouterLink to="/Record/ActivityEnrolled">活動報名</RouterLink>
 
-        <RouterLink to="">商品收藏</RouterLink>
+        <RouterLink to="/Record/Favorite">商品收藏</RouterLink>
         <RouterLink to="/Record/OrderPage">訂單記錄</RouterLink>
       </div>
     </nav>

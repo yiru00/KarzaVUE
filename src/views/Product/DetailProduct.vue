@@ -46,7 +46,7 @@
       
       <div class="spec-Out">
         <p>Fujifilm Instax Mini 90 銀色 </p>
-        <p>商品介紹:
+        <p class="Spec">商品介紹:
           {{ detail.productSpec }}
         </p>
     </div>
@@ -100,14 +100,21 @@ export default {
           });
       },
       async GetMemberId(){
-        this.MId =await this.fetchMemberId()
+       let id=await this.fetchMemberId()
+       this.MId=id
         console.log(this.MId)
       },
       async CallProductFavorites(){
-        axios.post(`https://localhost:7259/api/Favorites/ProductFavorites?memberId=${this.MId}&productId=${this.PId}`)
+       await axios.post(`https://localhost:7259/api/Favorites/ProductFavorites?memberId=${this.MId}&productId=${this.PId}`)
         .then(response=>{
          console.log(response.data) 
-         this.status.deleteId=response.data.deleteId
+         let res=response.data
+         if(res.upshot){
+          this.status.deleteId=res.deleteId
+         this.status.upshot=true
+         this.showAlert(res.reply)
+         }
+         
         })
         .catch(error=>{
           console.log(error);
@@ -116,14 +123,21 @@ export default {
       async CallUnFavorites(deleteId){
         axios.delete(`https://localhost:7259/api/favorites/unfavorites/${deleteId}`)
         .then(response=>{
-         this.status.upshot=false
+          if(response)
+          {
+            this.status.upshot=false
+            this.status.deleteId=0
+            this.showAlert("取消收藏成功")
+          }
+         console.log(response)
         })
         .catch(error=>{
           console.log(error);
         })
       },
       async CallFavoritesStatus(){
-        axios.get(`https://localhost:7259/api/Favorites/FavoritesStatus?memberId=${this.MId}&productId=${this.PId}`)
+        let memberId=await this.fetchMemberId()
+        axios.get(`https://localhost:7259/api/Favorites/FavoritesStatus?memberId=${memberId}&productId=${this.PId}`)
         .then(response=>{
           this.status =response.data
           console.log( this.status);
@@ -195,5 +209,8 @@ export default {
 }
 .spec-Out{
   padding: 50px;
+}
+.Spec{
+  white-space: pre-wrap;
 }
 </style>

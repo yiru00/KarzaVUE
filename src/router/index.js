@@ -102,6 +102,11 @@ const router = createRouter({
               name: "OrderPage",
               component: () => import("../views/Record/OrderPage.vue"),
         },
+        {
+          path: "/Record/Favorite",
+              name: "Favorite",
+              component: () => import("../views/Record/Favorite.vue"),
+        },
       ],
     },
     //要在最後一個(可能被動態router攔截)
