@@ -154,138 +154,36 @@ export default {
 </script>
 
 <template>
-  <nav
-    class="navbar navbar-light navbar-expand-lg navbar-togglable"
-    id="mainNav"
-  >
-    <div
-      class="container-fluid d-flex align-items-center justify-content-between"
+  <div>
+    <nav
+      class="navbar navbar-light navbar-expand-lg navbar-togglable"
+      id="mainNav"
     >
-      <!-- Navbar toggler 漢堡選單按鈕-->
-      <button
-        class="navbar-toggler border-0 px-0"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarCollapse"
-        aria-controls="navbarCollapse"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <i class="fa-solid fa-bars-staggered fs-4"></i>
-      </button>
-
-      <!--Navbar brand -->
-      <!-- <a class="navbar-brand m-0" href="./index.html">KARZA!</a> -->
-      <router-link to="/" class="navbar-brand m-0">KARZA!</router-link>
-
-      <!-- （有登入）lg以下顯示 訊息、通知、個人選單  -->
-      <div class="d-lg-none d-flex align-items-center justify-content-between">
-        <!-- 登入 -->
-        <div v-if="!isLogin" class="btn-group">
-          <button
-            data-bs-toggle="modal"
-            data-bs-target="#loginModal"
-            type="button"
-            class="loginBtn"
-          >
-            登入
-          </button>
-        </div>
-
-        <!-- 個人資料下拉選單（登入後顯示頭像）(mobile) -->
-        <div v-else-if="isLogin" class="btn-group">
-          <button
-            type="button"
-            class="userButton"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-            style="background-image: url(/src/assets/userPic.png)"
-          ></button>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li>
-              <RouterLink to="" class="dropdown-item personalList"
-                >帳戶管理</RouterLink
-              >
-            </li>
-            <li>
-              <RouterLink
-                to="/Record/ActivitySaved"
-                class="dropdown-item personalList"
-                >我的紀錄</RouterLink
-              >
-            </li>
-            <li>
-              <RouterLink to="" class="dropdown-item personalList"
-                >社群主頁</RouterLink
-              >
-            </li>
-            <li>
-              <RouterLink to="" class="dropdown-item personalList"
-                >購物車</RouterLink
-              >
-            </li>
-            <li><hr class="dropdown-divider" /></li>
-            <li>
-              <RouterLink to="" class="dropdown-item personalList" href="#"
-                >登出</RouterLink
-              >
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Navbar collapse -->
       <div
-        class="collapse navbar-collapse align-items-center"
-        id="navbarCollapse"
+        class="container-fluid d-flex align-items-center justify-content-between"
       >
-        <!-- Navbar nav -->
-        <ul class="navbar-nav me-3 ms-3">
-          <li class="nav-item">
-            <RouterLink
-              exact
-              active-class="active1"
-              to="/Activity"
-              class="nav-link navLink"
-              >官方活動</RouterLink
-            >
-            <!-- <RouterLink to="/activity">activity</RouterLink> -->
-          </li>
-          <li class="nav-item">
-            <RouterLink
-              exact
-              active-class="active1"
-              to="/"
-              class="nav-link navLink"
-              >社群</RouterLink
-            >
-          </li>
-
-          <li class="nav-item">
-            <RouterLink
-              exact
-              active-class="active1"
-              to="/"
-              class="nav-link navLink"
-              >商城</RouterLink
-            >
-          </li>
-          <li class="nav-item">
-            <RouterLink
-              exact
-              active-class="active1"
-              to="/Forum"
-              class="nav-link navLink"
-              >論壇</RouterLink
-            >
-          </li>
-        </ul>
-
-        <!--（有登入）lg以上 顯示 訊息、通知、個人選單 -->
-        <div
-          class="d-lg-block d-none d-flex justify-content-between align-items-center ms-auto"
+        <!-- Navbar toggler 漢堡選單按鈕-->
+        <button
+          class="navbar-toggler border-0 px-0"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarCollapse"
+          aria-controls="navbarCollapse"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
         >
-          <!-- 登入(沒登入前顯示) -->
+          <i class="fa-solid fa-bars-staggered fs-4"></i>
+        </button>
+
+        <!--Navbar brand -->
+        <!-- <a class="navbar-brand m-0" href="./index.html">KARZA!</a> -->
+        <router-link to="/" class="navbar-brand m-0">KARZA!</router-link>
+
+        <!-- （有登入）lg以下顯示 訊息、通知、個人選單  -->
+        <div
+          class="d-lg-none d-flex align-items-center justify-content-between"
+        >
+          <!-- 登入 -->
           <div v-if="!isLogin" class="btn-group">
             <button
               data-bs-toggle="modal"
@@ -297,7 +195,7 @@ export default {
             </button>
           </div>
 
-          <!-- 個人資料下拉選單（登入後顯示頭像） -->
+          <!-- 個人資料下拉選單（登入後顯示頭像）(mobile) -->
           <div v-else-if="isLogin" class="btn-group">
             <button
               type="button"
@@ -331,81 +229,178 @@ export default {
               </li>
               <li><hr class="dropdown-divider" /></li>
               <li>
-                <RouterLink to="" class="dropdown-item personalList"
+                <RouterLink to="" class="dropdown-item personalList" href="#"
                   >登出</RouterLink
                 >
               </li>
             </ul>
           </div>
         </div>
-      </div>
-    </div>
-  </nav>
 
-  <main><RouterView /></main>
+        <!-- Navbar collapse -->
+        <div
+          class="collapse navbar-collapse align-items-center"
+          id="navbarCollapse"
+        >
+          <!-- Navbar nav -->
+          <ul class="navbar-nav me-3 ms-3">
+            <li class="nav-item">
+              <RouterLink
+                exact
+                active-class="active1"
+                to="/Activity"
+                class="nav-link navLink"
+                >官方活動</RouterLink
+              >
+              <!-- <RouterLink to="/activity">activity</RouterLink> -->
+            </li>
+            <li class="nav-item">
+              <RouterLink
+                exact
+                active-class="active1"
+                to="/"
+                class="nav-link navLink"
+                >社群</RouterLink
+              >
+            </li>
 
-  <!-- login modal -->
-  <div
-    class="modal fade"
-    id="loginModal"
-    tabindex="-1"
-    aria-labelledby="loginModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-dialog-centered modalcenter">
-      <div class="modal-content">
-        <h3>登入會員使用更多功能！</h3>
-        <div class="modal-body">
-          <div class="loginInput" @keydown.enter="userLogin">
-            <div class="form-floating mb-3">
-              <input
-                v-model="user.email"
-                name="account"
-                class="form-control"
-                id="loginEmail"
-                type="email"
-                placeholder="電子郵件"
-              />
-              <label for="loginEmail">電子郵件</label>
-            </div>
-            <div class="form-floating mb-3">
-              <input
-                v-model="user.password"
-                name="password"
-                class="form-control"
-                id="loginPassword"
-                type="password"
-                placeholder="密碼"
-              />
-              <label for="loginPassword">密碼</label>
-              <span class="loginErroMsg">{{ user.erromsg }}</span>
+            <li class="nav-item">
+              <RouterLink
+                exact
+                active-class="active1"
+                to="/"
+                class="nav-link navLink"
+                >商城</RouterLink
+              >
+            </li>
+          </ul>
+
+          <!--（有登入）lg以上 顯示 訊息、通知、個人選單 -->
+          <div
+            class="d-lg-block d-none d-flex justify-content-between align-items-center ms-auto"
+          >
+            <!-- 登入(沒登入前顯示) -->
+            <div v-if="!isLogin" class="btn-group">
+              <button
+                data-bs-toggle="modal"
+                data-bs-target="#loginModal"
+                type="button"
+                class="loginBtn"
+              >
+                登入
+              </button>
             </div>
 
-            <div>
-              <input
-                @click="userLogin"
-                id="login"
-                class="login"
-                type="submit"
-                value="登入"
-              />
+            <!-- 個人資料下拉選單（登入後顯示頭像） -->
+            <div v-else-if="isLogin" class="btn-group">
+              <button
+                type="button"
+                class="userButton"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                style="background-image: url(/src/assets/userPic.png)"
+              ></button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                  <RouterLink to="" class="dropdown-item personalList"
+                    >帳戶管理</RouterLink
+                  >
+                </li>
+                <li>
+                  <RouterLink
+                    to="/Record/ActivitySaved"
+                    class="dropdown-item personalList"
+                    >我的紀錄</RouterLink
+                  >
+                </li>
+                <li>
+                  <RouterLink to="" class="dropdown-item personalList"
+                    >社群主頁</RouterLink
+                  >
+                </li>
+                <li>
+                  <RouterLink to="" class="dropdown-item personalList"
+                    >購物車</RouterLink
+                  >
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <RouterLink to="" class="dropdown-item personalList"
+                    >登出</RouterLink
+                  >
+                </li>
+              </ul>
             </div>
-            <router-link to="" class="mt-3">忘記密碼？</router-link>
           </div>
         </div>
+      </div>
+    </nav>
 
-        <p>還沒加入會員？<router-link to="">註冊</router-link></p>
+    <main><RouterView /></main>
+
+    <!-- login modal -->
+    <div
+      class="modal fade"
+      id="loginModal"
+      tabindex="-1"
+      aria-labelledby="loginModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered modalcenter">
+        <div class="modal-content">
+          <h3>登入會員使用更多功能！</h3>
+          <div class="modal-body">
+            <div class="loginInput" @keydown.enter="userLogin">
+              <div class="form-floating mb-3">
+                <input
+                  v-model="user.email"
+                  name="account"
+                  class="form-control"
+                  id="loginEmail"
+                  type="email"
+                  placeholder="電子郵件"
+                />
+                <label for="loginEmail">電子郵件</label>
+              </div>
+              <div class="form-floating mb-3">
+                <input
+                  v-model="user.password"
+                  name="password"
+                  class="form-control"
+                  id="loginPassword"
+                  type="password"
+                  placeholder="密碼"
+                />
+                <label for="loginPassword">密碼</label>
+                <span class="loginErroMsg">{{ user.erromsg }}</span>
+              </div>
+
+              <div>
+                <input
+                  @click="userLogin"
+                  id="login"
+                  class="login"
+                  type="submit"
+                  value="登入"
+                />
+              </div>
+              <router-link to="" class="mt-3">忘記密碼？</router-link>
+            </div>
+          </div>
+
+          <p>還沒加入會員？<router-link to="">註冊</router-link></p>
+        </div>
       </div>
     </div>
+    <!-- 以下會是點了連結之後的內容渲染 -->
+    <footer
+      class="footer border-top d-flex justify-content-center align-items-center me-0"
+    >
+      <p class="p-0 m-0 text-white">
+        <i class="fa-regular fa-copyright text-white"></i>2023 KARZA!
+      </p>
+    </footer>
   </div>
-  <!-- 以下會是點了連結之後的內容渲染 -->
-  <footer
-    class="footer border-top d-flex justify-content-center align-items-center me-0"
-  >
-    <p class="p-0 m-0 text-white">
-      <i class="fa-regular fa-copyright text-white"></i>2023 KARZA!
-    </p>
-  </footer>
 </template>
 
 <style>
@@ -453,6 +448,7 @@ main {
 
   #mainNav.is-visible {
     /* 變化滑動方向時顯示出navbar */
+
     background-color: #ffffffae;
     transform: translate3d(0, 100%, 0);
   }

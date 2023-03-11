@@ -405,8 +405,7 @@ export default {
       routes: "",
     };
   },
-
-  mounted() {
+  created() {
     this.scrollToTop();
     this.getMemberId();
 
@@ -415,18 +414,11 @@ export default {
     this.getSave();
     this.getQandA();
     this.getSameCategory();
+  },
+  mounted() {
     this.initMap();
-
-    // this.loading();
   },
   methods: {
-    // scrollToTop() {
-    //   window.scrollTo({
-    //     top: 0,
-    //     behavior: "smooth", // 平滑滚动
-    //   });
-    // },
-
     //#region 取得memberId&activityId
     async getMemberId() {
       let Id = 0;
