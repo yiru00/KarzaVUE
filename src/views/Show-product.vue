@@ -88,9 +88,17 @@
 
             <!-- 篩選在這 -->
             <div class="newproduct">
+              <div v-show="priceS===0"> <button  @click  ="CallOrderByPriceS" class="filter_btn">價格
+            <i class="fa-solid fa-arrow-up"></i></button>
+          <button  @click  ="CallOrderByPriceB" class="filter_btn">價格
+            <i class="fa-solid fa-arrow-down"></i>
+          </button></div>
           <!-- <button class="filter_btn border_btn ">最新*</button> -->
-          <button  @click  ="CallOrderByPriceS" class="filter_btn">價格*</button>
-          <button  @click  ="CallOrderByPriceB" class="filter_btn">價格*</button>
+          <button v-show="priceS===1" @click  ="CallOrderByPriceS" class="filter_btn">價格
+            <i class="fa-solid fa-arrow-up"></i></button>
+          <button v-show="priceS===2" @click  ="CallOrderByPriceB" class="filter_btn">價格
+            <i class="fa-solid fa-arrow-down"></i>
+          </button>
         </div>
 
         <!-- 全部Card在這 -->
@@ -104,12 +112,14 @@
 <script>
 import NewProduct from './Product/NewProduct.vue';
 import AllProduct from './Product/AllProduct.vue';
+import utility from '../../public/utility';
 
 export default {
   components: {
     NewProduct,
     AllProduct
   },
+  mixins:[utility],
   name:"AllProducts",
   data(){
     return{
@@ -119,12 +129,14 @@ export default {
       optionbrand:"0",
       inputProName:"",
       ProductResult:[],
+      priceS:0,
     }
   },
 created(){
+
+  this.scrollToTop();
   this.CallCategorylistApi();
   this.CallBrandlistApi();
-  this.CallOrderByPriceS();
 },
   methods: {
       async CallCategorylistApi(){
@@ -154,6 +166,7 @@ created(){
           .then(response=>{
             console.log(response.data)
             this.ProductResult = response.data
+
           })
           .catch(error => {
             console.log(error);
@@ -167,6 +180,9 @@ created(){
         .catch(error => {
           console.log(error);
         })
+
+        this.priceS = 2;
+      
       },
       async CallOrderByPriceB(){
         await axios.get("https://localhost:7259/api/Product/OrderByPriceB")
@@ -176,6 +192,8 @@ created(){
         .catch(error => {
           console.log(error);
         })
+
+        this.priceS = 1;
       }
     
   },

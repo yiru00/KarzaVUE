@@ -78,6 +78,7 @@ export default {
       }
     },
     created(){
+  this.scrollToTop();
      
       this.CallDetailProductsApi();
       this.CallFavoritesStatus();
