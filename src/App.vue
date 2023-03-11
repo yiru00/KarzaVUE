@@ -405,7 +405,9 @@ export default {
 
           <p>
             還沒加入會員？<router-link to="/Register"
-              ><span data-bs-dismiss="modal">註冊</span></router-link
+              ><span class="rigister" data-bs-dismiss="modal"
+                >註冊</span
+              ></router-link
             >
           </p>
         </div>
@@ -551,10 +553,12 @@ main {
   background: #afc7d8;
   color: #fff;
 }
-.modal-content a {
+.modal-content a,
+.rigister {
   text-decoration: none;
   color: #8991a9;
 }
+
 .modalcenter {
   display: flex;
   justify-content: center;
