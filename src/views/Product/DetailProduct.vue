@@ -24,7 +24,7 @@
             </button>
             <div>
               <button class="add-btn" @click.stop="buyDirectly(detail)">
-                購物車
+                加入購物車
               </button>
               <button class="add-btn">
                 <i
@@ -219,9 +219,11 @@ export default {
           Qty: 1,
           Name: item.name,
           Price: item.price,
+          Cover: `https://localhost:7027/ProductImgFiles/${this.detail.source[0]}`,
         });
       }
 
+      this.showAlert("加入成功");
       // 儲存到storage
       this.saveLocalStorage("cartsSelect", this.cartsSelect);
     },

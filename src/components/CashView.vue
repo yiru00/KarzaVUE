@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-4 p-0">
+  <div class="container cash-view mt-4 p-0">
     <div class="row px-md-4 px-2 pt-4">
       <div class="col-lg-8">
         <p class="pb-2 fw-bold">Order</p>
@@ -8,44 +8,12 @@
             <div class="table-responsive px-md-4 px-2 pt-3">
               <table class="table table-borderless">
                 <tbody>
-                  <tr class="">
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <div>
-                          <img
-                            class="pic"
-                            src="https://images.pexels.com/photos/7322083/pexels-photo-7322083.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-                            alt=""
-                          />
-                        </div>
-                        <div class="ps-3 d-flex flex-column">
-                          <p class="fw-bold">
-                            Sportswear<span class="ps-1">Heritage</span
-                            ><span class="ps-1">Windrunner</span>
-                          </p>
-                        </div>
-                      </div>
-                    </td>
-
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <span class="pe-3 text-muted">數量</span>
-                        <span class="pe-3">
-                          <input class="ps-2" type="number" value="2"
-                        /></span>
-                      </div>
-                    </td>
-                  </tr>
                   <!-- testtttt -->
                   <tr class="" v-for="(item, i) in cartsSelect" :key="item.Id">
                     <td>
                       <div class="d-flex align-items-center">
                         <div>
-                          <img
-                            class="pic"
-                            src="https://images.pexels.com/photos/7322083/pexels-photo-7322083.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-                            alt=""
-                          />
+                          <img class="pic" :src="item.Cover" alt="" />
                         </div>
                         <div class="ps-3 d-flex flex-column">
                           <p class="fw-bold ps-1">
@@ -68,7 +36,7 @@
                           ></i>
                         </button>
 
-                        <span class="pe-3">
+                        <span class="px-3">
                           <input
                             class="qtyinput text-center"
                             :class="`count-input-${i}`"
@@ -92,11 +60,15 @@
                             class="text-dark"
                             @click.stop="removeCartItem(item)"
                           >
-                            <i class="fa-solid fa-trash"></i>
+                            <i class="fa-solid fa-trash-can"></i>
                           </a>
                         </div>
                       </div>
                     </td>
+                  </tr>
+
+                  <tr v-show="cartsSelect.length == 0">
+                    <td class="text-center">購物車無商品</td>
                   </tr>
                   <!-- testtttt -->
                 </tbody>
@@ -394,6 +366,7 @@ export default {
             Qty: 1,
             Name: item.name,
             Price: item.price,
+            Cover: `https://localhost:7027/ProductImgFiles/${item.source[0]}`,
           });
         }
 
@@ -674,21 +647,13 @@ export default {
 
 
 
-<style scoped>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  list-style: none;
-  font-family: "Montserrat", sans-serif;
-}
-body {
+<style>
+.cash-view {
   background-color: #b064f7;
   line-height: 1rem;
   font-size: 14px;
   padding: 10px;
-}
-.container {
+
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
   border-bottom-left-radius: 25px;
@@ -696,41 +661,41 @@ body {
   background-color: #eee;
 }
 
-.order .card {
+.cash-view .order .card {
   position: relative;
   background: #fff;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
-.pic {
+.cash-view .pic {
   width: 70px;
   height: 90px;
   border-radius: 5px;
 }
-td {
+.cash-view td {
   vertical-align: middle;
 }
-.red {
+.cash-view .red {
   color: #fd1c1c;
   font-weight: 600;
 }
-.b-bottom {
+.cash-view .b-bottom {
   border-bottom: 2px dotted black;
   padding-bottom: 20px;
 }
-p {
+.cash-view p {
   margin: 0px;
 }
-table input {
+.cash-view table input {
   width: 50px;
   border: 1px solid #66b3ff;
   border-radius: 0.25rem;
 }
-input:focus {
+.cash-view input:focus {
   border: 1px solid #eee;
   outline: none;
 }
-.round {
+.cash-view .round {
   background-color: #eee;
   height: 40px;
   width: 40px;
@@ -739,7 +704,7 @@ input:focus {
   align-items: center;
   justify-content: center;
 }
-.payment-summary .unregistered {
+.cash-view .payment-summary .unregistered {
   width: 100%;
   display: flex;
   align-items: center;
@@ -748,11 +713,11 @@ input:focus {
   text-transform: uppercase;
   font-size: 14px;
 }
-.payment-summary input {
+.cash-view .payment-summary input {
   width: 100%;
   margin-right: 20px;
 }
-.payment-summary .sale {
+.cash-view .payment-summary .sale {
   width: 100%;
   background-color: #e9b3b3;
   text-transform: uppercase;
@@ -762,36 +727,36 @@ input:focus {
   align-items: center;
   padding: 5px 0;
 }
-.red {
+.cash-view .red {
   color: #fd1c1c;
 }
 
-.delivery .card {
+.cash-view .delivery .card {
   padding: 10px 5px;
 }
 
 /* 自己設最小高度 */
-.card-scroll-x {
+.cash-view .card-scroll-x {
   max-height: 500px;
   overflow-y: auto;
 }
 
-.btntext {
+.cash-view .btntext {
   font-size: 16px;
+}
+
+.cash-view .address-coustomize select {
+  /* display: inline-block; */
+  margin-right: 0.5em;
 }
 
 /* 更改地址 */
 
 @media screen and (max-width: 576px) {
-  .card-scroll-x {
+  .cash-view .card-scroll-x {
     max-height: none;
     overflow-y: auto;
   }
 }
 </style>
-<style>
-.address-coustomize select {
-  /* display: inline-block; */
-  margin-right: 0.5em;
-}
-</style>
+

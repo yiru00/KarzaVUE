@@ -1,6 +1,9 @@
 <template>
-  <CashView ref="CashView"></CashView>
+  <div class="container">
+    <CashView ref="CashView"></CashView>
+  </div>
 </template>
+
 
 <script>
 export default {
