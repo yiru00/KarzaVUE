@@ -3,16 +3,19 @@
     <!-- 搜尋 -->
     <div class="row">
       <div class="col-12 searchBar">
-        <div class="form-floating w-100 h-100">
+        <div class="form-floating searchText">
           <input
             type="text"
             class="form-control searchContent"
             id="floatingSearch"
             placeholder="名字"
-            v-model="searchInput"
+            v-model.trim="searchInput"
+            @keyup="searchName()"
           />
           <label for="floatingSearch"
-            ><i class="fa-solid fa-magnifying-glass"></i> 暱稱</label
+            ><i class="fa-solid fa-magnifying-glass"></i> 暱稱{{
+              searchInput
+            }}</label
           >
         </div>
       </div>
@@ -21,22 +24,24 @@
       <!-- 1張 -->
       <div
         class="col-12 col-sm-6 col-md-4 col-lg-3 user"
-        v-for="i in 10"
-        :key="i"
+        v-for="item in allProfile"
+        :key="item.id"
       >
         <RouterLink
-          :to="`/Community/PersonalPage/${i}/Photos`"
+          :to="`/Community/PersonalPage/${item.id}/Photos`"
           class="personlink"
         >
           <div class="rounded-3 p-5 userInfo">
             <!-- Personal information goes here -->
             <div class="userProfile">
               <img
+                v-if="item.source != null"
                 class="imgPhoto"
-                src="https://picsum.photos/500/400?random=1"
+                :src="item.source"
                 alt=""
               />
-              <h5>用戶的暱稱</h5>
+              <img v-else class="imgPhoto" src="../assets/userPic.png" alt="" />
+              <h5>{{ item.name }}</h5>
             </div>
           </div>
         </RouterLink>
@@ -48,20 +53,30 @@
 <script setup>
 import { ref, reactive } from "vue";
 const searchInput = ref("");
-const allProfile = reactive(Array);
+const allProfile = ref([]);
 console.log(searchInput.value);
-console.log(allProfile);
+console.log(allProfile.value);
 
-// axios
-//   .get(
-//     `https://localhost:7259/api/Profile/GetAllMember?searchInput=${searchInput.value}`
-//   )
-//   .then((response) => {
-//     console.log(response.data);
-//     allProfile = response.data;
-//     console.log(allProfile);
-//   })
-//   .catch((error) => console.log(error));
+const searchName = () => {
+  axios
+    .get(
+      `https://localhost:7259/api/Profile/GetAllMember?searchInput=${searchInput.value}`
+    )
+    .then((response) => {
+      allProfile.value = response.data;
+    })
+    .catch((error) => console.log(error));
+};
+
+axios
+  .get(
+    `https://localhost:7259/api/Profile/GetAllMember?searchInput=${searchInput.value}`
+  )
+  .then((response) => {
+    allProfile.value = response.data;
+    console.log(allProfile.value);
+  })
+  .catch((error) => console.log(error));
 </script>
 
 <style scoped>
@@ -116,7 +131,11 @@ console.log(allProfile);
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px 300px;
+}
+.searchText {
+  height: 100%;
+  width: 100%;
+  max-width: 700px;
 }
 .searchContent {
   border: 0;

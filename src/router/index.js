@@ -4,7 +4,6 @@ import PhotoGrid from "../components/PersonalPage/PhotoGrid.vue";
 import AlbumGrid from "../components/PersonalPage/AlbumGrid.vue";
 import AlbumPhoto from "../components/PersonalPage/AlbumPhoto.vue";
 import Collection from "../components/PersonalPage/Collection.vue";
-import Statics from "../components/PersonalPage/Statics.vue";
 import DateViews from "../components/PersonalPage/Statics/DateViews.vue";
 import TopPhotoViews from "../components/PersonalPage/Statics/TopPhotoViews.vue";
 import CameraUse from "../components/PersonalPage/Statics/CameraUse.vue";
@@ -52,14 +51,16 @@ const router = createRouter({
     },
     //個人主頁
     {
+      //這個直接導向notfound?
       name: "personalPage",
+      path: "/Community/PersonalPage",
       component: () => import("../views/PersonalPage.vue"),
       children: [
         {
           path: "/Community/PersonalPage/:memberId/Photos",
           name: "photos",
           component: PhotoGrid,
-          alias: ["/Community/PersonalPage"],
+          prop: true,
         },
         {
           path: "/Community/PersonalPage/:memberId/Albums",
