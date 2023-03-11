@@ -23,8 +23,12 @@
            <div>
            <button class="add-btn">購物車</button>
            <button class="add-btn">
-            <i v-if="!status.upshot" @click="CallProductFavorites()" class="fa-regular fa-star"></i>
+            <i v-if="MId==0" @click="CallUnFavorites(status.deleteId)" class="fa-regular fa-star" data-bs-toggle="modal" data-bs-target="#loginModal"></i>
+
+            <i v-else-if="!status.upshot" @click="CallProductFavorites()" class="fa-regular fa-star"></i>
             <i v-else @click="CallUnFavorites(status.deleteId)" class="fa-solid fa-star"></i>
+            
+
           </button>
           </div>
           </div>
@@ -74,9 +78,12 @@ export default {
       }
     },
     created(){
-      this.GetMemberId();
+     
       this.CallDetailProductsApi();
       this.CallFavoritesStatus();
+    },
+    mounted(){
+      this.GetMemberId();
     },
     
     methods: {
@@ -100,8 +107,8 @@ export default {
           });
       },
       async GetMemberId(){
-       let id=await this.fetchMemberId()
-       this.MId=id
+     
+       this.MId=await this.fetchMemberId()
         console.log(this.MId)
       },
       async CallProductFavorites(){
