@@ -124,6 +124,7 @@ axios({
 })
   .then((response) => {
     memberProfile.value = response.data;
+
     console.log(memberProfile);
   })
   .catch((error) => console.log(error));
