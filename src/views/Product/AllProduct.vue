@@ -1,27 +1,31 @@
 <template>
    
-  <div class="col-md-3" v-for="item in products" :key="item.id" >
+   <div class="col-md-3 justify-content-center" v-for="item in products" :key="item.id" >
+  
+  <div class="card card1">
     <router-link :to="/Product/ +item.id">
-            <div class="card card1">
-              <div class="card-img-top">
-                <img class="d-block w-100 h-236px " src="https://www.bigcamera.com.tw/data/goods/201311/1384338680718085767.jpg" alt="">
-              </div>
-              <!-- <img class="card-img-top d-block w-100 h200px object-fit-cover" src="./BS02/DQS-1.webp" alt=""> -->
-                <div class="card-body">
-                      <a class="text-nowrap text-dark text-decoration-none stretched-link" href="https://www.bigcamera.com.tw/goods_view.php?no=182" target="_blank">
-                        {{ item.name.slice(0,18) }}...
-                      </a>
-                </div>
-                <div class="card-footer bg-white border-top-0 price">
-                  <span>NTD  {{item.price}}</span>
-                </div>
+    <div class="card-img-top">
+      <img class="d-block w-100 h-236px "   
+      :src="'https://localhost:7027/ProductImgFiles/'+item.source" 
+      style="width:100%; object-fit: cover;"
+      alt="">
+    </div>
+    <!-- <img class="card-img-top d-block w-100 h200px object-fit-cover" src="./BS02/DQS-1.webp" alt=""> -->
+      <div class="card-body fs-5">
+            
+              {{ item.name.slice(0,18) }}...
+            
+      </div>
+      <div class="card-footer bg-white border-top-0 price">
+        <div class="me-3 fs-5">NTD  {{item.price}}</div>
+      </div>
 
-               
-            </div>
-          </router-link>
+    </router-link>
+  </div>
 
-          
-          </div>
+
+
+</div>
         
 </template>
 
@@ -163,7 +167,8 @@ a{
 }
  .card{
     margin-bottom: 45px;
-    width:15rem;
+   
+    padding: 0;
   } 
   .card1 img{
     transition: all 0.2s;

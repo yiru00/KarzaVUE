@@ -1,9 +1,67 @@
 <template>
     <div class="container h-100 py-5">
-        <div class="slider">
-          <img src="https://www.bigcamera.com.tw/data/flash/202302/1675329292385310396.png" alt="slider-1">
+      <!-- 輪播圖 -->
+      <div
+      id="newProduct"
+      class="carousel slide carousel-fade newActivityCarousel"
+      data-bs-ride="carousel"
+    >
+      <div class="carousel-indicators">
+        <div>
+          <button
+     
+            type="button"
+            data-bs-target="#newProduct"
+            class="active"
+            aria-current="true"
+            :data-bs-slide-to="index"
+          ></button>
+          <button
+            type="button"
+            data-bs-target="#newProduct"
+            :data-bs-slide-to="index"
+          ></button>
         </div>
-      
+      </div>
+      <div class="carousel-inner">
+        <div>
+          <div
+    
+            class="carousel-item carouselImg active"
+            data-bs-interval="1500"
+          >
+            <router-link to="/Product/13">
+              <img src="src\assets\ProEvent\01.png" alt="商城活動圖" />
+
+
+            </router-link>
+          </div>
+          <div class="carousel-item carouselImg" data-bs-interval="1500">
+            <router-link to="/DeatailProduct/">
+              <img src="src\assets\ProEvent\02.jpg" alt="商城活動圖" />
+            </router-link>
+          </div>
+        </div>
+      </div>
+      <button
+        class="carousel-control-prev"
+        type="button"
+        data-bs-target="#newProduct"
+        data-bs-slide="prev"
+      >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button
+        class="carousel-control-next"
+        type="button"
+        data-bs-target="#newProduct"
+        data-bs-slide="next"
+      >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
         <!-- 新品 -->
         <div class="newproduct">新品上市</div>
         <!-- 新品CARD -->
@@ -127,6 +185,10 @@ created(){
 </script>
 
 <style scoped>
+.carouselImg img{
+  width: 100%;
+
+}
 .search_div{
   border-radius: 10px;
   border: 1px solid #fcf7f0;

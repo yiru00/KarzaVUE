@@ -2,14 +2,14 @@
   <div class="container h-100 py-5" >
     <div class="topProduct">
       <div class="ProName">
-        <p class="ProName-P">品名 : {{detail.name}}</p>
+        <p class="ProName-P">{{detail.name}}</p>
       </div>
       <div>
         <div class="Pro-lef d-flex">
           <img
             class="card-img"
             :src="'https://localhost:7027/ProductImgFiles/'+coverimg"
-            style="height:360px; width:470px; object-fit: cover;"
+            style="width:470px; object-fit: cover;"
             alt=""
           />
           <div class="Pro-right">加寬</div>
@@ -22,7 +22,10 @@
            <button class="add-btn">直接購買</button>
            <div>
            <button class="add-btn">購物車</button>
-           <button class="add-btn">收藏</button>
+           <button class="add-btn">
+            <i v-if="!status.upshot" @click="CallProductFavorites()" class="fa-regular fa-star"></i>
+            <i v-else @click="CallUnFavorites(status.deleteId)" class="fa-solid fa-star"></i>
+          </button>
           </div>
           </div>
         </div>
@@ -53,23 +56,35 @@
 </template>
 
 <script>
+import axios from 'axios';
+import utility from '../../../public/utility';
 
 export default {
+  mixins:[utility],
   name:"DetailProduct",
     data(){
       return{
         detail:{},
         coverimg:"",
         picture:[],
+        MId:0,
+        PId:0,
+        status:{},
+
       }
     },
     created(){
+      this.GetMemberId();
       this.CallDetailProductsApi();
+      this.CallFavoritesStatus();
     },
     
     methods: {
+
       async CallDetailProductsApi(){
         let detailId=this.$route.path.slice(9)
+
+       this.PId=detailId
         console.log(detailId)
          axios.get(`https://localhost:7259/api/Product/DetailProducts?Id=${detailId}`)
         .then(response=>{
@@ -83,7 +98,40 @@ export default {
           .catch(error => {
             console.log(error);
           });
-      }
+      },
+      async GetMemberId(){
+        this.MId =await this.fetchMemberId()
+        console.log(this.MId)
+      },
+      async CallProductFavorites(){
+        axios.post(`https://localhost:7259/api/Favorites/ProductFavorites?memberId=${this.MId}&productId=${this.PId}`)
+        .then(response=>{
+         console.log(response.data) 
+         this.status.deleteId=response.data.deleteId
+        })
+        .catch(error=>{
+          console.log(error);
+        })
+      },
+      async CallUnFavorites(deleteId){
+        axios.delete(`https://localhost:7259/api/favorites/unfavorites/${deleteId}`)
+        .then(response=>{
+         this.status.upshot=false
+        })
+        .catch(error=>{
+          console.log(error);
+        })
+      },
+      async CallFavoritesStatus(){
+        axios.get(`https://localhost:7259/api/Favorites/FavoritesStatus?memberId=${this.MId}&productId=${this.PId}`)
+        .then(response=>{
+          this.status =response.data
+          console.log( this.status);
+        })
+        .catch(error=>{
+          console.log(error);
+        })
+      },
     }
 
 };
@@ -91,6 +139,8 @@ export default {
 
 <style scoped>
 .topProduct{
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
     background: #FFFF;
     padding:10% 10%;
 }
@@ -102,7 +152,7 @@ export default {
 }
 .ProName-P{
   padding-left: 50px;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 800;
 }
 .card-img{
@@ -134,11 +184,14 @@ export default {
   font-weight: 800;
   padding-top: 10px;
   padding-bottom: 10px;
+
 }
 .botproduct{
   background: #FFFF;
   margin-top:0;
   padding: 15%;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
 }
 .spec-Out{
   padding: 50px;

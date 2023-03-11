@@ -11,13 +11,13 @@
                 alt="">
               </div>
               <!-- <img class="card-img-top d-block w-100 h200px object-fit-cover" src="./BS02/DQS-1.webp" alt=""> -->
-                <div class="card-body">
+                <div class="card-body fs-5">
                       
                         {{ item.name.slice(0,18) }}...
                       
                 </div>
                 <div class="card-footer bg-white border-top-0 price">
-                  <span>NTD  {{item.price}}</span>
+                  <div class="me-3 fs-5">NTD  {{item.price}}</div>
                 </div>
 
               </router-link>
