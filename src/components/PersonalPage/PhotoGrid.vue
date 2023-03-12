@@ -37,24 +37,30 @@
           <div
             class="photoModalProfile d-flex justify-content-center align-items-center"
           >
-            <img
-              class="imgPhoto me-3"
-              :src="`https://localhost:7259/Images/${photoFor.authorPhotoSticker}`"
-              :alt="photoFor.authorPhotoSticker"
-            />
-            <p class="m-0">{{ photoFor.author }}</p>
+            <RouterLink
+              :to="`/Community/PersonalPage/1/Photos`"
+              :key="route.path"
+              class="personlink"
+            >
+              <img
+                class="imgPhoto me-3"
+                :src="`https://localhost:7259/Images/${photoFor.authorPhotoSticker}`"
+                :alt="photoFor.authorPhotoSticker"
+              />
+              <p class="m-0">{{ photoFor.author }}</p>
+            </RouterLink>
           </div>
-          <!-- 刪除相片 v-if="memberId==memberId" -->
-          <div class="dropdown">
+          <!-- 選項 編輯/刪除相片 v-if="memberId==memberId" -->
+          <div class="dropdown" v-if="!edit">
             <button
               type="button"
-              class="photoModalDeleteBtn dropdown-toggle"
+              class="photoModalMoreBtn"
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              <i class="fa-solid fa-trash-can fs-4"></i>
+              <i class="fa-solid fa-ellipsis fs-3"></i>
             </button>
-            <ul class="dropdown-menu deleteUl">
+            <ul class="dropdown-menu moreUl">
               <li
                 data-bs-dismiss="modal"
                 class="w-100 h-100 d-flex justify-content-center deleteLi"
@@ -62,8 +68,18 @@
               >
                 刪除
               </li>
+              <li
+                class="w-100 h-100 d-flex justify-content-center editLi"
+                @click="editPhoto(photoFor)"
+              >
+                編輯
+              </li>
             </ul>
           </div>
+          <!-- 修改按鈕 -->
+          <button v-else="edit" class="editConfirm" @click="editComplete">
+            修改
+          </button>
         </div>
         <div
           class="modal-body d-flex justify-content-center flex-column align-items-center p-0"
@@ -80,12 +96,27 @@
             </button>
           </div>
         </div>
-        <div class="photoModalFooter">
+        <div class="photoModalFooter" v-if="!edit">
           <p class="fw-bold">{{ photoFor.title }}</p>
           <p>
             <i class="fa-solid fa-camera-retro fs-5"></i>
             {{ photoFor.camera }}
           </p>
+        </div>
+        <!-- 編輯照片 -->
+        <div class="photoModalFooter" v-else="edit">
+          <input
+            type="text"
+            class="form-control editModal"
+            placeholder="標題"
+            v-model="editTitle"
+          />
+          <input
+            type="text"
+            class="form-control editModal"
+            placeholder="相機"
+            v-model="editCamera"
+          />
         </div>
       </div>
     </div>
@@ -100,7 +131,56 @@ const route = useRoute();
 const allPhotos = ref([]);
 const memberId = route.params.memberId;
 const photoFor = ref("");
-const reload = ref(false);
+const deleteReload = ref(false);
+const edit = ref(false);
+// const editReload = ref(false);
+const editTitle = ref("");
+const editCamera = ref("");
+
+// modal相片詳細資料
+const photoModal = (item) => {
+  edit.value = false;
+  console.log("傳給modal");
+  photoFor.value = item;
+};
+
+// 開啟編輯照片
+const editPhoto = (item) => {
+  edit.value = true;
+};
+// 執行編輯相片
+const editComplete = () => {
+  console.log(`${photoFor.value.id},${editTitle.value},${editCamera.value}`);
+  axios
+    .patch(`https://localhost:7259/api/Photo/EditPhoto`, {
+      photoId: photoFor.value.id,
+      title: editTitle.value,
+      camera: editCamera.value,
+    })
+    .then((response) => {
+      console.log("編輯相片成功");
+      // editReload.value = true;
+      photoFor.value.camera = editCamera.value;
+      photoFor.value.title = editTitle.value;
+      edit.value = false;
+      editTitle.value = "";
+      editCamera.value = "";
+    })
+    .catch((error) => console.log(error));
+};
+
+// 編輯相片後刷新頁面用
+// watch(editReload, () => {
+//   if (editReload.value) {
+//     axios
+//       .get(`https://localhost:7259/api/Photo/AllPhotos?memberId=${memberId}`)
+//       .then((response) => {
+//         allPhotos.value = response.data;
+//         editReload.value = false;
+//       })
+//       .catch((error) => console.log(error));
+//   }
+// });
 
 // 上傳相片後刷新頁面用
 const uploadReload = defineProps(["uploadProp"]);
@@ -115,12 +195,6 @@ watch(uploadReload, () => {
       .catch((error) => console.log(error));
   }
 });
-
-// modal資料
-const photoModal = (item) => {
-  console.log("傳給modal");
-  photoFor.value = item;
-};
 
 // 收藏
 const collectPhoto = (collectPhoto) => {
@@ -140,39 +214,25 @@ const collectPhoto = (collectPhoto) => {
 
 // 刪除相片
 const deletePhoto = function (photoId) {
-  // sweetAlert???
   axios
     .delete(`https://localhost:7259/api/Photo/DeletePhoto?photoId=${photoId}`)
     .then((response) => {
       console.log("刪除照片成功");
-      reload.value = true;
+      deleteReload.value = true;
     })
     .catch((error) => {
       console.log(error);
     });
-
-  // this.$swal
-  //   .fire({
-  //     text: "確定刪除發問？",
-  //     showCancelButton: true,
-  //     width: "220px",
-  //     focusCancel: true,
-  //   })
-  //   .then((result) => {
-  //     if (result.isConfirmed) {
-  //       Swal.fire("Deleted!", "Your file has been deleted.", "success");
-  //     }
-  //   });
 };
 
 // 刪除相片重整
-watch(reload, () => {
-  if (reload.value) {
+watch(deleteReload, () => {
+  if (deleteReload.value) {
     axios
       .get(`https://localhost:7259/api/Photo/AllPhotos?memberId=${memberId}`)
       .then((response) => {
         allPhotos.value = response.data;
-        reload.value = false;
+        deleteReload.value = false;
       })
       .catch((error) => console.log(error));
   }
@@ -188,22 +248,47 @@ axios
 </script>
 
 <style scoped>
-.deleteLi {
+.editModal {
+  height: 30px;
+  width: 250px;
+}
+.editConfirm {
+  width: 80px;
+  height: 40px;
+  border-radius: 15px;
+  border: 4px solid #dbe5e1eb;
+  background-color: #dbe5e1eb;
+}
+
+.editConfirm:hover {
+  transition: 0.3s ease-in-out;
+  background-color: white;
+}
+
+.deleteLi,
+.editLi {
+  cursor: pointer;
   display: flex;
   justify-content: center;
   height: 100%;
   width: 100%;
+  border: 0.5px solid black;
 }
 .deleteLi:hover {
-  cursor: pointer;
   background-color: #d39899;
   color: white;
   transition: ease-in-out 0.5s;
 }
-.deleteUl {
+.editLi:hover {
+  background-color: #a6b6b0;
+  color: white;
+  transition: ease-in-out 0.5s;
+}
+
+.moreUl {
   min-width: 40px;
   padding: 0;
-  border: 3px solid #d39899;
+  border: 2px solid black;
 }
 .photoModalFooter {
   border-top: 0;
@@ -222,16 +307,13 @@ axios
 .photoModalImage img {
   object-fit: cover;
 }
-.photoModalDeleteBtn {
+.photoModalMoreBtn {
   border: 0;
   background-color: transparent;
-  color: #d39899;
-  padding: 5px;
 }
-.photoModalDeleteBtn:hover {
-  background-color: rgba(211, 152, 153, 0.3);
-  transition: ease-in-out 0.5s;
-  border-radius: 10px;
+.photoModalMoreBtn:hover {
+  color: gray;
+  transition: ease-in-out 0.3s;
 }
 
 .photoModalImage {

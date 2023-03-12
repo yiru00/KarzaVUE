@@ -134,6 +134,7 @@
             @change="showPhoto"
             id="formFile"
             accept="image/*"
+            ref="uploadFile"
           />
           <div class="previewPhoto">
             <img :src="photoData" alt="XXXX" v-show="photoshow" />
@@ -181,6 +182,7 @@ const route = useRoute();
 const memberId = route.params.memberId;
 const memberProfile = ref([]);
 const uploadReload = ref(false);
+const uploadFile = ref("uploadFile");
 
 // 上傳照片欄位缺 author=登入者
 const photoData = ref("");
@@ -228,11 +230,16 @@ const goSubmit = async function () {
       camera.value = "";
       photoData.value = "";
       photoshow.value = false;
-      console.log(`photofile.value=${photofile.value},,${photofile}`);
+      uploadFile.value.value = "";
+      // console.log(
+      //   `photofile.value=${photofile.value},,${uploadFile.value.value}`
+      // );
     })
     .catch((error) => {
       console.log(error);
     });
+  uploadReload.value = false;
+  console.log("上傳成功後value?" + uploadReload.value);
 };
 
 // 得到此頁面的profile

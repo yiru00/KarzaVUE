@@ -21,6 +21,7 @@
     </div>
   </div>
 
+  <!-- modal -->
   <div
     class="modal fade"
     id="photoModal"
@@ -36,16 +37,48 @@
           <div
             class="photoModalProfile d-flex justify-content-center align-items-center"
           >
-            <img
-              class="imgPhoto me-3"
-              :src="`https://localhost:7259/Images/${photoFor.authorPhotoSticker}`"
-              :alt="photoFor.authorPhotoSticker"
-            />
-            <p class="m-0">{{ photoFor.author }}</p>
+            <RouterLink
+              :to="`/Community/PersonalPage/1/Photos`"
+              :key="route.path"
+              class="personlink"
+            >
+              <img
+                class="imgPhoto me-3"
+                :src="`https://localhost:7259/Images/${photoFor.authorPhotoSticker}`"
+                :alt="photoFor.authorPhotoSticker"
+              />
+              <p class="m-0">{{ photoFor.author }}</p>
+            </RouterLink>
           </div>
-          <!-- 刪除相片 v-if="memberId==memberId" -->
-          <button class="photoModalDeleteBtn" @click="deletePhoto(photoFor.id)">
-            <i class="fa-solid fa-trash-can fs-4"></i>
+          <!-- 選項 編輯/刪除相片 v-if="memberId==memberId" -->
+          <div class="dropdown" v-if="!edit">
+            <button
+              type="button"
+              class="photoModalMoreBtn"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i class="fa-solid fa-ellipsis fs-3"></i>
+            </button>
+            <ul class="dropdown-menu moreUl">
+              <li
+                data-bs-dismiss="modal"
+                class="w-100 h-100 d-flex justify-content-center deleteLi"
+                @click="deletePhoto(photoFor.id)"
+              >
+                刪除
+              </li>
+              <li
+                class="w-100 h-100 d-flex justify-content-center editLi"
+                @click="editPhoto(photoFor)"
+              >
+                編輯
+              </li>
+            </ul>
+          </div>
+          <!-- 修改按鈕 -->
+          <button v-else="edit" class="editConfirm" @click="editComplete">
+            修改
           </button>
         </div>
         <div
@@ -63,12 +96,27 @@
             </button>
           </div>
         </div>
-        <div class="photoModalFooter">
+        <div class="photoModalFooter" v-if="!edit">
           <p class="fw-bold">{{ photoFor.title }}</p>
           <p>
             <i class="fa-solid fa-camera-retro fs-5"></i>
             {{ photoFor.camera }}
           </p>
+        </div>
+        <!-- 編輯照片 -->
+        <div class="photoModalFooter" v-else="edit">
+          <input
+            type="text"
+            class="form-control editModal"
+            placeholder="標題"
+            v-model="editTitle"
+          />
+          <input
+            type="text"
+            class="form-control editModal"
+            placeholder="相機"
+            v-model="editCamera"
+          />
         </div>
       </div>
     </div>
@@ -84,10 +132,39 @@ const collections = ref([]);
 const memberId = route.params.memberId;
 const photoFor = ref("");
 const reload = ref(false);
-console.log("path" + route.path);
+const deleteReload = ref(false);
+const edit = ref(false);
+const editTitle = ref("");
+const editCamera = ref("");
+
 // modal資料
 const photoModal = (item) => {
   photoFor.value = item;
+};
+
+// 開啟編輯照片
+const editPhoto = (item) => {
+  edit.value = true;
+};
+// 執行編輯相片
+const editComplete = () => {
+  console.log(`${photoFor.value.id},${editTitle.value},${editCamera.value}`);
+  axios
+    .patch(`https://localhost:7259/api/Photo/EditPhoto`, {
+      photoId: photoFor.value.id,
+      title: editTitle.value,
+      camera: editCamera.value,
+    })
+    .then((response) => {
+      console.log("編輯相片成功");
+      // editReload.value = true;
+      photoFor.value.camera = editCamera.value;
+      photoFor.value.title = editTitle.value;
+      edit.value = false;
+      editTitle.value = "";
+      editCamera.value = "";
+    })
+    .catch((error) => console.log(error));
 };
 
 // 收藏
@@ -123,41 +200,86 @@ watch(reload, () => {
 
 // 刪除相片
 const deletePhoto = function (photoId) {
-  // sweetAlert???
   axios
     .delete(`https://localhost:7259/api/Photo/DeletePhoto?photoId=${photoId}`)
     .then((response) => {
       console.log("刪除照片成功");
+      deleteReload.value = true;
     })
     .catch((error) => {
       console.log(error);
     });
-
-  // this.$swal
-  //   .fire({
-  //     text: "確定刪除發問？",
-  //     showCancelButton: true,
-  //     width: "220px",
-  //     focusCancel: true,
-  //   })
-  //   .then((result) => {
-  //     if (result.isConfirmed) {
-  //       Swal.fire("Deleted!", "Your file has been deleted.", "success");
-  //     }
-  //   });
 };
+
+// 刪除相片重整
+watch(deleteReload, () => {
+  if (deleteReload.value) {
+    axios
+      .post("https://localhost:7259/api/Photo/CollectionPhoto", {
+        id: memberId,
+      })
+      .then((response) => {
+        collections.value = response.data;
+        deleteReload.value = false;
+      })
+      .catch((error) => console.log(error));
+  }
+});
 
 // 撈某人的收藏
 axios
   .post("https://localhost:7259/api/Photo/CollectionPhoto", { id: memberId })
   .then((response) => {
     collections.value = response.data;
-    console.log(collections.value);
+    reload.value = true;
+    // console.log(collections.value);
   })
   .catch((error) => console.log(error));
 </script>
 
 <style scoped>
+.editModal {
+  height: 30px;
+  width: 250px;
+}
+.editConfirm {
+  width: 80px;
+  height: 40px;
+  border-radius: 15px;
+  border: 4px solid #dbe5e1eb;
+  background-color: #dbe5e1eb;
+}
+
+.editConfirm:hover {
+  transition: 0.3s ease-in-out;
+  background-color: white;
+}
+
+.deleteLi,
+.editLi {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  border: 0.5px solid black;
+}
+.deleteLi:hover {
+  background-color: #d39899;
+  color: white;
+  transition: ease-in-out 0.5s;
+}
+.editLi:hover {
+  background-color: #a6b6b0;
+  color: white;
+  transition: ease-in-out 0.5s;
+}
+
+.moreUl {
+  min-width: 40px;
+  padding: 0;
+  border: 2px solid black;
+}
 .photoModalFooter {
   border-top: 0;
   display: flex;
@@ -175,11 +297,13 @@ axios
 .photoModalImage img {
   object-fit: cover;
 }
-.photoModalDeleteBtn {
+.photoModalMoreBtn {
   border: 0;
   background-color: transparent;
-  color: #d39899;
-  padding: 0;
+}
+.photoModalMoreBtn:hover {
+  color: gray;
+  transition: ease-in-out 0.3s;
 }
 
 .photoModalImage {

@@ -2,7 +2,7 @@
   <!-- 呈現內容 component使用-->
   <div class="col-12 col-sm-6 col-md-4 col-lg-3" v-for="i in 10" :key="i">
     <div class="card cardSize">
-      <RouterLink to="Albums/AlbumPhoto" class="w-100 h-100">
+      <RouterLink to="Albums/:albumId/AlbumPhoto" class="w-100 h-100">
         <img
           :src="`https://picsum.photos/500/400?random=${i}`"
           class="card-img-top rounded-bottom"
