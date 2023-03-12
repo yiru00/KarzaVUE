@@ -63,6 +63,10 @@
                             <i class="fa-solid fa-trash-can"></i>
                           </a>
                         </div>
+
+                        <div class="ms-5">
+                          <a> ${{ item.Price }} </a>
+                        </div>
                       </div>
                     </td>
                   </tr>
