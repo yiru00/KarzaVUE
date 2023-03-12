@@ -7,38 +7,39 @@
               <li class="list-group-item forumall">
                 <a href="#">所有看板</a>
               </li>
-              <li class="list-group-item forumother ">
-                <a href="#">Karza精選看板</a>
+              <!-- 所有看板列表 -->
+              <li v-for="item in objforum" :key="item.id" class="list-group-item forumother ">
+                <a href="#">{{ item.name }}</a>
               </li>
-              <li class="list-group-item forumother">
-                <a href="#">旅遊照片</a>
-              </li>
+              
             </ul>
           </div>
         </div>
         <div class="col-10 ">
           <div class="articl_search">
-            <div class="article_text" >
-                <p>搜尋文章</p>
+            <div>
+            <input v-model="inputTitle" type="text" class="article_texts" placeholder="輸入文章關鍵字..." @keyup="callSearchApi">
             </div>
-            <div class="icon">icon</div>
           </div>
           <div class="article" >
               <div class="card-header d-flex justify-content-between article_title">
-                <a class="nav-link active " aria-current="true" href="#">
+                <a class="nav-link active "  aria-current="true" style="cursor: pointer;" @click.prevent="callPopularArticleApi">
                   全部文章
                 </a>
-                <button class="article_create">新增文章</button>
+                <div>
+                <router-link to="/Forum/Create"><button class="article_create" >新增文章</button></router-link>
+                </div>
                 <div class="article_change" >
                   <p class="m-0 me-3" >文章篩選 : </p>
-                  <select class="article_category" >
-                    <option value="1" class="choice">熱門</option>
-                    <option value="2" class="choice">最新</option>
+                  <select class="article_category" v-model="changeArticle"  @change="changeNewOld">
+                    <option value=""  class="choice" disabled>未選擇</option>
+                    <option  class="choice">熱門</option>
+                    <option  class="choice">最新</option>
                   </select>
                 </div>
               </div>
               <!-- 內容在這 -->
-              <Forumarticle v-for="i in 5" :key="i"></Forumarticle>
+              <Forumarticle :parentArticles="showArticle"></Forumarticle>
           </div>
         </div>
       </div>
@@ -47,11 +48,107 @@
 </template>
 
 <script>
+import axios from "axios" 
 import Forumarticle from './Forum/Forumarticle.vue';
 export default {
+    name:"PopularArticle",
+    data() {
+        return {
+            objforum: [
+                {
+                    id: 2,
+                    name: "AAA"
+                },
+                {
+                    id: 3,
+                    name: "BBB"
+                }
+            ],
+            
+            inputTitle: "",
+            showArticle: [],
+
+            changeArticle: ""
+
+ 
+        }
+    },
+    created() {
+        this.callForumallApi()
+        this.callSearchApi()
+    },
+    mounted() {
+      this.callSearchApi()
+    },
+    methods: {
+
+        //全部看板
+        async callForumallApi(){
+            await axios.get("https://localhost:7259/api/Forum/ForumAll")
+            .then(response=> {
+                // console.log(response.data)
+                this.objforum = response.data
+                
+            })
+            .catch(error=> {
+                console.log(error)
+            })
+        },
+
+        //搜尋文章
+        async callSearchApi(){
+            await axios.get(`https://localhost:7259/api/Article/Search?title=${this.inputTitle}`)
+            .then(response=> {
+                console.log(response.data)
+                this.showArticle = response.data
+                
+            })
+            .catch(error=> {
+                console.log(error)
+            })
+        },
+
+        //熱門文章
+        async callPopularArticleApi() {
+        await axios.get("https://localhost:7259/api/Article/PopularArticle")
+        .then(response=> {
+            console.log(response.data)
+            this.showArticle = response.data 
+        })
+        .catch(error=> {
+            console.log(error)
+        })
+        },
+        
+        //最新文章
+        async callLatestArticleApi(){
+            await axios.get("https://localhost:7259/api/Article/LatestArticle")
+            .then(response=> {
+                console.log(response.data)
+                this.showArticle = response.data
+                
+            })
+            .catch(error=> {
+                console.log(error)
+            })
+        },
+        
+        changeNewOld(){
+          if (this.changeArticle === "熱門"){
+            this.callPopularArticleApi();
+          } 
+          else{
+            this.callLatestArticleApi();
+          }
+        }
+
+
+    },
+
     components: {
         Forumarticle
     }
+
 }
 </script>
 
@@ -64,48 +161,10 @@ export default {
       padding: 0;
       font-family: Arial, sans-serif;
     }
-
     header {
       background-color: #000001;
       color: #fff;
       padding: 20px;
-    }
-
-    nav ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: flex;
-    }
-
-    nav li {
-      margin-right: 20px;
-    }
-
-    nav li:last-child {
-      margin-right: 0;
-    }
-
-    nav a {
-      color: #fff;
-      text-decoration: none;
-      font-size: 16px;
-      font-weight: bold;
-    }
-
-    main {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    .post {
-      padding: 20px 20px 10px 20px;
-      border-bottom: 1px solid #aaa;
-      box-shadow: 0px 0px 5;
-    }
-    .post p {
-      margin-bottom: 5px;
     }
     a {
       text-decoration-line: none;
@@ -155,7 +214,7 @@ export default {
     }
     .article_create{
       border-radius: 15px;
-      margin-left: 600px;
+      margin-left: 500px;
     }
     .choice{
       margin-top: 20px;
@@ -163,12 +222,11 @@ export default {
     .articl_search{
       display: flex;
     }
-    .article_text{
-      background: blue;
+    .article_texts{
       padding: 5px 50px;
       border-radius: 10px;
     }
-    .article_text p {
+    .article_texts p {
       margin: 0;
     }
 </style>
