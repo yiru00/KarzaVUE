@@ -41,6 +41,14 @@ import utility from '../../../public/utility';
     },
     methods:{
         editpassword(){
+          if(!this.oldpassword ||
+             !this.password ||
+             !this.confirmpassword
+            ){
+              this.showAlert("必須填入密碼");
+              return;
+             }
+
           if(this.password !== this.confirmpassword)
           {
             

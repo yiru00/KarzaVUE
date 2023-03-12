@@ -10,7 +10,14 @@
             <div class="edit_profile ">
               <div class="edit_profile_left">
                 <img :src="photoData">
+                <div class="edit_profile_right_info_photo">
+                    <button for="" class="file-label" @click="uploadpicture">頭貼</button>
+                    <input id="file-input" class="file-input" type="file" ref="fileSticker" @change="handleFileChange">
+                </div>
               </div>
+
+              
+
               <div class="edit_profile_right">
                 <div class="edit_profile_right_info">
                     <label for="">姓名</label>
@@ -34,12 +41,9 @@
                 </div>
                 <div class="edit_profile_right_info">
                     <label for="">關於</label>
-                    <input type="text" v-model="about">
+                    <textarea class="text_about" type="text" v-model="about"></textarea>
                 </div>
-                <div class="edit_profile_right_info_photo">
-                    <button for="" class="file-label" @click="uploadpicture">頭貼</button>
-                    <input id="file-input" class="file-input" type="file" ref="fileSticker" @change="handleFileChange">
-                </div>
+                
               </div>
 
             </div>
@@ -145,7 +149,7 @@ export default {
           }
         });
         
-        this.$router.push("/Profile")
+        this.$router.go(0)
       } catch (error) {
         console.error(error);
       }
@@ -166,6 +170,7 @@ export default {
           border-radius: 15px;
           padding: 50px 80px;
           background-color: #FCF7F0;
+          color:#8991a9;
 
         }
         .edit_profile_header{
@@ -231,9 +236,11 @@ export default {
             display: flex;
             justify-content: end;
             margin-top: 20px;
+            margin-right: 20px;
         }
         .edit_profile_submit_btn{
-            background: #A6B6B0;
+            background: #AFC7D8;
+            /* background: #A6B6B0; */
             border: none;
             border-radius: 5px;
             padding: 8px 15px;
@@ -241,8 +248,16 @@ export default {
             letter-spacing: 1px;
         }
 
+        .edit_profile_right_info_photo{
+           margin-top: 20px;  
+           display: flex;
+           justify-content: center;
+          
+
+        }
         .file-label{
-            background: #A6B6B0;
+            background: #AFC7D8;
+            /* background: #A6B6B0; */
             border: none;
             border-radius: 5px;
             padding: 8px 15px;
@@ -254,4 +269,32 @@ export default {
         .file-input {
          display: none;
         }
+
+        
+        
+        textarea {
+          margin-top: 40px;
+  display: block;
+  width: 370px;
+  height: 100px;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+}
+
+textarea:focus {
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+      
 </style>

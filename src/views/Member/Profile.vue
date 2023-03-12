@@ -97,6 +97,7 @@ export default {
       background-color: #FCF7F0;
     }
     .profile_header{
+      margin-left: 200px;
       color: #8991A9;
       display: flex;
       justify-content: space-between;

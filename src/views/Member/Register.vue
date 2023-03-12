@@ -6,15 +6,15 @@
             <div class=" insert_register">
                 <div class="register_user">註冊會員</div>
                 <div class="flex_middle">
-                    <label for="" class="register_text">會員暱稱 :　</label>
+                    <label for="" class="register_text">暱稱 :　</label>
                     <input type="text" v-model="nickname" placeholder="請輸入暱稱" class="form-control" required>
                 </div>
                 <div class="flex_middle">
-                    <label for="" class="register_text">會員帳號 :　</label>
+                    <label for="" class="register_text">帳號 :　</label>
                     <input type="email" v-model="account" placeholder="請輸入Email" class="form-control" required>
                 </div>
                 <div class="flex_middle">
-                    <label for="" class="register_text">會員密碼 :　</label>
+                    <label for="" class="register_text">密碼 :　</label>
                     <input type="password" v-model="password" placeholder="請輸入密碼" class="form-control" required>
                 </div>
                 <div class="flex_middle">
@@ -47,18 +47,25 @@
     },mixins:[utility],
     methods:{
         register(){
+            var regExp=/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
+            if(!regExp.test(this.account))
+            {this.showAlert('E-mail格式不正確')}
             if(this.password !== this.confirmPassword)
-            {alert('密碼不相符')}
+            {this.showAlert('密碼不相符')}
             else
-            
+          
             axios.post('https://localhost:7259/api/Members/SignUp', {
                 EmailAccount:this.account,
                 EncryptedPassword:this.password,
                 ConfirmEncryptedPassword:this.confirmPassword,
                 NickName:this.nickname
                 }).then(response => {
-                this.showAlert("註冊成功")
-                this.$router.push('/HomeView');
+                if(response.data ==="無法註冊這個帳號")  
+                {this.showAlert('無法註冊這個帳號')}
+                else{
+                this.showAlert("註冊成功，請至信箱啟用帳戶")
+                this.$router.push('/HomeView')
+                }
                 //console.log(response.data);
                 }).catch(error => {
                 console.log(error);
