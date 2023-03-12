@@ -4,7 +4,7 @@
       <p class="text-center">我的訂單</p>
       <hr />
 
-      <div class="outline" v-for="item in orderdetail" :key="item.id">
+      <div class="outline" v-for="(item, index) in orderdetail" :key="item.id">
         <div class="col prooutline container-fluid p-3 mt-5">
           <i
             @click.stop="getOI(item.id)"
@@ -20,13 +20,13 @@
           <!-- {{ item }} -->
         </div>
 
-        <div class="col prooutline container-fluid p-3 collapse" id="ordetail">
-          <div
-            class="col procard mt-3"
-            v-for="(item, i) in orderitems"
-            :key="item"
-          >
-            {{ item }}
+        <div
+          v-show="showprodu"
+          class="col prooutline container-fluid p-3 collapse"
+          id="ordetail"
+        >
+          <div class="col procard mt-3">
+            {{ orderitems }}
           </div>
         </div>
       </div>
@@ -42,6 +42,7 @@ export default {
       orderdetail: [],
       orderitems: [],
       orderid: 0,
+      showprodu: "",
     };
   },
 
@@ -57,16 +58,24 @@ export default {
       axios
         .get(`https://localhost:7259/api/OrderDetail/GetMemberOrder?memberid=1`)
         .then((res) => {
-          this.orderdetail = res.data;
+          if (res.data.length > 0) {
+            this.orderdetail = res.data;
+          } else {
+          }
         })
         .catch((err) => {});
     },
 
-    getOI(id) {
+    getOI(orderid) {
       axios
-        .get(`https://localhost:7259/api/OrderDetail/GetOrderID?orderid=${id}`)
+        .get(
+          `https://localhost:7259/api/OrderDetail/GetOrderID?orderid=${orderid}`
+        )
         .then((res) => {
           this.orderitems = res.data;
+          if(orderid)
+
+          
         })
         .catch((err) => {});
     },
