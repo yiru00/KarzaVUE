@@ -2,7 +2,7 @@
   <div class="container cash-view mt-4 p-0">
     <div class="row px-md-4 px-2 pt-4">
       <div class="col-lg-8">
-        <p class="pb-2 fw-bold">Order</p>
+        <p class="pb-2 fw-bold">購物車商品</p>
         <div class="card">
           <div class="card-scroll-x">
             <div class="table-responsive px-md-4 px-2 pt-3">
@@ -108,11 +108,11 @@
         <div class="d-flex flex-column b-bottom">
           <div class="d-flex justify-content-between py-3">
             <small class="text-muted">折價券折扣</small>
-            <p>$122</p>
+            <p>{{ showdiscountprice }}</p>
           </div>
           <div class="d-flex justify-content-between pb-3">
-            <small class="text-muted">以折扣金額</small>
-            <p>$22</p>
+            <small class="text-muted">已折扣金額</small>
+            <p>${{ countedPrice }}</p>
           </div>
           <div class="d-flex justify-content-between">
             <small class="text-muted">總金額</small>
@@ -154,6 +154,9 @@ export default {
       couponmessage: "",
       coupondiscountdata: "",
       couponID: null,
+      showdiscountprice: "$0",
+      totalOrigin: 0,
+      countedPrice: 0,
       // vue loading
       loading: false,
       // sweet alert訊息
@@ -216,11 +219,17 @@ export default {
           .map((a) => a.Price * a.Qty) // 得到 price * qty 陣列 [100*2, 2000*5, 500 * 6]
           .reduce((a, b) => a + b); // 做累加 a累加值 b 下一個要累加的數 [200, 10000, 3000] => 200 + 10000 +300
 
+        this.totalOrigin = totalCount;
+
         if (this.coupondiscountdata) {
           if (this.coupondiscountdata > 1) {
             totalCount = totalCount - parseInt(this.coupondiscountdata);
+            this.showdiscountprice = `$ -${this.coupondiscountdata}`;
           } else {
             totalCount = parseInt(totalCount * this.coupondiscountdata);
+            this.showdiscountprice = `${String(this.coupondiscountdata).slice(
+              2
+            )}折`;
           }
         }
 
@@ -275,6 +284,7 @@ export default {
               this.coupondiscountdata = res.data.data.discount;
               this.couponmessage = `<span class="text-success">${res.data.messsage}<\/span>`;
               this.couponID = res.data.data.id;
+              this.countedPrice = this.totalOrigin - this.getTotal;
               // alert(`${this.couponID}`);
             }
           })
@@ -285,6 +295,7 @@ export default {
           });
       } else {
         this.coupondiscountdata = "";
+        this.showdiscountprice = `$0`;
         this.couponmessage = "";
       }
     },
