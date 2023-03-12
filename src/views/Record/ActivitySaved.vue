@@ -33,7 +33,13 @@
         </div>
       </div>
     </div>
-    <div v-show="isempty && !isloading">沒有收藏的活動</div>
+    <div v-show="isempty && !isloading">
+      <div class="content">
+        <h4>我的收藏活動</h4>
+        <div class="line mb-4"></div>
+        沒有收藏的活動
+      </div>
+    </div>
     <div v-show="isloading" class="image-container">
       <img src="../../assets/Spinner-1s-200px-2.gif" alt="" />
     </div>

@@ -405,8 +405,7 @@ export default {
       routes: "",
     };
   },
-
-  mounted() {
+  created() {
     this.scrollToTop();
     this.getMemberId();
 
@@ -415,18 +414,11 @@ export default {
     this.getSave();
     this.getQandA();
     this.getSameCategory();
+  },
+  mounted() {
     this.initMap();
-
-    // this.loading();
   },
   methods: {
-    // scrollToTop() {
-    //   window.scrollTo({
-    //     top: 0,
-    //     behavior: "smooth", // 平滑滚动
-    //   });
-    // },
-
     //#region 取得memberId&activityId
     async getMemberId() {
       let Id = 0;
@@ -890,9 +882,11 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  height: fit-content;
+}
 .detailpage {
   min-height: 100vh;
-  max-height: fit-content;
   background-color: #fff;
   width: 95%;
   border-radius: 15px;
@@ -901,6 +895,7 @@ export default {
   margin-left: auto;
   margin-right: auto;
   padding-bottom: 0.75rem;
+  position: relative;
 }
 
 .image-container {
