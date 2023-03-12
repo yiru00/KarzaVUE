@@ -103,10 +103,10 @@ const photoFor = ref("");
 const reload = ref(false);
 
 // 上傳相片後刷新頁面用
-const uploadProp = defineProps(["uploadProp"]);
-watch(uploadProp, () => {
-  console.log(uploadProp);
-  if (uploadProp) {
+const uploadReload = defineProps(["uploadProp"]);
+watch(uploadReload, () => {
+  console.log(uploadReload);
+  if (uploadReload) {
     axios
       .get(`https://localhost:7259/api/Photo/AllPhotos?memberId=${memberId}`)
       .then((response) => {

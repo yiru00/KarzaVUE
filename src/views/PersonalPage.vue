@@ -57,7 +57,6 @@
             <!-- 選單 切換component-->
             <div class="col-12 userLinkGroup">
               <RouterLink
-                :uploadReload="uploadProp"
                 :to="`/Community/PersonalPage/${memberId}/Photos`"
                 class="userLink"
                 >相片</RouterLink
@@ -109,7 +108,7 @@
             </div>
 
             <!-- 呈現內容 component使用-->
-            <RouterView></RouterView>
+            <RouterView :uploadProp="uploadReload"></RouterView>
           </div>
         </div>
       </div>
@@ -134,6 +133,7 @@
             type="file"
             @change="showPhoto"
             id="formFile"
+            accept="image/*"
           />
           <div class="previewPhoto">
             <img :src="photoData" alt="XXXX" v-show="photoshow" />
@@ -180,7 +180,7 @@ import { ref } from "vue";
 const route = useRoute();
 const memberId = route.params.memberId;
 const memberProfile = ref([]);
-const uploadProp = ref(false);
+const uploadReload = ref(false);
 
 // 上傳照片欄位缺 author=登入者
 const photoData = ref("");
@@ -222,9 +222,13 @@ const goSubmit = async function () {
     .post("https://localhost:7259/api/Photo/Create", formData)
     .then((response) => {
       console.log("上傳照片成功");
-
-      uploadProp.value = true;
-      console.log(uploadProp.value);
+      uploadReload.value = true;
+      photofile.value = null;
+      title.value = "";
+      camera.value = "";
+      photoData.value = "";
+      photoshow.value = false;
+      console.log(`photofile.value=${photofile.value},,${photofile}`);
     })
     .catch((error) => {
       console.log(error);
@@ -238,7 +242,6 @@ axios({
 })
   .then((response) => {
     memberProfile.value = response.data;
-    console.log(memberProfile);
   })
   .catch((error) => console.log(error));
 </script>
