@@ -6,7 +6,7 @@
         <p class="ms-2">{{ item.forumName }}</p>
         </div>
         <div class="borderImgsss">
-        <h2 class= "mb-2"><a>{{ item.title }}</a></h2>
+        <h2 class= "mb-2"><router-link :to="`/Forum/ArticleDetail/${item.articleId}`">{{ item.title }}</router-link></h2>
         <div class="imgsss">
         <img class="" :src="`https://localhost:7259/Images/${item.articlePhoto}`" alt="">
         </div>

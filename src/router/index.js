@@ -31,6 +31,14 @@ const router = createRouter({
       name: "Create",
       component: () => import("../views/Forum/CreateArticle.vue")
     },
+
+    {
+      path: "/Forum/ArticleDetail/:Articleid",
+      name: "Detail",
+      component: () => import("../views/Forum/ArticleDetail.vue"),
+      props: true
+    },
+
     //活動詳細頁面(動態router
     {
       path: "/Activity/:id",
