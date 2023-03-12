@@ -71,47 +71,42 @@
     </div>
 
     <!-- 介紹 -->
+    <div class="py-vh-5 w-100 overflow-hidden">
+      <div class="container">
+        <div class="col-lg-8" data-aos="fade-down">
+          <h4 class="display-6">”攝影教學，讓你學會用鏡頭捕捉生活的瞬間“</h4>
+        </div>
+        <div class="row d-flex align-items-center">
+          <div
+            class="col-md-6 col-lg-4"
+            data-aos="fade-up"
+            data-aos-delay="200"
+          >
+            <span class="h4 fw-lighter">01.</span>
+            <h4 class="py-5 border-top border-dark">免費課程</h4>
+            <p>加入會員、並填寫資料，即可參加免費教學活動</p>
+          </div>
 
-    <div class="container">
-      <div class="infoDiv">
-        <div
-          class="row d-flex justify-content-space-between align-items-center p-4"
-        >
-          <div class="h500 col-12 col-lg-4 d-flex justify-content-center">
-            <div class="infoContent">
-              <img
-                src="../assets/activity/8201369_check_done_approve_ui_ux_icon.jpg"
-                alt=""
-              />
-              <p class="infoTitle">免費活動</p>
-              <p class="infoText">
-                加入會員並填寫基本資料， 即可報名參加免費活動
-              </p>
-            </div>
+          <div
+            class="col-md-6 col-lg-4 py-vh-4 pb-0"
+            data-aos="fade-up"
+            data-aos-delay="400"
+          >
+            <span class="h4 fw-lighter">02.</span>
+            <h4 class="py-5 border-top border-dark">多樣選擇</h4>
+            <p>提供多樣的拍攝種類、時間、地區選擇</p>
+            <p>透過問與答確認更多活動資訊，找到你有興趣的活動。</p>
           </div>
-          <div class="h500 col-12 col-lg-4 d-flex justify-content-center">
-            <div class="infoContent">
-              <img
-                src="../assets/activity/8103318_office_message_chat_communication_user_icon.jpg"
-                alt=""
-              />
-              <p class="infoTitle">尋找同伴</p>
-              <p class="infoText">
-                參加有興趣的活動， 與志同道合的攝影夥伴交流
-              </p>
-            </div>
-          </div>
-          <div class="h500 col-12 col-lg-4 d-flex justify-content-center">
-            <div class="infoContent">
-              <img
-                src="../assets/activity/8757642_camera_cam_photo_media_device_icon.jpg"
-                alt=""
-              />
-              <p class="infoTitle">增進攝影技巧</p>
-              <p class="infoText">
-                活動種類豐富皆有專業講師參與，用不同角度看世界
-              </p>
-            </div>
+
+          <div
+            class="col-md-6 col-lg-4 py-vh-6 pb-0"
+            data-aos="fade-up"
+            data-aos-delay="600"
+          >
+            <span class="h4 fw-lighter">03.</span>
+            <h4 class="py-5 border-top border-dark">互動交流</h4>
+            <p>與其他攝影愛好者進行互動，分享攝影經驗。</p>
+            <p>建立人際關係，並且學習到更多不同的攝影風格和技巧。</p>
           </div>
         </div>
       </div>
@@ -120,7 +115,7 @@
     <!-- ｓｗｉｐｅｒ -->
     <div class="swiperDiv">
       <div class="container">
-        <p class="h4">熱門活動</p>
+        <h4 class="h4">熱門活動</h4>
         <!-- @swiper="onSwiper"
         @slideChange="onSlideChange" -->
         <swiper
@@ -145,6 +140,44 @@
                   <div :style="{ width: item.enrolmentRate + '%' }"></div>
                   <!-- <div></div> -->
                 </div>
+              </div>
+              <router-link :to="`/Activity/${item.activityId}`">
+                <div class="arrow">
+                  <i class="fa-solid fa-arrow-right-to-bracket fs-4"></i>
+                </div>
+              </router-link></div
+          ></swiper-slide>
+        </swiper>
+      </div>
+    </div>
+
+    <!-- ｓｗｉｐｅｒ -->
+    <div class="swiperDiv">
+      <div class="container">
+        <h4 class="h4">即將舉辦</h4>
+        <!-- @swiper="onSwiper"
+        @slideChange="onSlideChange" -->
+        <swiper
+          :modules="modules"
+          :breakpoints="swiperOptions.breakpoints"
+          :scrollbar="{ draggable: true }"
+          id="mySlider"
+        >
+          <swiper-slide v-for="(item, index) in willbeheld" :key="index"
+            ><div class="popularCard">
+              <div class="popularCardBody">
+                <div class="info">
+                  <img :src="item.coverImage" alt="" />
+                  <div class="content">
+                    <p class="activityName">{{ item.activityName }}</p>
+                    <p class="description">
+                      {{ item.description.slice(0, 9) }}...
+                    </p>
+                  </div>
+                </div>
+                <!-- <div class="progressBar">
+                  <div :style="{ width: item.enrolmentRate + '%' }"></div>
+                </div> -->
               </div>
               <router-link :to="`/Activity/${item.activityId}`">
                 <div class="arrow">
@@ -203,7 +236,7 @@ export default {
     return {
       newActivity: [],
       popular: [],
-      // willbeheld: [],
+      willbeheld: [],
       memberId: 0,
       carousel: [],
       swiperOptions: {
@@ -245,7 +278,7 @@ export default {
     this.scrollToTop();
     this.getNewActivity();
     this.getPopularActivity();
-    // this.getWillbeheld();
+    this.getWillbeheld();
   },
   methods: {
     //#region 取得memberId
@@ -275,17 +308,16 @@ export default {
     //#endregion
 
     //#region 取得即將舉辦活動
-    // getWillbeheld() {
-    //   fetch("https://localhost:7259/api/Activity/WillBeHeld")
-    //     .then((response) => response.json())
-    //     .then((data) => {
-    //       console.log(data);
-    //       this.willbeheld = data;
-    //     });
-    // },
+    getWillbeheld() {
+      fetch("https://localhost:7259/api/Activity/WillBeHeld")
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          this.willbeheld = data;
+        });
+    },
     //#endregion
   },
-  // components: { RouterLink },
 };
 </script>
 
@@ -294,19 +326,18 @@ export default {
   height: 300px;
 }
 .h4 {
-  font-size: 24px;
   text-align: center;
   margin-bottom: 20px;
 }
 
 /* 輪播圖 start*/
 .newActivityCarousel {
-  height: 80vh;
+  height: 90vh;
 }
 
 .carouselImg img {
   width: 100%;
-  height: 80vh;
+  height: 90vh;
   object-fit: cover;
 }
 
@@ -382,40 +413,6 @@ a {
 
 /* 熱門活動卡片 end */
 
-.infoDiv {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  margin: 30px 0px 10px 0px;
-  /* background-color: #fff; */
-}
-
-.infoContent {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: #fff;
-  border-radius: 15px;
-  padding: 40px 20px 20px 20px;
-  width: 100%;
-}
-.infoContent img {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-}
-.infoTitle {
-  font-size: 20px;
-  padding: 0;
-
-  margin: 20px 0px;
-}
-.infoText {
-  text-align: center;
-  width: 80%;
-}
 .swiperDiv {
   /* background-color: #a6b6b0; */
   height: 400px;
@@ -445,7 +442,7 @@ a {
   width: 100%;
   height: 100%;
   opacity: 0.6;
-  background-image: url("../assets/activity/pexels-mati-mango-6344884.jpg");
+  background-image: url("../assets/activity/pexels-ben-mack-5326909.jpg");
   background-repeat: no-repeat;
   background-position: 50% 0;
   background-size: cover;
@@ -460,7 +457,7 @@ a {
   height: 100px;
   width: 50%;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   border-radius: 20px;
   color: #444;
@@ -468,8 +465,8 @@ a {
   text-align: center;
   background: linear-gradient(
     to right,
-    #fcf7f0d7 50%,
-    rgba(255, 255, 255, 0.565) 50%
+    #ffffff 50%,
+    rgba(255, 255, 255, 0.523) 50%
   );
   background-size: 200% 100%;
   background-position: right bottom;
@@ -481,5 +478,6 @@ a {
 }
 .searchActivity i {
   color: #444;
+  padding: 10px;
 }
 </style>

@@ -882,9 +882,11 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  height: fit-content;
+}
 .detailpage {
   min-height: 100vh;
-  max-height: fit-content;
   background-color: #fff;
   width: 95%;
   border-radius: 15px;
@@ -893,6 +895,7 @@ export default {
   margin-left: auto;
   margin-right: auto;
   padding-bottom: 0.75rem;
+  position: relative;
 }
 
 .image-container {
