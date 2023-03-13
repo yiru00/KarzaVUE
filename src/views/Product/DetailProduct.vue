@@ -12,21 +12,47 @@
             style="width:470px; object-fit: cover;"
             alt=""
           />
-          <div class="Pro-right">加寬</div>
+          <div class="Pro-right">12加寬</div>
           <div>
-            <p class="Id-Pborder">商品編號 : {{detail.id}}</p>
-            <p>商品類別 : {{ detail.categoryName }}</p>
-            <p>品牌 : {{ detail.brandName }}</p>
-            <p>庫存量 : {{ detail.inventory }}</p>
-           <span> NT   {{detail.price }}</span>
-           <button class="add-btn">直接購買</button>
+            <table>
+              <thead>
+                <tr>
+                  <th class="push-td">12345<span class="m-5 p-2"></span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="cate-mt">
+                  <td>商品編號 : </td>
+                  <td class="td-r">{{detail.id}}</td>
+                </tr>
+                <tr>    
+                  <td>商品類別 : </td>
+                  <td class="td-r">{{ detail.categoryName }}</td>
+                </tr>
+                <tr>    
+                  <td>品牌 : </td>
+                  <td class="td-r">{{ detail.inventory }}</td>
+                </tr>
+                <tr>    
+                  <td>庫存量 : </td>
+                  <td class="td-r">{{ detail.inventory }}</td>
+                </tr>
+                <tr>    
+                  <td> NTD : </td>
+                  <td class="td-r">{{detail.price }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div>
+           <button class="add-btn ">直接購買</button>
+          </div>
            <div>
-           <button class="add-btn">購物車</button>
-           <button class="add-btn">
-            <i v-if="MId==0" @click="CallUnFavorites(status.deleteId)" class="fa-regular fa-star" data-bs-toggle="modal" data-bs-target="#loginModal"></i>
+           <button class="add-btn-buy"><i class="fa-solid fa-cart-shopping buy-i"></i></button>
+           <button class="add-btn-like">
+            <i  v-if="MId==0" @click="CallUnFavorites(status.deleteId)" class="fa-regular fa-star like-i" data-bs-toggle="modal" data-bs-target="#loginModal"></i>
 
-            <i v-else-if="!status.upshot" @click="CallProductFavorites()" class="fa-regular fa-star"></i>
-            <i v-else @click="CallUnFavorites(status.deleteId)" class="fa-solid fa-star"></i>
+            <i v-else-if="!status.upshot" @click="CallProductFavorites()" class="fa-regular fa-star  like-i"></i>
+            <i v-else @click="CallUnFavorites(status.deleteId)" class="fa-solid fa-star  like-i"></i>
             
 
           </button>
@@ -49,7 +75,7 @@
       </div>
       
       <div class="spec-Out">
-        <p>Fujifilm Instax Mini 90 銀色 </p>
+        <p class="spec-name">Fujifilm Instax Mini 90 銀色 </p>
         <p class="Spec">商品介紹:
           {{ detail.productSpec }}
         </p>
@@ -187,8 +213,8 @@ export default {
   color:#FFFF;
   
 }
-.Id-Pborder{
-  
+p{
+  font-size: 20px;
 }
 .add-btn{
   margin: 20px;
@@ -217,8 +243,61 @@ export default {
 }
 .spec-Out{
   padding: 50px;
+  max-width: 1000px;
+  align-content: center;
+  border: #899EA9 solid 5px;
+  border-radius:10px ;
 }
 .Spec{
   white-space: pre-wrap;
+  margin-top: 30px;
+}
+.add-btn-buy{
+margin-left: 30px;
+padding: 5px 35px 5px 35px;
+border: none;
+border-radius: 5px; 
+background: #d3989938;
+font-size: 20px;
+
+}
+.add-btn-like{
+margin-left: 60px;
+margin-right: 30px;
+padding: 5px 35px 5px 35px;
+border: none;
+border-radius: 5px; 
+background: #e9cb8931;
+font-size: 20px;
+}
+.add-btn{
+margin-bottom: 35px;
+margin-left: 82.5px;
+padding: 5px 30px 5px 30px;
+border: none;
+border-radius: 5px; 
+background:#899ea9ab;
+font-size: 20px;
+font-weight: 800;
+}
+td{
+  font-size: 18px;
+  font-weight: 600;
+  padding-bottom: 10px;
+}
+.push-td{
+  color: #FFFF;
+}
+.like-i{
+  color:#e9cb89;
+}
+.buy-i{
+  color:#d39899;
+}
+.spec-name{
+  font-size: 24px;
+  font-weight: 800;
+  padding: 20px;
+  border-bottom:3px solid #899EA9;
 }
 </style>
