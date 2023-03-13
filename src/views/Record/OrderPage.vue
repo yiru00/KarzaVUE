@@ -9,8 +9,8 @@
           <i
             @click.stop="getOI(item.id)"
             class="fa-solid fa-clipboard clickauto"
-            data-bs-toggle="collapse"
-            href="#ordetail"
+            data-bs-toggle="collapse"           
+            :data-bs-target="`#index${item.id}`"
           ></i>
 
           <small class="ms-4">訂單編號:{{ item.paymentId }}</small>
@@ -20,10 +20,9 @@
           <!-- {{ item }} -->
         </div>
 
-        <div
-          v-show="showprodu"
+        <div        
           class="col prooutline container-fluid p-3 collapse"
-          id="ordetail"
+          :id="`index${item.id}`"
         >
           <div class="col procard mt-3">
             {{ orderitems }}
@@ -35,7 +34,6 @@
 </template>
 
 <script>
-import axios, { Axios } from "axios";
 export default {
   data() {
     return {
@@ -72,10 +70,7 @@ export default {
           `https://localhost:7259/api/OrderDetail/GetOrderID?orderid=${orderid}`
         )
         .then((res) => {
-          this.orderitems = res.data;
-          if(orderid)
-
-          
+          this.orderitems = res.data;                 
         })
         .catch((err) => {});
     },
