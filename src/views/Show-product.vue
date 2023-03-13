@@ -20,18 +20,58 @@
             data-bs-target="#newProduct"
             data-bs-slide-to="1"
           ></button>
+          <button
+            type="button"
+            data-bs-target="#newProduct"
+            data-bs-slide-to="2"
+          ></button>
+          <button
+            type="button"
+            data-bs-target="#newProduct"
+            data-bs-slide-to="3"
+          ></button>
+          <button
+            type="button"
+            data-bs-target="#newProduct"
+            data-bs-slide-to="4"
+          ></button>
+          <button
+            type="button"
+            data-bs-target="#newProduct"
+            data-bs-slide-to="5"
+          ></button>
         </div>
       </div>
       <div class="carousel-inner">
         <div>
           <div class="carousel-item carouselImg active" data-bs-interval="1500">
-            <router-link to="/Product/13">
+            <router-link to="/Product/31">
               <img src="src\assets\ProEvent\01.png" alt="商城活動圖" />
             </router-link>
           </div>
           <div class="carousel-item carouselImg" data-bs-interval="1500">
-            <router-link to="/Product/8">
+            <router-link to="/Product/34">
               <img src="src\assets\ProEvent\02.jpg" alt="商城活動圖" />
+            </router-link>
+          </div>
+          <div class="carousel-item carouselImg" data-bs-interval="1500">
+            <router-link to="/Product/30">
+              <img src="src\assets\ProEvent\03.jpg" alt="商城活動圖" />
+            </router-link>
+          </div>
+          <div class="carousel-item carouselImg" data-bs-interval="1500">
+            <router-link to="/Product/32">
+              <img src="src\assets\ProEvent\04.jpg" alt="商城活動圖" />
+            </router-link>
+          </div>
+          <div class="carousel-item carouselImg" data-bs-interval="1500">
+            <router-link to="/Product/36">
+              <img src="src\assets\ProEvent\05.jpg" alt="商城活動圖" />
+            </router-link>
+          </div>
+          <div class="carousel-item carouselImg" data-bs-interval="1500">
+            <router-link to="/Product/35">
+              <img src="src\assets\ProEvent\06.jpg" alt="商城活動圖" />
             </router-link>
           </div>
         </div>
