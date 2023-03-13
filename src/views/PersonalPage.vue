@@ -45,7 +45,14 @@
                 >
                   新增相片
                 </button>
-                <button class="uploadAlbumBtn">新增相簿</button>
+                <button
+                  class="uploadAlbumBtn"
+                  data-bs-toggle="modal"
+                  data-bs-target="#uploadAlbumModal"
+                  @click="albumGetPhotos"
+                >
+                  新增相簿
+                </button>
               </div>
             </div>
           </div>
@@ -108,13 +115,17 @@
             </div>
 
             <!-- 呈現內容 component使用-->
-            <RouterView :uploadProp="uploadReload"></RouterView>
+            <RouterView
+              :uploadProp="uploadReload"
+              :uploadAlbumProp="uploadAlbumReload"
+            ></RouterView>
           </div>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- 上傳相片的modal -->
   <div class="modal fade" tabindex="-1" id="uploadPhotoModal">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -173,16 +184,79 @@
       </div>
     </div>
   </div>
+
+  <!-- 上傳相簿的modal -->
+  <div class="modal fade" tabindex="-1" id="uploadAlbumModal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header border-bottom-0">
+          <h5 class="modal-title">上傳相簿</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="floatingAlbumTitle"
+              placeholder="標題"
+              v-model="albumTitle"
+            />
+            <label for="floatingAlbumTitle">相簿標題</label>
+          </div>
+
+          <div class="row gy-3 gx-3">
+            <div
+              class="col-12 col-sm-6 col-md-4 col-lg-3"
+              v-for="item in allPhotos"
+              :key="item.id"
+            >
+              <div class="card border-0">
+                <img
+                  :src="`https://localhost:7259/Images/${item.source}`"
+                  class="card-img-top rounded-bottom"
+                  :alt="item.source"
+                />
+                <input
+                  type="checkbox"
+                  class="albumCheckbox"
+                  v-model="albumCheckBox"
+                  :value="item.id"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end">
+            <button
+              @click="goAlbumSubmit"
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              送出
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
 import { useRoute } from "vue-router";
-import { ref } from "vue";
+import { ref, watch, computed } from "vue";
 const route = useRoute();
-const memberId = route.params.memberId;
+const allPhotos = ref([]);
 const memberProfile = ref([]);
 const uploadReload = ref(false);
 const uploadFile = ref("uploadFile");
+const uploadAlbumReload = ref(false);
 
 // 上傳照片欄位缺 author=登入者
 const photoData = ref("");
@@ -191,6 +265,12 @@ const photofile = ref({});
 const title = ref("");
 const camera = ref("");
 // const author = ref("");
+
+const memberId = computed(() => route.params.memberId);
+
+//上傳相簿
+const albumCheckBox = ref([]);
+const albumTitle = ref("");
 
 //上傳照片預覽
 const showPhoto = (event) => {
@@ -207,7 +287,7 @@ const showPhoto = (event) => {
   };
 };
 
-// 上傳照片功能
+// submit上傳照片功能
 const goSubmit = async function () {
   console.log(photofile.value);
   console.log(title.value);
@@ -242,18 +322,78 @@ const goSubmit = async function () {
   console.log("上傳成功後value?" + uploadReload.value);
 };
 
+// submit上傳相簿
+const goAlbumSubmit = function () {
+  console.log(albumCheckBox.value);
+  const newArray = albumCheckBox.value.slice();
+  console.log(newArray);
+  console.log(albumTitle.value);
+
+  // memberId還沒改!!!!!!!!!!!!!!!!!!!!!!!!!
+  axios
+    .post(`https://localhost:7259/api/Album/CreateAlbum`, {
+      albumName: albumTitle.value,
+      memberId: memberId.value,
+      photoId: newArray,
+    })
+    .then((response) => {
+      console.log("上傳相簿成功");
+      uploadAlbumReload.value = true;
+      albumTitle.value = "";
+      albumCheckBox.value = [];
+    })
+    .catch((error) => console.log(error));
+
+  uploadAlbumReload.value = false;
+};
+
 // 得到此頁面的profile
-axios({
-  method: "GET",
-  url: `https://localhost:7259/api/Photo/GetProfile?memberId=${memberId}`,
-})
+axios
+  .get(`https://localhost:7259/api/Photo/GetProfile?memberId=${memberId.value}`)
   .then((response) => {
     memberProfile.value = response.data;
   })
   .catch((error) => console.log(error));
+
+// 上傳相簿得到所有相片
+const albumGetPhotos = () => {
+  axios
+    .get(
+      `https://localhost:7259/api/Photo/AllPhotos?memberId=${memberId.value}`
+    )
+    .then((response) => {
+      allPhotos.value = response.data;
+    })
+    .catch((error) => console.log(error));
+};
+// watch memberId
+watch(memberId, () => {
+  // console.log("watch");
+  // console.log(route.params.memberId);
+  // console.log(memberId.value);
+  axios
+    .get(
+      `https://localhost:7259/api/Photo/GetProfile?memberId=${memberId.value}`
+    )
+    .then((response) => {
+      memberProfile.value = response.data;
+    })
+    .catch((error) => console.log(error));
+});
 </script>
 
 <style scoped>
+.albumCheckbox {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-radius: 10px;
+  border: 0;
+  color: white;
+  margin: 0;
+}
 .previewPhoto {
   padding: 10px 0;
   display: flex;

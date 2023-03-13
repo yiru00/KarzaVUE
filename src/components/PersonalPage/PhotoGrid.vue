@@ -37,18 +37,27 @@
           <div
             class="photoModalProfile d-flex justify-content-center align-items-center"
           >
-            <RouterLink
-              :to="`/Community/PersonalPage/1/Photos`"
-              :key="route.path"
-              class="personlink"
+            <div
+              data-bs-dismiss="modal"
+              class="d-flex justify-content-center align-items-center"
             >
-              <img
-                class="imgPhoto me-3"
-                :src="`https://localhost:7259/Images/${photoFor.authorPhotoSticker}`"
-                :alt="photoFor.authorPhotoSticker"
-              />
-              <p class="m-0">{{ photoFor.author }}</p>
-            </RouterLink>
+              <RouterLink
+                :to="`/Community/PersonalPage/${photoFor.authorId}/Photos`"
+                class="authorLink"
+              >
+                <img
+                  class="imgPhoto me-3"
+                  :src="`https://localhost:7259/Images/${photoFor.authorPhotoSticker}`"
+                  :alt="photoFor.authorPhotoSticker"
+                />
+              </RouterLink>
+              <RouterLink
+                :to="`/Community/PersonalPage/${photoFor.authorId}/Photos`"
+                class="authorLink"
+              >
+                <p class="m-0">{{ photoFor.author }}</p>
+              </RouterLink>
+            </div>
           </div>
           <!-- 選項 編輯/刪除相片 v-if="memberId==memberId" -->
           <div class="dropdown" v-if="!edit">
@@ -125,11 +134,11 @@
 
 <script setup>
 import { useRoute } from "vue-router";
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 
 const route = useRoute();
 const allPhotos = ref([]);
-const memberId = route.params.memberId;
+
 const photoFor = ref("");
 const deleteReload = ref(false);
 const edit = ref(false);
@@ -137,6 +146,7 @@ const edit = ref(false);
 const editTitle = ref("");
 const editCamera = ref("");
 
+const memberId = computed(() => route.params.memberId);
 // modal相片詳細資料
 const photoModal = (item) => {
   edit.value = false;
@@ -169,26 +179,15 @@ const editComplete = () => {
     .catch((error) => console.log(error));
 };
 
-// 編輯相片後刷新頁面用
-// watch(editReload, () => {
-//   if (editReload.value) {
-//     axios
-//       .get(`https://localhost:7259/api/Photo/AllPhotos?memberId=${memberId}`)
-//       .then((response) => {
-//         allPhotos.value = response.data;
-//         editReload.value = false;
-//       })
-//       .catch((error) => console.log(error));
-//   }
-// });
-
 // 上傳相片後刷新頁面用
 const uploadReload = defineProps(["uploadProp"]);
 watch(uploadReload, () => {
   console.log(uploadReload);
   if (uploadReload) {
     axios
-      .get(`https://localhost:7259/api/Photo/AllPhotos?memberId=${memberId}`)
+      .get(
+        `https://localhost:7259/api/Photo/AllPhotos?memberId=${memberId.value}`
+      )
       .then((response) => {
         allPhotos.value = response.data;
       })
@@ -229,7 +228,9 @@ const deletePhoto = function (photoId) {
 watch(deleteReload, () => {
   if (deleteReload.value) {
     axios
-      .get(`https://localhost:7259/api/Photo/AllPhotos?memberId=${memberId}`)
+      .get(
+        `https://localhost:7259/api/Photo/AllPhotos?memberId=${memberId.value}`
+      )
       .then((response) => {
         allPhotos.value = response.data;
         deleteReload.value = false;
@@ -240,14 +241,37 @@ watch(deleteReload, () => {
 
 // 撈此頁面所有照片
 axios
-  .get(`https://localhost:7259/api/Photo/AllPhotos?memberId=${memberId}`)
+  .get(`https://localhost:7259/api/Photo/AllPhotos?memberId=${memberId.value}`)
   .then((response) => {
     allPhotos.value = response.data;
   })
   .catch((error) => console.log(error));
+
+// 撈此頁面所有照片
+watch(memberId, () => {
+  // console.log("watch");
+  // console.log(route.params.memberId);
+  // console.log(memberId.value);
+  axios
+    .get(
+      `https://localhost:7259/api/Photo/AllPhotos?memberId=${memberId.value}`
+    )
+    .then((response) => {
+      allPhotos.value = response.data;
+    })
+    .catch((error) => console.log(error));
+});
 </script>
 
 <style scoped>
+.authorLink {
+  text-decoration: none;
+  color: black;
+}
+.authorLink:hover {
+  color: gray;
+  transition: ease-in-out 0.3s;
+}
 .editModal {
   height: 30px;
   width: 250px;
@@ -272,7 +296,9 @@ axios
   justify-content: center;
   height: 100%;
   width: 100%;
-  border: 0.5px solid black;
+  border: 1px solid black;
+  font-size: 15px;
+  text-align: center;
 }
 .deleteLi:hover {
   background-color: #d39899;
@@ -288,7 +314,6 @@ axios
 .moreUl {
   min-width: 40px;
   padding: 0;
-  border: 2px solid black;
 }
 .photoModalFooter {
   border-top: 0;

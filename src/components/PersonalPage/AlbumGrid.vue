@@ -1,20 +1,57 @@
 <template>
   <!-- 呈現內容 component使用-->
-  <div class="col-12 col-sm-6 col-md-4 col-lg-3" v-for="i in 10" :key="i">
+  <div
+    class="col-12 col-sm-6 col-md-4 col-lg-3"
+    v-for="item in allAlbums"
+    :key="item.albumId"
+  >
     <div class="card cardSize">
-      <RouterLink to="Albums/:albumId/AlbumPhoto" class="w-100 h-100">
+      <RouterLink
+        :to="`/Community/PersonalPage/${memberId}/Albums/${item.albumId}`"
+        class="w-100 h-100"
+      >
         <img
-          :src="`https://picsum.photos/500/400?random=${i}`"
+          :src="`https://localhost:7259/Images/${item.coverImg}`"
           class="card-img-top rounded-bottom"
-          alt="Photo 1"
+          :alt="item.source"
         />
-        <div class="albumTitle">相簿名稱</div>
+        <div class="albumTitle">{{ item.albumName }}</div>
       </RouterLink>
     </div>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { useRoute } from "vue-router";
+import { ref, watch, computed } from "vue";
+const route = useRoute();
+const allAlbums = ref([]);
+const memberId = computed(() => route.params.memberId);
+
+//上傳相簿刷新頁面用
+const uploadAlbumProp = defineProps(["uploadAlbumProp"]);
+watch(uploadAlbumProp, () => {
+  console.log(uploadAlbumProp);
+  if (uploadAlbumProp) {
+    axios
+      .get(
+        `https://localhost:7259/api/Album/GetAlbums?memberId=${memberId.value}`
+      )
+      .then((response) => {
+        allAlbums.value = response.data;
+      })
+      .catch((error) => console.log(error));
+  }
+});
+
+// 撈相簿
+axios
+  .get(`https://localhost:7259/api/Album/GetAlbums?memberId=${memberId.value}`)
+  .then((response) => {
+    allAlbums.value = response.data;
+  })
+  .catch((error) => console.log(error));
+</script>
 
 <style scoped>
 .photoGrid {

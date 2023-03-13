@@ -13,9 +13,7 @@
             @keyup="searchName()"
           />
           <label for="floatingSearch"
-            ><i class="fa-solid fa-magnifying-glass"></i> 暱稱{{
-              searchInput
-            }}</label
+            ><i class="fa-solid fa-magnifying-glass"></i> 暱稱</label
           >
         </div>
       </div>
