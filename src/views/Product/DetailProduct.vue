@@ -22,41 +22,54 @@
               </thead>
               <tbody>
                 <tr class="cate-mt">
-                  <td>商品編號 : </td>
-                  <td class="td-r">{{detail.id}}</td>
+                  <td>商品編號 :</td>
+                  <td class="td-r">{{ detail.id }}</td>
                 </tr>
-                <tr>    
-                  <td>商品類別 : </td>
+                <tr>
+                  <td>商品類別 :</td>
                   <td class="td-r">{{ detail.categoryName }}</td>
                 </tr>
-                <tr>    
-                  <td>品牌 : </td>
+                <tr>
+                  <td>品牌 :</td>
                   <td class="td-r">{{ detail.inventory }}</td>
                 </tr>
-                <tr>    
-                  <td>庫存量 : </td>
+                <tr>
+                  <td>庫存量 :</td>
                   <td class="td-r">{{ detail.inventory }}</td>
                 </tr>
-                <tr>    
-                  <td> NTD : </td>
-                  <td class="td-r">{{detail.price }}</td>
+                <tr>
+                  <td>NTD :</td>
+                  <td class="td-r">{{ detail.price }}</td>
                 </tr>
               </tbody>
             </table>
             <div>
-           <button class="add-btn ">直接購買</button>
-          </div>
-           <div>
-           <button class="add-btn-buy"><i class="fa-solid fa-cart-shopping buy-i"></i></button>
-           <button class="add-btn-like">
-            <i  v-if="MId==0" @click="CallUnFavorites(status.deleteId)" class="fa-regular fa-star like-i" data-bs-toggle="modal" data-bs-target="#loginModal"></i>
+              <button class="add-btn">直接購買</button>
+            </div>
+            <div>
+              <button class="add-btn-buy">
+                <i class="fa-solid fa-cart-shopping buy-i"></i>
+              </button>
+              <button class="add-btn-like">
+                <i
+                  v-if="MId == 0"
+                  class="fa-regular fa-star like-i"
+                  data-bs-toggle="modal"
+                  data-bs-target="#loginModal"
+                ></i>
 
-            <i v-else-if="!status.upshot" @click="CallProductFavorites()" class="fa-regular fa-star  like-i"></i>
-            <i v-else @click="CallUnFavorites(status.deleteId)" class="fa-solid fa-star  like-i"></i>
-            
-
-          </button>
-          </div>
+                <i
+                  v-else-if="!status.upshot"
+                  @click="CallProductFavorites()"
+                  class="fa-regular fa-star like-i"
+                ></i>
+                <i
+                  v-else
+                  @click="CallUnFavorites(status.deleteId)"
+                  class="fa-solid fa-star like-i"
+                ></i>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -75,8 +88,9 @@
       </div>
 
       <div class="spec-Out">
-        <p class="spec-name">{{detail.name}} </p>
-        <p class="Spec">商品介紹:
+        <p class="spec-name">{{ detail.name }}</p>
+        <p class="Spec">
+          商品介紹:
           {{ detail.productSpec }}
         </p>
       </div>
@@ -268,7 +282,7 @@ export default {
   border-bottom: 5px solid #ffff;
   color: #ffff;
 }
-p{
+p {
   font-size: 20px;
 }
 .add-btn {
@@ -298,59 +312,58 @@ p{
   padding: 50px;
   max-width: 1000px;
   align-content: center;
-  border: #899EA9 solid 5px;
-  border-radius:10px ;
+  border: #899ea9 solid 5px;
+  border-radius: 10px;
 }
 .Spec {
   white-space: pre-wrap;
   margin-top: 30px;
 }
-.add-btn-buy{
-margin-left: 30px;
-padding: 5px 35px 5px 35px;
-border: none;
-border-radius: 5px; 
-background: #d3989938;
-font-size: 20px;
-
+.add-btn-buy {
+  margin-left: 30px;
+  padding: 5px 35px 5px 35px;
+  border: none;
+  border-radius: 5px;
+  background: #d3989938;
+  font-size: 20px;
 }
-.add-btn-like{
-margin-left: 60px;
-margin-right: 30px;
-padding: 5px 35px 5px 35px;
-border: none;
-border-radius: 5px; 
-background: #e9cb8931;
-font-size: 20px;
+.add-btn-like {
+  margin-left: 60px;
+  margin-right: 30px;
+  padding: 5px 35px 5px 35px;
+  border: none;
+  border-radius: 5px;
+  background: #e9cb8931;
+  font-size: 20px;
 }
-.add-btn{
-margin-bottom: 35px;
-margin-left: 82.5px;
-padding: 5px 30px 5px 30px;
-border: none;
-border-radius: 5px; 
-background:#899ea9ab;
-font-size: 20px;
-font-weight: 800;
+.add-btn {
+  margin-bottom: 35px;
+  margin-left: 82.5px;
+  padding: 5px 30px 5px 30px;
+  border: none;
+  border-radius: 5px;
+  background: #899ea9ab;
+  font-size: 20px;
+  font-weight: 800;
 }
-td{
+td {
   font-size: 18px;
   font-weight: 600;
   padding-bottom: 10px;
 }
-.push-td{
-  color: #FFFF;
+.push-td {
+  color: #ffff;
 }
-.like-i{
-  color:#e9cb89;
+.like-i {
+  color: #e9cb89;
 }
-.buy-i{
-  color:#d39899;
+.buy-i {
+  color: #d39899;
 }
-.spec-name{
+.spec-name {
   font-size: 24px;
   font-weight: 800;
   padding: 20px;
-  border-bottom:3px solid #899EA9;
+  border-bottom: 3px solid #899ea9;
 }
 </style>
