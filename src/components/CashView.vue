@@ -9,10 +9,14 @@
               <table class="table table-borderless">
                 <tbody>
                   <!-- testtttt -->
-                  <tr class="" v-for="(item, i) in cartsSelect" :key="item.Id">
-                    <td>
+                  <div
+                    v-for="(item, i) in cartsSelect"
+                    :key="item.Id"
+                    class="row justify-content-center align-items-center"
+                  >
+                    <div class="col-6">
                       <div class="d-flex align-items-center">
-                        <div>
+                        <div class="">
                           <img class="pic" :src="item.Cover" alt="" />
                         </div>
                         <div class="ps-3 d-flex flex-column">
@@ -21,9 +25,9 @@
                           </p>
                         </div>
                       </div>
-                    </td>
+                    </div>
 
-                    <td>
+                    <div class="col-4">
                       <div class="d-flex align-items-center">
                         <span class="pe-2 text-muted">數量</span>
 
@@ -63,13 +67,14 @@
                             <i class="fa-solid fa-trash-can"></i>
                           </a>
                         </div>
-
-                        <div class="ms-5">
-                          <a> ${{ item.Price }} </a>
-                        </div>
                       </div>
-                    </td>
-                  </tr>
+                    </div>
+                    <div class="col-2">
+                      <div class="d-flex align-items-center">
+                        <a> ${{ item.Price }} </a>
+                      </div>
+                    </div>
+                  </div>
 
                   <tr v-show="cartsSelect.length == 0">
                     <td class="text-center">購物車無商品</td>
@@ -83,43 +88,50 @@
       </div>
       <div class="col-lg-4 payment-summary">
         <p class="fw-bold pt-lg-0 pt-4 pb-2">購買資訊</p>
-        <div class="card px-md-3 px-2 pt-4">
-          <div class="unregistered mb-4">
-            <span class="py-1"
-              ><span>地址:</span>
-              <VueTwZipCodeSelector
-                @getSelectedZone="getSelectedZone"
-                class="address-coustomize ms-3" /><input
-                v-model="adressinput"
-                type="text"
-                class="form-control"
-                @blur="getAdressInput"
-            /></span>
+        <div class="buy">
+          <div class="addrText">地址:</div>
+
+          <div>
+            <VueTwZipCodeSelector
+              @getSelectedZone="getSelectedZone"
+              class="address-coustomize"
+            />
           </div>
-          <div class="d-flex justify-content-between pb-3">
-            <small v-html="couponmessage" class="text-muted"></small>
+          <div>
+            <input
+              v-model="adressinput"
+              type="text"
+              class="buyinput"
+              placeholder="住址"
+              @blur="getAdressInput"
+            />
           </div>
-          <div class="d-flex justify-content-between b-bottom">
+          <div class="">優惠券:</div>
+          <div class="">
             <input
               v-model="couponinput"
               @blur.stop="getCoupon"
               type="text"
-              class="ps-2"
+              class="buyinput"
               placeholder="折價券代碼"
             />
           </div>
+          <div class="">
+            {{ couponmessage }}
+          </div>
         </div>
+
         <div class="d-flex flex-column b-bottom">
           <div class="d-flex justify-content-between py-3">
-            <small class="text-muted">折價券折扣</small>
+            <p class="text-muted">折價券折扣</p>
             <p>{{ showdiscountprice }}</p>
           </div>
           <div class="d-flex justify-content-between pb-3">
-            <small class="text-muted">已折扣金額</small>
+            <p class="text-muted">已折扣金額</p>
             <p>${{ countedPrice }}</p>
           </div>
           <div class="d-flex justify-content-between">
-            <small class="text-muted">總金額</small>
+            <p class="text-muted">總金額</p>
             <p>${{ this.getTotal }}</p>
           </div>
         </div>
@@ -127,10 +139,10 @@
           <span>
             <button
               type="button"
-              class="btn btn-lg btn-block btn-success p-1 col-12"
+              class="p-1 col-12 buybutton"
               @click.stop="cartSubmit"
             >
-              <p class="btntext">購買</p>
+              購買
             </button>
           </span>
         </div>
@@ -142,10 +154,13 @@
 </template>
 <script>
 import { useRouter, useRoute } from "vue-router";
+import utility from "../../public/utility";
 export default {
+  mixins: [utility],
   data() {
     return {
       notFoundLink: "/notfound",
+      MemberId: this.fetchMemberId(),
       headers: {},
       products: null,
       cartsSelect: [],
@@ -166,32 +181,23 @@ export default {
       // sweet alert訊息
       delSweetConfirm: {
         title: "要刪除此項目嗎",
-        // text: "You won't be able to revert this!",
-        icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: "#ff7674",
-        cancelButtonColor: "#777",
         confirmButtonText: "刪除",
-        cancelButtonText: "取消",
       },
       buySweetConfirm: {
         title: "確定要購買嗎",
-        // text: "You won't be able to revert this!",
         showCancelButton: true,
         confirmButtonText: "購買",
         cancelButtonText: "取消",
       },
       successSweetAlert: {
         title: "成功",
-        icon: "success",
-        confirmButtonText: "確定",
-        confirmButtonColor: "#41b882",
+
         // timer: 2000,
       },
       errSweetAlert: {
         title: "錯誤",
-        confirmButtonText: "確定",
-        confirmButtonColor: "#41b882",
+
         // timer: 2000,
       },
     };
@@ -293,7 +299,7 @@ export default {
             }
           })
           .catch((err) => {
-            this.couponmessage = `<span class="text-danger">${err.response.data.messsage}<\/span>`;
+            this.couponmessage = `${err.response.data.messsage}`;
             this.coupondiscountdata = "";
             this.couponinput = "";
           });
@@ -422,6 +428,7 @@ export default {
     */
     async cartSubmit() {
       // 確認購買
+      let id = await this.fetchMemberId();
       await this.$swal.fire(this.buySweetConfirm).then((result) => {
         if (result.isConfirmed) {
           if (
@@ -440,7 +447,7 @@ export default {
 
           // 按下購買
           let model = {
-            MemberId: 1,
+            MemberId: id,
             State: 0,
             Total: this.getTotal,
             CartProducts: Array.from(this.cartsSelect),
@@ -657,35 +664,68 @@ export default {
 };
 </script>
 
-
-
-
-
-
 <style>
+.cash-view .address-coustomize select {
+  margin: 5px;
+  padding: 0;
+  border-radius: 0.25rem;
+}
+.cash-view .address-coustomize {
+  padding: 0;
+}
+</style>
+<style scoped>
 .cash-view {
-  background-color: #b064f7;
   line-height: 1rem;
   font-size: 14px;
   padding: 10px;
 
-  border-top-left-radius: 25px;
-  border-top-right-radius: 25px;
-  border-bottom-left-radius: 25px;
-  border-bottom-right-radius: 25px;
-  background-color: #eee;
-}
+  border-radius: 25px;
 
-.cash-view .order .card {
+  background-color: #f8e4e4;
+}
+.prozone {
+  min-width: 380px;
+}
+.numzone {
+  min-width: 200px;
+}
+.pricezone {
+  min-width: 60px;
+}
+.card {
   position: relative;
+
   background: #fff;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
-
+.addrText {
+  white-space: nowrap;
+}
+.buy {
+  padding: 15px;
+  position: relative;
+  background: #fff;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 300px;
+}
+.buyinput {
+  height: 40px;
+  outline: none;
+  box-shadow: none;
+  background-color: transparent;
+  border: 1.5px solid gray;
+  border-radius: 0.25rem;
+  color: #444444;
+}
 .cash-view .pic {
-  width: 70px;
+  width: 110px;
   height: 90px;
-  border-radius: 5px;
+  margin-right: 20px;
 }
 .cash-view td {
   vertical-align: middle;
@@ -722,11 +762,9 @@ export default {
 .cash-view .payment-summary .unregistered {
   width: 100%;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #eee;
-  text-transform: uppercase;
-  font-size: 14px;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
 }
 .cash-view .payment-summary input {
   width: 100%;
@@ -756,13 +794,19 @@ export default {
   overflow-y: auto;
 }
 
-.cash-view .btntext {
-  font-size: 16px;
+.cash-view .adressinput {
+  font-size: 14px;
 }
-
-.cash-view .address-coustomize select {
-  /* display: inline-block; */
-  margin-right: 0.5em;
+.buybutton {
+  background: #afc7d8;
+  border: 0cm;
+  border-radius: 0.25rem;
+  padding: 10px;
+  height: 2.5rem;
+}
+.buybutton:hover {
+  opacity: 0.7;
+  transition: 0.6s;
 }
 
 /* 更改地址 */
@@ -774,4 +818,3 @@ export default {
   }
 }
 </style>
-

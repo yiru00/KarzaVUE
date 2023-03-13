@@ -9,7 +9,7 @@
           <i
             @click.stop="getOI(item.id)"
             class="fa-solid fa-clipboard clickauto"
-            data-bs-toggle="collapse"           
+            data-bs-toggle="collapse"
             :data-bs-target="`#index${item.id}`"
           ></i>
 
@@ -20,7 +20,7 @@
           <!-- {{ item }} -->
         </div>
 
-        <div        
+        <div
           class="col prooutline container-fluid p-3 collapse"
           :id="`index${item.id}`"
         >
@@ -34,7 +34,9 @@
 </template>
 
 <script>
+import utility from "../../../public/utility";
 export default {
+  mixins: [utility],
   data() {
     return {
       orderdetail: [],
@@ -52,9 +54,12 @@ export default {
   created() {},
 
   methods: {
-    getOD() {
+    async getOD() {
+      let memberId = await this.fetchMemberId();
       axios
-        .get(`https://localhost:7259/api/OrderDetail/GetMemberOrder?memberid=1`)
+        .get(
+          `https://localhost:7259/api/OrderDetail/GetMemberOrder?memberid=${memberId}`
+        )
         .then((res) => {
           if (res.data.length > 0) {
             this.orderdetail = res.data;
@@ -70,7 +75,7 @@ export default {
           `https://localhost:7259/api/OrderDetail/GetOrderID?orderid=${orderid}`
         )
         .then((res) => {
-          this.orderitems = res.data;                 
+          this.orderitems = res.data;
         })
         .catch((err) => {});
     },
