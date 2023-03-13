@@ -1,37 +1,50 @@
 <template>
-  <div class="cotainer">
-    <div>
-      <p class="text-center">我的訂單</p>
-      <hr />
+  <div class="content">
+    <h4>我的報名活動</h4>
+    <div class="line"></div>
 
-      <div class="outline" v-for="(item, index) in orderdetail" :key="item.id">
-        <div class="col prooutline container-fluid p-3 mt-5">
-          <i
-            @click.stop="getOI(item.id)"
-            class="fa-solid fa-clipboard clickauto"
-            data-bs-toggle="collapse"
-            :data-bs-target="`#index${item.id}`"
-          ></i>
+    <div class="" v-html="noorder"></div>
+    <div
+      :ref="item.id"
+      class="outline"
+      v-for="(item, index) in orderdetail"
+      :key="item.id"
+    >
+      <div class="col prooutline container-fluid p-3 mt-5">
+        <i
+          @click.stop="getOI(item.id)"
+          class="fa-solid fa-clipboard clickauto"
+          data-bs-toggle="collapse"
+          :data-bs-target="`#index${item.id}`"
+          :ref="`${item.id}`"
+        ></i>
 
-          <small class="ms-4">訂單編號:{{ item.paymentId }}</small>
-          <small class="totalloca">總金額:{{ item.total }}$</small>
-          <br />
-          <small class="ms-4">收件資訊: {{ item.address }}</small>
-          <!-- {{ item }} -->
-        </div>
+        <small class="ms-4">訂單編號:{{ item.paymentId }}</small>
+        <small class="totalloca">總金額:{{ item.total }}$</small>
+        <br />
+        <small class="ms-4">收件資訊: {{ item.address }}</small>
+        <!-- {{ item }} -->
+      </div>
 
+      <div
+        class="col prooutline container-fluid p-3 collapse"
+        :id="`index${item.id}`"
+      >
         <div
-          class="col prooutline container-fluid p-3 collapse"
-          :id="`index${item.id}`"
+          class="col procard mt-3"
+          v-for="items in orderitems"
+          :key="items.id"
         >
-          <div class="col procard mt-3">
-            {{ orderitems }}
-          </div>
+          <img :src="item.source" alt="" />
+          {{ items }}
         </div>
       </div>
     </div>
+    {{ orderitems }}
   </div>
 </template>
+
+
 
 <script>
 import utility from "../../../public/utility";
@@ -43,6 +56,8 @@ export default {
       orderitems: [],
       orderid: 0,
       showprodu: "",
+      noorder: "",
+      itemid: this.$refs,
     };
   },
 
@@ -64,6 +79,7 @@ export default {
           if (res.data.length > 0) {
             this.orderdetail = res.data;
           } else {
+            this.noorder = "<span>目前暫無訂單~</span>";
           }
         })
         .catch((err) => {});
@@ -102,6 +118,13 @@ export default {
   justify-content: center;
   align-items: center;
   word-wrap: normal;
+}
+.line {
+  height: 1px;
+  background-color: #a3a3a3;
+}
+.content {
+  padding: 20px 50px;
 }
 .prooutline .totalloca {
   margin-left: 85%;

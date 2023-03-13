@@ -3,6 +3,7 @@
     <div class="row px-md-4 px-2 pt-4">
       <div class="col-lg-8">
         <p class="pb-2 fw-bold">購物車商品</p>
+
         <div class="card">
           <div class="card-scroll-x">
             <div class="table-responsive px-md-4 px-2 pt-3">
@@ -50,9 +51,9 @@
                           />
                         </span>
 
-                        <button class="btn btn-link px-2 pointer">
+                        <button class="btn btn-link px-2">
                           <i
-                            class="fa-solid fa-plus"
+                            class="fa-solid fa-plus pointer"
                             @click.stop="
                               addToCart(item, 0, `.count-input-${i}`)
                             "
@@ -116,9 +117,7 @@
               placeholder="折價券代碼"
             />
           </div>
-          <div class="">
-            {{ couponmessage }}
-          </div>
+          <div class="" v-html="couponmessage"></div>
         </div>
 
         <div class="d-flex flex-column b-bottom">
@@ -299,13 +298,14 @@ export default {
             }
           })
           .catch((err) => {
-            this.couponmessage = `${err.response.data.messsage}`;
+            this.couponmessage = `<span class="text-danger">${err.response.data.messsage}<\/span>`;
             this.coupondiscountdata = "";
             this.couponinput = "";
+            this.countedPrice = 0;
+            this.showdiscountprice = "$0";
           });
       } else {
         this.coupondiscountdata = "";
-        this.showdiscountprice = `$0`;
         this.couponmessage = "";
       }
     },
@@ -718,9 +718,16 @@ export default {
   outline: none;
   box-shadow: none;
   background-color: transparent;
-  border: 1.5px solid gray;
+  border: 1px solid #8991a9;
+  opacity: 0.8;
+
   border-radius: 0.25rem;
   color: #444444;
+}
+
+.buyinput :focus {
+  border: 1px solid #010511;
+  color: #000;
 }
 .cash-view .pic {
   width: 110px;
@@ -735,7 +742,7 @@ export default {
   font-weight: 600;
 }
 .cash-view .b-bottom {
-  border-bottom: 2px dotted black;
+  border-bottom: 1px solid #8991a9;
   padding-bottom: 20px;
 }
 .cash-view p {

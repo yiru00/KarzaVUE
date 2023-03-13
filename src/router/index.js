@@ -20,7 +20,7 @@ const router = createRouter({
       component: () => import("../views/ShoppingCart.vue"),
     },
     {
-      path: "/CheckOutReport",
+      path: "/CheckOutReport/:id",
       name: "CheckOutReport",
       //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
       component: () => import("../views/CheckOutReport.vue"),

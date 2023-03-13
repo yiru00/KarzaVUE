@@ -33,10 +33,14 @@
     <div>總金額:</div>
     <div>{{ this.paymentData.orderDetail.total }}</div>
   </div>
+
+
+  <div v-else>
+    查無結帳資料
+  </div>
 </template>
 
 <script>
-import { clippingParents } from "@popperjs/core";
 import { useRouter, useRoute } from "vue-router";
 
 export default {
@@ -124,8 +128,10 @@ export default {
     },
     /*================================== 結帳行為及api  =================================== */
     async GetPaymentResult() {
-      await this.$axios
-        .get(`api/ShoppingCart/GetPaymentResult?paymentId=${this.paymentID}`)
+      axios
+        .get(
+          `https://localhost:7259/api/ShoppingCart/GetPaymentResult?paymentId=${this.paymentID}`
+        )
         .then((res) => {
           if (res.data) {
             this.paymentData = res.data.data;
