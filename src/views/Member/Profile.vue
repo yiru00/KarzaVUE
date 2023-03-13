@@ -22,7 +22,7 @@
 
 <script>
 import utility from "../../../public/utility.js"
-import axios from 'axios'
+// import axios from 'axios'
 
 export default {
   data() {
