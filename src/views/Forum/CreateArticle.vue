@@ -1,5 +1,5 @@
 <template> 
-    <div class="container article_banner">
+    <div class="container article_banners">
     <div class="row justify-content-center">
         <div class="article_insert col-md-10" >
             <div class="card-header d-flex justify-content-between article_title">
@@ -136,7 +136,11 @@ export default {
             })
             .catch(error=> {
                 console.log(error)
+                if(error){                
+                  alert("請完整輸入") 
+                }
             })
+            
         },
 
         async createnow() {
@@ -219,7 +223,7 @@ export default {
       margin-top: 25px;
 
     }
-    .article_banner{
+    .article_banners{
       margin-top: 10px;
       padding: 50px ;
     }
@@ -239,7 +243,7 @@ export default {
     .article_insert{
       margin-top: 10px;
       padding: 20px 70px 20px 70px;
-      border: 3px solid blue;
+      border: 3px solid #8991A9;
       border-radius: 15px;
     }
     .article_title{

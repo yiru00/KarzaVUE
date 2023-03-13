@@ -1,5 +1,5 @@
 <template>
-    <div class="container article_banner">
+    <div class="container article_bannero">
       <div class="contents row ">
         <div class="forum col-2 ">
           <div class="card">
@@ -176,7 +176,7 @@ export default {
       margin-top: 25px;
 
     }
-    .article_banner{
+    .article_bannero{
       margin-top: 10px;
     }
     .contents {
@@ -195,7 +195,7 @@ export default {
     .article{
       margin-top: 10px;
       padding: 20px;
-      border: 3px solid blue;
+      border: 3px solid #8991A9;
       border-radius: 15px;
     }
     .article_title{
