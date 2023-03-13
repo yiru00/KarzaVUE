@@ -1,8 +1,7 @@
 <template>
   <div class="container">
     <div class="searchPage">
-      <!-- {{result}} -->
-      <!-- <router-link to="/Activity/12">go</router-link> -->
+      <h4 class="align-self-center mt-4">活動總覽</h4>
       <form class="row inputSearch">
         <div class="col-lg-3 col-md-4 col-12">
           <input
@@ -469,7 +468,7 @@ export default {
   padding: 10px;
   background-color: #fff;
   border-radius: 10px;
-  box-shadow: 0 2px 15px #00000033;
+  box-shadow: 0 2px 15px #0000001c;
   /* height: 300px; */
 }
 .card-header {

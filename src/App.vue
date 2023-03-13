@@ -74,11 +74,7 @@ export default {
       if (token) isLogin = true;
       this.isLogin = isLogin;
     },
-    // async getMemberId() {
-    //   let id = await this.fetchMemberId();
-    //   this.memberId = id;
-    //   console.log(this.memberId);
-    // },
+   
     async setPhoto() {
       let id = await this.fetchMemberId();
 
@@ -159,10 +155,11 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div data-bs-spy="scroll" data-bs-target="#mainNav">
     <nav
-      class="navbar navbar-light navbar-expand-lg navbar-togglable"
       id="mainNav"
+      class="navbar navbar-expand-lg navbar-light fixed-top"
+      tabindex="0"
     >
       <div
         class="container-fluid d-flex align-items-center justify-content-between"
@@ -180,8 +177,9 @@ export default {
           <i class="fa-solid fa-bars-staggered fs-4"></i>
         </button>
 
-        <!--Navbar brand -->
-        <router-link to="/" class="navbar-brand m-0">KARZA!</router-link>
+        <router-link to="/" class="navbar-brand m-0">
+          <span class="ms-1 fw-bolder fs-4">KARZA!</span></router-link
+        >
 
         <!-- （有登入）lg以下顯示 訊息、通知、個人選單  -->
         <div
@@ -260,9 +258,8 @@ export default {
                 active-class="active1"
                 to="/Activity"
                 class="nav-link navLink"
-                >官方活動</RouterLink
+                >教學活動</RouterLink
               >
-              <!-- <RouterLink to="/activity">activity</RouterLink> -->
             </li>
             <li class="nav-item">
               <RouterLink
@@ -284,7 +281,6 @@ export default {
               >
             </li>
           </ul>
-
           <!--（有登入）lg以上 顯示 訊息、通知、個人選單 -->
           <div
             class="d-lg-block d-none d-flex justify-content-between align-items-center ms-auto"
@@ -435,20 +431,25 @@ body {
 }
 main {
   min-height: 100vh;
+  padding-bottom: 70px;
+  position: relative;
+  top: 70px;
 }
 #mainNav {
+  padding-top: 10px;
+  padding-bottom: 10px;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1030;
-  background: #fff;
+  background: #ffffff;
 }
 .navLink {
   color: #070707;
 }
 @media (min-width: 992px) {
   #mainNav {
-    background: #fff;
+    background: #ffffff;
     transition: background-color 0.5s;
     /* Force Hardware Acceleration in WebKit */
     transform: translate3d(0, 0, 0);
@@ -463,13 +464,14 @@ main {
   #mainNav.is-fixed {
     /* 往下滑時navbar固定在網頁上方隱藏 */
     position: fixed;
-    top: -66px;
+    top: -70px;
     transition: transform 0.5s;
   }
 
   #mainNav.is-visible {
     /* 變化滑動方向時顯示出navbar */
-    background-color: #ffffffae;
+
+    background-color: #ffffffa5;
     transform: translate3d(0, 100%, 0);
   }
   .active1 {
@@ -499,9 +501,21 @@ main {
 .personalList:active {
   background-color: #afc7d8;
   color: #fff;
+  /* transition: transform 0.01s; */
 }
-
+.btn,
+.nav-link.collapsed,
+.navbar,
+.navbar-collapse.collapse.show,
+.navbar-collapse.collapsing,
+.scrolled,
+.shadow,
+a,
+img {
+  transition: all 0s ease-in-out 0s;
+}
 .footer {
+  position: relative;
   height: 100px;
   bottom: 0px;
   background-color: #8991a9;
