@@ -74,7 +74,7 @@ export default {
       if (token) isLogin = true;
       this.isLogin = isLogin;
     },
-   
+
     async setPhoto() {
       let id = await this.fetchMemberId();
 
