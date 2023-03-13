@@ -46,6 +46,24 @@ const router = createRouter({
       component: () => import("../views/Member/Profile.vue"),
     },
     {
+      path: "/EditProfile",
+      name: "EditProfile",
+      //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
+      component: () => import("../views/Member/EditProfile.vue"),
+    },
+    {
+      path: "/ForgotPassword",
+      name: "ForgotPassword",
+      //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
+      component: () => import("../views/Member/ForgotPassword.vue"),
+    },
+    {
+      path: "/EditPassword",
+      name: "EditPassword",
+      //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
+      component: () => import("../views/Member/EditPassword.vue"),
+    },
+    {
       path: "/Activity",
       name: "Activity",
       //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
