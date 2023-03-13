@@ -44,11 +44,16 @@
               </tbody>
             </table>
             <div>
-              <button class="add-btn">直接購買</button>
+              <button class="add-btn" @click.stop="this.toSoppingCart(detail)">
+                直接購買
+              </button>
             </div>
             <div>
               <button class="add-btn-buy">
-                <i class="fa-solid fa-cart-shopping buy-i"></i>
+                <i
+                  class="fa-solid fa-cart-shopping buy-i"
+                  @click.stop="buyDirectly(detail)"
+                ></i>
               </button>
               <button class="add-btn-like">
                 <i
