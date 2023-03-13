@@ -12,20 +12,48 @@
             style="width: 470px; object-fit: cover"
             alt=""
           />
-          <div class="Pro-right">加寬</div>
+          <div class="Pro-right">12加寬</div>
           <div>
-            <p class="Id-Pborder">商品編號 : {{ detail.id }}</p>
-            <p>商品類別 : {{ detail.categoryName }}</p>
-            <p>品牌 : {{ detail.brandName }}</p>
-            <p>庫存量 : {{ detail.inventory }}</p>
-            <span> NT {{ detail.price }}</span>
-            <button class="add-btn">直接購買</button>
+            <table>
+              <thead>
+                <tr>
+                  <th class="push-td">12345<span class="m-5 p-2"></span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="cate-mt">
+                  <td>商品編號 :</td>
+                  <td class="td-r">{{ detail.id }}</td>
+                </tr>
+                <tr>
+                  <td>商品類別 :</td>
+                  <td class="td-r">{{ detail.categoryName }}</td>
+                </tr>
+                <tr>
+                  <td>品牌 :</td>
+                  <td class="td-r">{{ detail.inventory }}</td>
+                </tr>
+                <tr>
+                  <td>庫存量 :</td>
+                  <td class="td-r">{{ detail.inventory }}</td>
+                </tr>
+                <tr>
+                  <td>NTD :</td>
+                  <td class="td-r">{{ detail.price }}</td>
+                </tr>
+              </tbody>
+            </table>
             <div>
-              <button class="add-btn">購物車</button>
-              <button class="add-btn">
+              <button class="add-btn">直接購買</button>
+            </div>
+            <div>
+              <button class="add-btn-buy">
+                <i class="fa-solid fa-cart-shopping buy-i"></i>
+              </button>
+              <button class="add-btn-like">
                 <i
                   v-if="MId == 0"
-                  class="fa-regular fa-star"
+                  class="fa-regular fa-star like-i"
                   data-bs-toggle="modal"
                   data-bs-target="#loginModal"
                 ></i>
@@ -33,12 +61,12 @@
                 <i
                   v-else-if="!status.upshot"
                   @click="CallProductFavorites()"
-                  class="fa-regular fa-star"
+                  class="fa-regular fa-star like-i"
                 ></i>
                 <i
                   v-else
                   @click="CallUnFavorites(status.deleteId)"
-                  class="fa-solid fa-star"
+                  class="fa-solid fa-star like-i"
                 ></i>
               </button>
             </div>
@@ -60,7 +88,7 @@
       </div>
 
       <div class="spec-Out">
-        <p>Fujifilm Instax Mini 90 銀色</p>
+        <p class="spec-name">{{ detail.name }}</p>
         <p class="Spec">
           商品介紹:
           {{ detail.productSpec }}
@@ -73,10 +101,22 @@
 <script>
 import axios from "axios";
 import utility from "../../../public/utility";
+import { useRouter, useRoute } from "vue-router";
 
 export default {
   mixins: [utility],
   name: "DetailProduct",
+  setup() {
+    const router = useRouter();
+    const route = useRoute();
+    const toSoppingCart = (productSelItem) => {
+      // 將本頁prdoctItem傳入並存sessionStorage
+      sessionStorage.setItem("productSelItem", JSON.stringify(productSelItem));
+      router.push(`/ShoppingCart`);
+    };
+
+    return { toSoppingCart };
+  },
   data() {
     return {
       detail: {},
@@ -85,6 +125,7 @@ export default {
       MId: 0,
       PId: 0,
       status: {},
+      cartsSelect: [],
     };
   },
   created() {
@@ -92,6 +133,7 @@ export default {
 
     this.CallDetailProductsApi();
     this.CallFavoritesStatus();
+    this.getStorageCart();
   },
   mounted() {
     this.GetMemberId();
@@ -168,6 +210,47 @@ export default {
           console.log(error);
         });
     },
+
+    // 購物車行為
+    saveLocalStorage(saveName, val) {
+      localStorage.setItem(saveName, JSON.stringify(val));
+    },
+    // 將localStorage 已存JSON字串轉回物件 存在指定data參數
+    // saveName與data相同
+    getlocalStorage(saveName) {
+      this[saveName] = JSON.parse(localStorage.getItem(saveName)); // 與this.saveName相同
+    },
+    // 從Storage取使用者購物車紀錄
+    getStorageCart() {
+      this.getlocalStorage("cartsSelect");
+      // 防呆 假如storage沒存過 將值存為空陣列
+      if (!this.cartsSelect) {
+        this.cartsSelect = [];
+      }
+    },
+    buyDirectly(item) {
+      // 防呆 依id確認購物車有沒有商品 有的話更新陣列數量+1 沒有新增一筆
+      let findProduct = this.cartsSelect.find((a) => a.Id == item.id);
+
+      if (findProduct) {
+        // 已在購物車 找到index 修改物件值
+        let index = this.cartsSelect.indexOf(findProduct);
+        this.cartsSelect[index].Qty++;
+      } else {
+        // 未在購物車 加入陣列
+        this.cartsSelect.push({
+          Id: item.id,
+          Qty: 1,
+          Name: item.name,
+          Price: item.price,
+          Cover: `https://localhost:7027/ProductImgFiles/${this.detail.source[0]}`,
+        });
+      }
+
+      this.showAlert("加入成功");
+      // 儲存到storage
+      this.saveLocalStorage("cartsSelect", this.cartsSelect);
+    },
   },
 };
 </script>
@@ -199,7 +282,8 @@ export default {
   border-bottom: 5px solid #ffff;
   color: #ffff;
 }
-.Id-Pborder {
+p {
+  font-size: 20px;
 }
 .add-btn {
   margin: 20px;
@@ -226,8 +310,60 @@ export default {
 }
 .spec-Out {
   padding: 50px;
+  max-width: 1000px;
+  align-content: center;
+  border: #899ea9 solid 5px;
+  border-radius: 10px;
 }
 .Spec {
   white-space: pre-wrap;
+  margin-top: 30px;
+}
+.add-btn-buy {
+  margin-left: 30px;
+  padding: 5px 35px 5px 35px;
+  border: none;
+  border-radius: 5px;
+  background: #d3989938;
+  font-size: 20px;
+}
+.add-btn-like {
+  margin-left: 60px;
+  margin-right: 30px;
+  padding: 5px 35px 5px 35px;
+  border: none;
+  border-radius: 5px;
+  background: #e9cb8931;
+  font-size: 20px;
+}
+.add-btn {
+  margin-bottom: 35px;
+  margin-left: 82.5px;
+  padding: 5px 30px 5px 30px;
+  border: none;
+  border-radius: 5px;
+  background: #899ea9ab;
+  font-size: 20px;
+  font-weight: 800;
+}
+td {
+  font-size: 18px;
+  font-weight: 600;
+  padding-bottom: 10px;
+}
+.push-td {
+  color: #ffff;
+}
+.like-i {
+  color: #e9cb89;
+}
+.buy-i {
+  color: #d39899;
+}
+.spec-name {
+  font-size: 24px;
+  font-weight: 800;
+  padding: 20px;
+  border-bottom: 3px solid #899ea9;
 }
 </style>

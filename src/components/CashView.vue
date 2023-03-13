@@ -1,54 +1,19 @@
 <template>
-
-
-
-  <div class="container mt-4 p-0">
+  <div class="container cash-view mt-4 p-0">
     <div class="row px-md-4 px-2 pt-4">
       <div class="col-lg-8">
-        <p class="pb-2 fw-bold">Order</p>
+        <p class="pb-2 fw-bold">購物車商品</p>
         <div class="card">
           <div class="card-scroll-x">
             <div class="table-responsive px-md-4 px-2 pt-3">
               <table class="table table-borderless">
                 <tbody>
-                  <tr class="">
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <div>
-                          <img
-                            class="pic"
-                            src="https://images.pexels.com/photos/7322083/pexels-photo-7322083.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-                            alt=""
-                          />
-                        </div>
-                        <div class="ps-3 d-flex flex-column">
-                          <p class="fw-bold">
-                            Sportswear<span class="ps-1">Heritage</span
-                            ><span class="ps-1">Windrunner</span>
-                          </p>
-                        </div>
-                      </div>
-                    </td>
-
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <span class="pe-3 text-muted">數量</span>
-                        <span class="pe-3">
-                          <input class="ps-2" type="number" value="2"
-                        /></span>                       
-                      </div>
-                    </td>
-                  </tr>
                   <!-- testtttt -->
                   <tr class="" v-for="(item, i) in cartsSelect" :key="item.Id">
                     <td>
                       <div class="d-flex align-items-center">
                         <div>
-                          <img
-                            class="pic"
-                            src="https://images.pexels.com/photos/7322083/pexels-photo-7322083.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-                            alt=""
-                          />
+                          <img class="pic" :src="item.Cover" alt="" />
                         </div>
                         <div class="ps-3 d-flex flex-column">
                           <p class="fw-bold ps-1">
@@ -63,16 +28,15 @@
                         <span class="pe-2 text-muted">數量</span>
 
                         <button class="btn btn-link px-2 pointer">
-                          <font-awesome-icon
-                            icon="fas fa-minus"
+                          <i
+                            class="fa-solid fa-minus"
                             @click.stop="
                               addToCart(item, 1, `.count-input-${i}`)
                             "
-                          />
-                          <i class="fas fa-minus">dsfsd</i>
+                          ></i>
                         </button>
 
-                        <span class="pe-3">
+                        <span class="px-3">
                           <input
                             class="qtyinput text-center"
                             :class="`count-input-${i}`"
@@ -83,10 +47,12 @@
                         </span>
 
                         <button class="btn btn-link px-2 pointer">
-                          
-                          <i class="fa-solid fa-plus" @click.stop="
+                          <i
+                            class="fa-solid fa-plus"
+                            @click.stop="
                               addToCart(item, 0, `.count-input-${i}`)
-                            "></i>
+                            "
+                          ></i>
                         </button>
 
                         <div class="ms-4 pointer">
@@ -94,11 +60,19 @@
                             class="text-dark"
                             @click.stop="removeCartItem(item)"
                           >
-                            <font-awesome-icon icon="fas fa-trash" />
+                            <i class="fa-solid fa-trash-can"></i>
                           </a>
+                        </div>
+
+                        <div class="ms-5">
+                          <a> ${{ item.Price }} </a>
                         </div>
                       </div>
                     </td>
+                  </tr>
+
+                  <tr v-show="cartsSelect.length == 0">
+                    <td class="text-center">購物車無商品</td>
                   </tr>
                   <!-- testtttt -->
                 </tbody>
@@ -138,11 +112,11 @@
         <div class="d-flex flex-column b-bottom">
           <div class="d-flex justify-content-between py-3">
             <small class="text-muted">折價券折扣</small>
-            <p>$122</p>
+            <p>{{ showdiscountprice }}</p>
           </div>
           <div class="d-flex justify-content-between pb-3">
-            <small class="text-muted">以折扣金額</small>
-            <p>$22</p>
+            <small class="text-muted">已折扣金額</small>
+            <p>${{ countedPrice }}</p>
           </div>
           <div class="d-flex justify-content-between">
             <small class="text-muted">總金額</small>
@@ -163,10 +137,8 @@
       </div>
     </div>
   </div>
-
-
-
-
+  <div v-html="paymentForm"></div>
+  <loading :active="loading"></loading>
 </template>
 <script>
 import { useRouter, useRoute } from "vue-router";
@@ -180,12 +152,15 @@ export default {
       searchText: "",
       paymentForm: "",
       adressval: null,
-      adressinput:"",
+      adressinput: "",
       //折價券資料
       couponinput: "",
       couponmessage: "",
       coupondiscountdata: "",
       couponID: null,
+      showdiscountprice: "$0",
+      totalOrigin: 0,
+      countedPrice: 0,
       // vue loading
       loading: false,
       // sweet alert訊息
@@ -201,8 +176,8 @@ export default {
       },
       buySweetConfirm: {
         title: "確定要購買嗎",
-        // text: "You won't be able to revert this!",        
-        showCancelButton: true,        
+        // text: "You won't be able to revert this!",
+        showCancelButton: true,
         confirmButtonText: "購買",
         cancelButtonText: "取消",
       },
@@ -215,7 +190,6 @@ export default {
       },
       errSweetAlert: {
         title: "錯誤",
-        icon: "error",
         confirmButtonText: "確定",
         confirmButtonColor: "#41b882",
         // timer: 2000,
@@ -249,11 +223,17 @@ export default {
           .map((a) => a.Price * a.Qty) // 得到 price * qty 陣列 [100*2, 2000*5, 500 * 6]
           .reduce((a, b) => a + b); // 做累加 a累加值 b 下一個要累加的數 [200, 10000, 3000] => 200 + 10000 +300
 
+        this.totalOrigin = totalCount;
+
         if (this.coupondiscountdata) {
           if (this.coupondiscountdata > 1) {
             totalCount = totalCount - parseInt(this.coupondiscountdata);
+            this.showdiscountprice = `$ -${this.coupondiscountdata}`;
           } else {
             totalCount = parseInt(totalCount * this.coupondiscountdata);
+            this.showdiscountprice = `${String(this.coupondiscountdata).slice(
+              2
+            )}折`;
           }
         }
 
@@ -299,13 +279,16 @@ export default {
     async getCoupon() {
       if (this.couponinput) {
         axios
-          .get(`https://localhost:7259/api/ShoppingCart/CatchCoupon?CouponCode=${this.couponinput}`)
+          .get(
+            `https://localhost:7259/api/ShoppingCart/CatchCoupon?CouponCode=${this.couponinput}`
+          )
           .then((res) => {
             if (res.status == 204 || res.status == 200) {
               //折扣數
               this.coupondiscountdata = res.data.data.discount;
               this.couponmessage = `<span class="text-success">${res.data.messsage}<\/span>`;
               this.couponID = res.data.data.id;
+              this.countedPrice = this.totalOrigin - this.getTotal;
               // alert(`${this.couponID}`);
             }
           })
@@ -316,6 +299,7 @@ export default {
           });
       } else {
         this.coupondiscountdata = "";
+        this.showdiscountprice = `$0`;
         this.couponmessage = "";
       }
     },
@@ -397,6 +381,7 @@ export default {
             Qty: 1,
             Name: item.name,
             Price: item.price,
+            Cover: `https://localhost:7027/ProductImgFiles/${item.source[0]}`,
           });
         }
 
@@ -439,6 +424,20 @@ export default {
       // 確認購買
       await this.$swal.fire(this.buySweetConfirm).then((result) => {
         if (result.isConfirmed) {
+          if (
+            !this.adressval ||
+            !this.adressval.name ||
+            !this.adressval.zipCode ||
+            !this.adressval.county ||
+            !this.adressval.countyName ||
+            !this.adressinput
+          ) {
+            this.errSweetAlert.text = "請輸入完整地址";
+            this.$swal.fire(this.errSweetAlert);
+            this.errSweetAlert.text = "";
+            return;
+          }
+
           // 按下購買
           let model = {
             MemberId: 1,
@@ -461,8 +460,11 @@ export default {
           };
 
           this.loading = true;
-          this.$axios
-            .post(`https://localhost:7259/api/ShoppingCart/SaveShoppingCart`, model)
+          axios
+            .post(
+              `https://localhost:7259/api/ShoppingCart/SaveShoppingCart`,
+              model
+            )
             .then((res) => {
               if (res.status == 204 || res.status == 200) {
                 if ((res.data !== null) & (res.data !== undefined)) {
@@ -507,7 +509,7 @@ export default {
     },
 
     // 購買後將後端產的付款參數組成form post到綠界
-    async buildPaymentForm(trendModels) {
+    buildPaymentForm(trendModels) {
       let rtn = ``;
       rtn += `<form action="${trendModels.url}" method="post" id="payment">`;
       // 必要參數
@@ -660,21 +662,13 @@ export default {
 
 
 
-<style scoped>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  list-style: none;
-  font-family: "Montserrat", sans-serif;
-}
-body {
+<style>
+.cash-view {
   background-color: #b064f7;
   line-height: 1rem;
   font-size: 14px;
   padding: 10px;
-}
-.container {
+
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
   border-bottom-left-radius: 25px;
@@ -682,41 +676,41 @@ body {
   background-color: #eee;
 }
 
-.order .card {
+.cash-view .order .card {
   position: relative;
   background: #fff;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
-.pic {
+.cash-view .pic {
   width: 70px;
   height: 90px;
   border-radius: 5px;
 }
-td {
+.cash-view td {
   vertical-align: middle;
 }
-.red {
+.cash-view .red {
   color: #fd1c1c;
   font-weight: 600;
 }
-.b-bottom {
+.cash-view .b-bottom {
   border-bottom: 2px dotted black;
   padding-bottom: 20px;
 }
-p {
+.cash-view p {
   margin: 0px;
 }
-table input {
+.cash-view table input {
   width: 50px;
   border: 1px solid #66b3ff;
   border-radius: 0.25rem;
 }
-input:focus {
+.cash-view input:focus {
   border: 1px solid #eee;
   outline: none;
 }
-.round {
+.cash-view .round {
   background-color: #eee;
   height: 40px;
   width: 40px;
@@ -725,7 +719,7 @@ input:focus {
   align-items: center;
   justify-content: center;
 }
-.payment-summary .unregistered {
+.cash-view .payment-summary .unregistered {
   width: 100%;
   display: flex;
   align-items: center;
@@ -734,11 +728,11 @@ input:focus {
   text-transform: uppercase;
   font-size: 14px;
 }
-.payment-summary input {
+.cash-view .payment-summary input {
   width: 100%;
   margin-right: 20px;
 }
-.payment-summary .sale {
+.cash-view .payment-summary .sale {
   width: 100%;
   background-color: #e9b3b3;
   text-transform: uppercase;
@@ -748,36 +742,36 @@ input:focus {
   align-items: center;
   padding: 5px 0;
 }
-.red {
+.cash-view .red {
   color: #fd1c1c;
 }
 
-.delivery .card {
+.cash-view .delivery .card {
   padding: 10px 5px;
 }
 
 /* 自己設最小高度 */
-.card-scroll-x {
+.cash-view .card-scroll-x {
   max-height: 500px;
   overflow-y: auto;
 }
 
-.btntext {
+.cash-view .btntext {
   font-size: 16px;
+}
+
+.cash-view .address-coustomize select {
+  /* display: inline-block; */
+  margin-right: 0.5em;
 }
 
 /* 更改地址 */
 
 @media screen and (max-width: 576px) {
-  .card-scroll-x {
+  .cash-view .card-scroll-x {
     max-height: none;
     overflow-y: auto;
   }
 }
 </style>
-<style>
-.address-coustomize select {
-  /* display: inline-block; */
-  margin-right: 0.5em;
-}
-</style>
+
