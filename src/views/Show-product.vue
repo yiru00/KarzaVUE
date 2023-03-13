@@ -20,6 +20,11 @@
             data-bs-target="#newProduct"
             data-bs-slide-to="1"
           ></button>
+          <button
+            type="button"
+            data-bs-target="#newProduct"
+            data-bs-slide-to="2"
+          ></button>
         </div>
       </div>
       <div class="carousel-inner">
@@ -32,6 +37,11 @@
           <div class="carousel-item carouselImg" data-bs-interval="1500">
             <router-link to="/Product/8">
               <img src="src\assets\ProEvent\02.jpg" alt="商城活動圖" />
+            </router-link>
+          </div>
+          <div class="carousel-item carouselImg" data-bs-interval="1500">
+            <router-link to="/Product/30">
+              <img src="src\assets\ProEvent\03.jpg" alt="商城活動圖" />
             </router-link>
           </div>
         </div>
