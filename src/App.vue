@@ -220,8 +220,10 @@ export default {
                 >
               </li>
               <li>
-                <RouterLink to="" class="dropdown-item personalList"
-                  >社群主頁</RouterLink
+                <RouterLink
+                  to="/Community/PersonalPage"
+                  class="dropdown-item personalList"
+                  >個人主頁</RouterLink
                 >
               </li>
               <li>
@@ -265,7 +267,7 @@ export default {
               <RouterLink
                 exact
                 active-class="active1"
-                to="/"
+                to="/Community"
                 class="nav-link navLink"
                 >社群</RouterLink
               >
@@ -320,7 +322,9 @@ export default {
                   >
                 </li>
                 <li>
-                  <RouterLink to="" class="dropdown-item personalList"
+                  <RouterLink
+                    to="/personalPage"
+                    class="dropdown-item personalList"
                     >社群主頁</RouterLink
                   >
                 </li>
