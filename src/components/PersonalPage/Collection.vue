@@ -145,8 +145,8 @@ const deleteReload = ref(false);
 const edit = ref(false);
 const editTitle = ref("");
 const editCamera = ref("");
-
 const memberId = computed(() => route.params.memberId);
+const token = ref($.cookie("token"));
 
 // modal資料
 const photoModal = (item) => {
@@ -181,10 +181,18 @@ const editComplete = () => {
 // 收藏
 const collectPhoto = (collectPhoto) => {
   axios
-    .post(`https://localhost:7259/api/Collection/Collect`, {
-      Id: 1,
-      photoId: collectPhoto.id,
-    })
+    .post(
+      `https://localhost:7259/api/Collection/Collect`,
+      {
+        Id: 1,
+        photoId: collectPhoto.id,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+        },
+      }
+    )
     .then((response) => {
       console.log("收藏api成功");
       reload.value = true;
@@ -198,9 +206,17 @@ const collectPhoto = (collectPhoto) => {
 watch(reload, () => {
   if (reload.value) {
     axios
-      .post("https://localhost:7259/api/Photo/CollectionPhoto", {
-        id: memberId.value,
-      })
+      .post(
+        "https://localhost:7259/api/Photo/CollectionPhoto",
+        {
+          id: memberId.value,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token.value}`,
+          },
+        }
+      )
       .then((response) => {
         collections.value = response.data;
         reload.value = false;
@@ -226,9 +242,17 @@ const deletePhoto = function (photoId) {
 watch(deleteReload, () => {
   if (deleteReload.value) {
     axios
-      .post("https://localhost:7259/api/Photo/CollectionPhoto", {
-        id: memberId.value,
-      })
+      .post(
+        "https://localhost:7259/api/Photo/CollectionPhoto",
+        {
+          id: memberId.value,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token.value}`,
+          },
+        }
+      )
       .then((response) => {
         collections.value = response.data;
         deleteReload.value = false;
@@ -239,9 +263,17 @@ watch(deleteReload, () => {
 
 // 撈某人的收藏
 axios
-  .post("https://localhost:7259/api/Photo/CollectionPhoto", {
-    id: memberId.value,
-  })
+  .post(
+    "https://localhost:7259/api/Photo/CollectionPhoto",
+    {
+      id: memberId.value,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token.value}`,
+      },
+    }
+  )
   .then((response) => {
     collections.value = response.data;
     reload.value = true;
@@ -255,9 +287,17 @@ watch(memberId, () => {
   // console.log(route.params.memberId);
   // console.log(memberId.value);
   axios
-    .post("https://localhost:7259/api/Photo/CollectionPhoto", {
-      id: memberId.value,
-    })
+    .post(
+      "https://localhost:7259/api/Photo/CollectionPhoto",
+      {
+        id: memberId.value,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+        },
+      }
+    )
     .then((response) => {
       collections.value = response.data;
       reload.value = true;

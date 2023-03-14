@@ -1,5 +1,13 @@
 <template>
   <!-- 呈現內容 component使用-->
+  <button
+    data-bs-toggle="modal"
+    data-bs-target="#loginModal"
+    type="button"
+    class="loginBtn"
+  >
+    登入
+  </button>
   <div
     class="col-12 col-sm-6 col-md-4 col-lg-3"
     v-for="item in allPhotos"
@@ -59,34 +67,38 @@
               </RouterLink>
             </div>
           </div>
-          <!-- 選項 編輯/刪除相片 v-if="memberId==memberId" -->
-          <div class="dropdown dropdown-center" v-if="!edit">
-            <button
-              type="button"
-              class="photoModalMoreBtn"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <i class="fa-solid fa-ellipsis fs-3"></i>
+          <div v-if="loginMemberId == memberId">
+            <!-- 選項 編輯/刪除相片 v-if="memberId==memberId" -->
+            <div class="dropdown dropdown-center" v-if="!edit">
+              <button
+                type="button"
+                class="photoModalMoreBtn"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i class="fa-solid fa-ellipsis fs-3"></i>
+              </button>
+              <ul class="dropdown-menu moreUl">
+                <li
+                  data-bs-dismiss="modal"
+                  class="w-100 h-100 d-flex justify-content-center deleteLi"
+                  @click="deletePhoto(photoFor.id)"
+                >
+                  刪除
+                </li>
+                <li
+                  class="w-100 h-100 d-flex justify-content-center editLi"
+                  @click="editPhoto(photoFor)"
+                >
+                  編輯
+                </li>
+              </ul>
+            </div>
+            <!-- 修改按鈕 -->
+            <button v-else class="editConfirm" @click="editComplete">
+              修改
             </button>
-            <ul class="dropdown-menu moreUl">
-              <li
-                data-bs-dismiss="modal"
-                class="w-100 h-100 d-flex justify-content-center deleteLi"
-                @click="deletePhoto(photoFor.id)"
-              >
-                刪除
-              </li>
-              <li
-                class="w-100 h-100 d-flex justify-content-center editLi"
-                @click="editPhoto(photoFor)"
-              >
-                編輯
-              </li>
-            </ul>
           </div>
-          <!-- 修改按鈕 -->
-          <button v-else class="editConfirm" @click="editComplete">修改</button>
         </div>
         <div
           class="modal-body d-flex justify-content-center flex-column align-items-center p-0"
@@ -148,6 +160,26 @@ const editTitle = ref("");
 const editCamera = ref("");
 
 const memberId = computed(() => route.params.memberId);
+
+//token
+const token = ref($.cookie("token"));
+const loginMemberId = ref("");
+//判斷登入者的id
+axios
+  .get("https://localhost:7259/api/Members/Read", {
+    headers: {
+      Authorization: `Bearer ${token.value}`,
+    },
+  })
+  .then((response) => {
+    loginMemberId.value = response.data;
+    console.log("登入ID");
+    console.log(loginMemberId.value);
+  })
+  .catch((error) => {
+    console.log("MY未登入");
+  });
+
 // modal相片詳細資料
 const photoModal = (item) => {
   edit.value = false;
@@ -187,7 +219,12 @@ watch(uploadReload, () => {
   if (uploadReload) {
     axios
       .get(
-        `https://localhost:7259/api/Photo/AllPhotos?memberId=${memberId.value}`
+        `https://localhost:7259/api/Photo/AllPhotos?memberId=${memberId.value}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token.value}`,
+          },
+        }
       )
       .then((response) => {
         allPhotos.value = response.data;
@@ -200,16 +237,23 @@ watch(uploadReload, () => {
 const collectPhoto = (collectPhoto) => {
   console.log("一開始的isCollection:" + collectPhoto.isCollection);
   axios
-    .post(`https://localhost:7259/api/Collection/Collect`, {
-      Id: 1,
-      photoId: collectPhoto.id,
-    })
+    .post(
+      `https://localhost:7259/api/Collection/Collect`,
+      {
+        photoId: collectPhoto.id,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+        },
+      }
+    )
     .then((response) => {
       console.log("收藏api成功");
       collectPhoto.isCollection = !collectPhoto.isCollection;
       console.log("後來的isCollection:" + collectPhoto.isCollection);
     })
-    .catch((error) => console.log(error));
+    .catch((error) => console.log("未登入無法收藏或api錯惹"));
 };
 
 // 刪除相片
@@ -230,7 +274,12 @@ watch(deleteReload, () => {
   if (deleteReload.value) {
     axios
       .get(
-        `https://localhost:7259/api/Photo/AllPhotos?memberId=${memberId.value}`
+        `https://localhost:7259/api/Photo/AllPhotos?memberId=${memberId.value}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token.value}`,
+          },
+        }
       )
       .then((response) => {
         allPhotos.value = response.data;
@@ -242,7 +291,14 @@ watch(deleteReload, () => {
 
 // 撈此頁面所有照片
 axios
-  .get(`https://localhost:7259/api/Photo/AllPhotos?memberId=${memberId.value}`)
+  .get(
+    `https://localhost:7259/api/Photo/AllPhotos?memberId=${memberId.value}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token.value}`,
+      },
+    }
+  )
   .then((response) => {
     allPhotos.value = response.data;
   })
@@ -255,7 +311,12 @@ watch(memberId, () => {
   // console.log(memberId.value);
   axios
     .get(
-      `https://localhost:7259/api/Photo/AllPhotos?memberId=${memberId.value}`
+      `https://localhost:7259/api/Photo/AllPhotos?memberId=${memberId.value}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+        },
+      }
     )
     .then((response) => {
       allPhotos.value = response.data;

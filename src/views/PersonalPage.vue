@@ -39,6 +39,7 @@
               <div class="userBtn">
                 <!-- v-if="登入memberId==此頁面memberId" -->
                 <button
+                  v-if="loginMemberId == memberId"
                   class="uploadPhotoBtn"
                   data-bs-toggle="modal"
                   data-bs-target="#uploadPhotoModal"
@@ -46,6 +47,7 @@
                   新增相片
                 </button>
                 <button
+                  v-if="loginMemberId == memberId"
                   class="uploadAlbumBtn"
                   data-bs-toggle="modal"
                   data-bs-target="#uploadAlbumModal"
@@ -74,11 +76,12 @@
                 >相簿</RouterLink
               >
               <RouterLink
+                v-if="loginMemberId == memberId"
                 :to="`/Community/PersonalPage/${memberId}/Collections`"
                 class="userLink"
                 >收藏</RouterLink
               >
-              <div class="dropdown">
+              <div class="dropdown" v-if="loginMemberId == memberId">
                 <button
                   role="button"
                   class="userLink dropdown-toggle toggle"
@@ -272,6 +275,25 @@ const memberId = computed(() => route.params.memberId);
 const albumCheckBox = ref([]);
 const albumTitle = ref("");
 
+//token
+const token = ref($.cookie("token"));
+const loginMemberId = ref("");
+//判斷登入者的id
+axios
+  .get("https://localhost:7259/api/Members/Read", {
+    headers: {
+      Authorization: `Bearer ${token.value}`,
+    },
+  })
+  .then((response) => {
+    loginMemberId.value = response.data;
+    console.log("登入ID");
+    console.log(loginMemberId.value);
+  })
+  .catch((error) => {
+    console.log("MY未登入");
+  });
+
 //上傳照片預覽
 const showPhoto = (event) => {
   const file = event.target.files[0];
@@ -296,12 +318,17 @@ const goSubmit = async function () {
   const formData = new FormData();
   formData.append("Id", 0);
   formData.append("File", photofile.value);
-  formData.append("Author", 1); //登入者的id author.value
+  // formData.append("Author", 1);
+  //登入者的id author.value
   formData.append("Title", title.value);
   formData.append("Camera", camera.value);
 
   await axios
-    .post("https://localhost:7259/api/Photo/Create", formData)
+    .post("https://localhost:7259/api/Photo/Create", formData, {
+      headers: {
+        Authorization: `Bearer ${token.value}`,
+      },
+    })
     .then((response) => {
       console.log("上傳照片成功");
       uploadReload.value = true;
@@ -329,13 +356,19 @@ const goAlbumSubmit = function () {
   console.log(newArray);
   console.log(albumTitle.value);
 
-  // memberId還沒改!!!!!!!!!!!!!!!!!!!!!!!!!
   axios
-    .post(`https://localhost:7259/api/Album/CreateAlbum`, {
-      albumName: albumTitle.value,
-      memberId: memberId.value,
-      photoId: newArray,
-    })
+    .post(
+      `https://localhost:7259/api/Album/CreateAlbum`,
+      {
+        albumName: albumTitle.value,
+        photoId: newArray,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+        },
+      }
+    )
     .then((response) => {
       console.log("上傳相簿成功");
       uploadAlbumReload.value = true;
@@ -359,7 +392,12 @@ axios
 const albumGetPhotos = () => {
   axios
     .get(
-      `https://localhost:7259/api/Photo/AllPhotos?memberId=${memberId.value}`
+      `https://localhost:7259/api/Photo/AllPhotos?memberId=${memberId.value}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+        },
+      }
     )
     .then((response) => {
       allPhotos.value = response.data;
