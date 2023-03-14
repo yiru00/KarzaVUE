@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <h4>我的報名活動</h4>
+    <h4>我的訂單</h4>
     <div class="line"></div>
 
     <div class="" v-html="noorder"></div>
@@ -12,13 +12,11 @@
     >
       <div class="col prooutline container-fluid p-3 mt-5">
         <i
-          @click.stop="getOI(item.id)"
           class="fa-solid fa-clipboard clickauto"
           data-bs-toggle="collapse"
           :data-bs-target="`#index${item.id}`"
-          :ref="`${item.id}`"
+          :ref="item.id"
         ></i>
-
         <small class="ms-4">訂單編號:{{ item.paymentId }}</small>
         <small class="totalloca">總金額:{{ item.total }}$</small>
         <br />
@@ -27,24 +25,29 @@
       </div>
 
       <div
-        class="col prooutline container-fluid p-3 collapse"
+        class="col-11 prooutline2 container-fluid p-3 collapse flex-column justify-content-center align-items-center"
         :id="`index${item.id}`"
       >
-        <div
-          class="col procard mt-3"
-          v-for="items in orderitems"
-          :key="items.id"
-        >
-          <img :src="item.source" alt="" />
-          {{ items }}
+        <div class="row procard mt-3">
+          <div class="col-3">
+            <img
+              class="pic"
+              :src="
+                'https://localhost:7027/ProductImgFiles/' +
+                orderdetail.orderitems.source
+              "
+              alt=""
+            />
+          </div>
+          <div class="col-3">
+            <small>{{ orderdetail.orderitems.productName }}</small>
+          </div>
         </div>
       </div>
     </div>
-    {{ orderitems }}
+    {{ itemid }}
   </div>
 </template>
-
-
 
 <script>
 import utility from "../../../public/utility";
@@ -57,7 +60,7 @@ export default {
       orderid: 0,
       showprodu: "",
       noorder: "",
-      itemid: this.$refs,
+      itemid: "",
     };
   },
 
@@ -84,22 +87,16 @@ export default {
         })
         .catch((err) => {});
     },
-
-    getOI(orderid) {
-      axios
-        .get(
-          `https://localhost:7259/api/OrderDetail/GetOrderID?orderid=${orderid}`
-        )
-        .then((res) => {
-          this.orderitems = res.data;
-        })
-        .catch((err) => {});
-    },
   },
 };
 </script>
 
 <style scoped>
+.pic {
+  width: 110px;
+  height: 90px;
+  margin-right: 20px;
+}
 .procard {
   height: 50%;
   width: 100%;
@@ -118,6 +115,14 @@ export default {
   justify-content: center;
   align-items: center;
   word-wrap: normal;
+}
+.prooutline2 {
+  border-radius: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  word-wrap: normal;
+  background-color: #fcf7f0;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
 }
 .line {
   height: 1px;
