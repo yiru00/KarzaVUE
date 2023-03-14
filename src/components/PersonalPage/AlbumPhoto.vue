@@ -47,8 +47,8 @@
         :alt="item.source"
       />
       <button class="bookMarkBtn" @click.stop="collectPhoto(item)">
-        <i class="fa-solid fa-bookmark" v-if="item.isCollection"></i>
-        <i class="fa-regular fa-bookmark" v-else></i>
+        <i class="fa-solid fa-bookmark text-light" v-if="item.isCollection"></i>
+        <i class="fa-regular fa-bookmark text-light" v-else></i>
       </button>
     </div>
   </div>
@@ -92,7 +92,7 @@
             </div>
           </div>
           <!-- 選項 編輯相片/移出相簿 v-if="memberId==memberId" -->
-          <div class="dropdown" v-if="!edit">
+          <div class="dropdown dropdown-center" v-if="!edit">
             <button
               type="button"
               class="photoModalMoreBtn"
@@ -118,9 +118,7 @@
             </ul>
           </div>
           <!-- 修改按鈕 -->
-          <button v-else="edit" class="editConfirm" @click="editComplete">
-            修改
-          </button>
+          <button v-else class="editConfirm" @click="editComplete">修改</button>
         </div>
         <div
           class="modal-body d-flex justify-content-center flex-column align-items-center p-0"
@@ -132,8 +130,11 @@
               :alt="photoFor.source"
             />
             <button class="bookMarkBtn" @click.stop="collectPhoto(photoFor)">
-              <i class="fa-solid fa-bookmark" v-if="photoFor.isCollection"></i>
-              <i class="fa-regular fa-bookmark" v-else></i>
+              <i
+                class="fa-solid fa-bookmark text-light"
+                v-if="photoFor.isCollection"
+              ></i>
+              <i class="fa-regular fa-bookmark text-light" v-else></i>
             </button>
           </div>
         </div>
@@ -145,7 +146,7 @@
           </p>
         </div>
         <!-- 編輯照片 -->
-        <div class="photoModalFooter" v-else="edit">
+        <div class="photoModalFooter" v-else>
           <input
             type="text"
             class="form-control editModal"
@@ -450,23 +451,26 @@ watch(editAlbumReload, () => {
   height: 100%;
   width: 100%;
   border: 1px solid black;
-  font-size: 15px;
+  padding: 10px;
   text-align: center;
 }
 .deleteLi:hover {
   background-color: #d39899;
   color: white;
-  transition: ease-in-out 0.5s;
+  transition: ease-in-out 0.3s;
 }
 .editLi:hover {
   background-color: #a6b6b0;
   color: white;
-  transition: ease-in-out 0.5s;
+  transition: ease-in-out 0.3s;
 }
 
 .moreUl {
   min-width: 40px;
+  width: 60px;
   padding: 0;
+  border: 1px solid black;
+  border-radius: 3px;
 }
 .photoModalFooter {
   border-top: 0;

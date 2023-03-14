@@ -366,15 +366,15 @@ export default {
       aria-hidden="true"
     >
       <div class="modal-dialog modal-dialog-centered modalcenter">
-        <div class="modal-content">
+        <div class="modal-content Mcontent">
           <h3>登入會員使用更多功能！</h3>
-          <div class="modal-body">
+          <div class="modal-body Mbody">
             <div class="loginInput" @keydown.enter="userLogin">
               <div class="form-floating mb-3">
                 <input
                   v-model="user.email"
                   name="account"
-                  class="form-control"
+                  class="form-control Mcontrol"
                   id="loginEmail"
                   type="email"
                   placeholder="電子郵件"
@@ -385,7 +385,7 @@ export default {
                 <input
                   v-model="user.password"
                   name="password"
-                  class="form-control"
+                  class="form-control Mcontrol"
                   id="loginPassword"
                   type="password"
                   placeholder="密碼"
@@ -533,7 +533,7 @@ img {
   background-color: #8991a9;
 }
 
-.modal-content {
+.Mcontent {
   background-color: #fff;
   display: flex;
   flex-direction: column;
@@ -546,7 +546,7 @@ img {
   width: 450px;
   padding: 60px 50px;
 }
-.modal-body {
+.Mbody {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -557,7 +557,7 @@ img {
   flex-direction: column;
   justify-content: space-between;
 }
-.form-control {
+.Mcontrol {
   border: 0px;
   border-radius: 0px;
   outline: 0;
@@ -565,7 +565,7 @@ img {
   color: gray;
   width: 100%;
 }
-.form-control:focus {
+.Mcontrol:focus {
   outline: none; /* 外框效果 */
   box-shadow: none;
   border-bottom: 2.5px solid #8991a9;
