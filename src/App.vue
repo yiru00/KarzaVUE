@@ -30,6 +30,7 @@ export default {
         password: "",
         erromsg: "",
       },
+      memberId: 0,
     };
   },
   mounted() {
@@ -77,7 +78,7 @@ export default {
 
     async setPhoto() {
       let id = await this.fetchMemberId();
-
+      this.memberId = id;
       if (id != 0) {
         fetch(`https://localhost:7259/api/Members/Profile?id=${id}`, {
           method: "GET",
@@ -225,7 +226,7 @@ export default {
               </li>
               <li>
                 <RouterLink
-                  to="/Community/PersonalPage"
+                  :to="'/Community/PersonalPage/' + this.memberId + '/Photos'"
                   class="dropdown-item personalList"
                   >個人主頁</RouterLink
                 >
@@ -327,9 +328,9 @@ export default {
                 </li>
                 <li>
                   <RouterLink
-                    to="/personalPage"
+                    :to="'/Community/PersonalPage/' + this.memberId + '/Photos'"
                     class="dropdown-item personalList"
-                    >社群主頁</RouterLink
+                    >個人主頁</RouterLink
                   >
                 </li>
                 <li>
