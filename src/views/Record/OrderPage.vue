@@ -2,45 +2,46 @@
   <div class="content">
     <h4>我的訂單</h4>
     <div class="line"></div>
-
     <div class="" v-html="noorder"></div>
     <div
       :ref="item.id"
       class="outline"
       v-for="(item, index) in orderdetail"
-      :key="item.id"
+      :key="index"
     >
-      <div class="col prooutline container-fluid p-3 mt-5">
-        <i
-          class="fa-solid fa-clipboard clickauto"
-          data-bs-toggle="collapse"
-          :data-bs-target="`#index${item.id}`"
-          :ref="item.id"
-        ></i>
+      <div
+        class="col prooutline container-fluid p-3 mt-5"
+        data-bs-toggle="collapse"
+        :data-bs-target="`#index${item.id}`"
+        :ref="item.id"
+      >
+        <i class="fa-solid fa-clipboard clickauto"></i>
         <small class="ms-4">訂單編號:{{ item.paymentId }}</small>
         <small class="totalloca">總金額:{{ item.total }}$</small>
         <br />
         <small class="ms-4">收件資訊: {{ item.address }}</small>
-        <!-- {{ item }} -->
       </div>
 
       <div
-        class="col-11 prooutline2 container-fluid p-3 collapse flex-column justify-content-center align-items-center"
+        class="col-11 prooutline2 container-fluid collapsing flex-column justify-content-center align-items-center"
         :id="`index${item.id}`"
       >
-        <div class="row procard mt-3">
+        <div
+          class="row procard"
+          v-for="(orderitem, index) in item.orderItems"
+          :key="index"
+        >
           <div class="col-3">
             <img
               class="pic"
               :src="
-                'https://localhost:7027/ProductImgFiles/' +
-                orderdetail.orderitems.source
+                'https://localhost:7027/ProductImgFiles/' + orderitem.source
               "
               alt=""
             />
           </div>
           <div class="col-3">
-            <small>{{ orderdetail.orderitems.productName }}</small>
+            <small>{{ orderitem.productName }}</small>
           </div>
         </div>
       </div>
@@ -80,6 +81,7 @@ export default {
         )
         .then((res) => {
           if (res.data.length > 0) {
+            console.log(res.data);
             this.orderdetail = res.data;
           } else {
             this.noorder = "<span>目前暫無訂單~</span>";
@@ -98,11 +100,8 @@ export default {
   margin-right: 20px;
 }
 .procard {
-  height: 50%;
   width: 100%;
-  border: solid 0.8px;
-  border-color: black;
-  border-radius: 0.5rem;
+
   display: block;
   margin-bottom: 1rem;
   padding: 10px;
