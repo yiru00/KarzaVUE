@@ -121,6 +121,8 @@
         <swiper
           :modules="modules"
           :breakpoints="swiperOptions.breakpoints"
+          navigation
+          :pagination="{ clickable: true }"
           :scrollbar="{ draggable: true }"
           id="mySlider"
         >
@@ -160,6 +162,8 @@
         <swiper
           :modules="modules"
           :breakpoints="swiperOptions.breakpoints"
+          navigation
+          :pagination="{ clickable: true }"
           :scrollbar="{ draggable: true }"
           id="mySlider"
         >
@@ -203,14 +207,16 @@
 <script>
 //import { RouterLink } from "vue-router";
 // import Swiper core and required modules
-import { Scrollbar } from "swiper";
+import { Navigation, Pagination, Scrollbar } from "swiper";
 
 // Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from "swiper/vue";
 
 // Import Swiper styles
 import "swiper/css";
-// import "swiper/css/scrollbar";
+//import "swiper/css/scrollbar";
+//import "swiper/css/navigation";
+import "swiper/css/pagination";
 import utility from "../../public/utility.js";
 export default {
   mixins: [utility],
@@ -229,7 +235,7 @@ export default {
     return {
       // onSwiper,
       // onSlideChange,
-      modules: [Scrollbar],
+      modules: [Navigation, Pagination, Scrollbar],
     };
   },
   data() {
@@ -321,6 +327,15 @@ export default {
 };
 </script>
 
+<style>
+.swiper-pagination {
+  position: relative;
+  margin-top: 10px;
+}
+.swiper-pagination-bullet-active {
+  background-color: #e9ca89;
+}
+</style>
 <style scoped>
 .h500 {
   height: 300px;
@@ -442,7 +457,7 @@ a {
   width: 100%;
   height: 100%;
   opacity: 0.6;
-  background-image: url("../assets/activity/pexels-ben-mack-5326909.jpg");
+  background-image: url("../assets/activity/pexels-mati-mango-6344884.jpg");
   background-repeat: no-repeat;
   background-position: 50% 0;
   background-size: cover;
@@ -465,7 +480,7 @@ a {
   text-align: center;
   background: linear-gradient(
     to right,
-    #ffffff 50%,
+    #fcf7f0cb 50%,
     rgba(255, 255, 255, 0.523) 50%
   );
   background-size: 200% 100%;
