@@ -210,7 +210,7 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 
 // Import Swiper styles
 import "swiper/css";
-// import "swiper/css/scrollbar";
+//import "swiper/css/scrollbar";
 import utility from "../../public/utility.js";
 export default {
   mixins: [utility],

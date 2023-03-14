@@ -1,7 +1,12 @@
 <template>
-  <div class="container pagebac">
+  <div class="container mt-4">
     <!-- 搜尋 -->
     <div class="row">
+      <div class="col-12 d-flex justify-content-center align-items-center">
+        <div class="col-3">
+          <p class="karzaFS">KARZA!</p>
+        </div>
+      </div>
       <div class="col-12 searchBar">
         <div class="form-floating searchText">
           <input
@@ -78,6 +83,9 @@ axios
 </script>
 
 <style scoped>
+.karzaFS {
+  font-size: 80px;
+}
 .user {
   max-width: 360px;
   display: flex;
