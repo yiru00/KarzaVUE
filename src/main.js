@@ -22,7 +22,7 @@ const options = {
 
 //回到最上一頁
 router.afterEach((to, from, next) => {
-  window.scrollTo(0, 0);
+  window.scrollTo({ top: 0, behavior: "instant" });
 });
 
 const app = createApp(App);

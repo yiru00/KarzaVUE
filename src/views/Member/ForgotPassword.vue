@@ -6,15 +6,15 @@
                 <div class="forgotpassword_user">忘記密碼</div>
                 <div class="flex_middle">
                     <label for="" class="forgotpassword_text">姓名 :　</label>
-                    <input type="text" v-model="realname" placeholder="請輸入姓名" class="form-control" required>
+                    <input type="text" v-model="realname" placeholder="請輸入姓名" class="form-control Mcontrol" required>
                 </div>
                 <div class="flex_middle">
                     <label for="" class="forgotpassword_text">帳號 :　</label>
-                    <input type="email" v-model="account" placeholder="請輸入Email" class="form-control" required>
+                    <input type="email" v-model="account" placeholder="請輸入Email" class="form-control Mcontrol" required>
                 </div>
                 <div class="flex_middle">
                     <label for="" class="forgotpassword_text">電話 :　</label>
-                    <input type="text" v-model="mobilenumber" placeholder="請輸入手機號碼" class="form-control" required>
+                    <input type="text" v-model="mobilenumber" placeholder="請輸入手機號碼" class="form-control Mcontrol" required>
                 </div>             
                 <div class="forgotpassword_btn">
                     <button @click="forgotpassword" >送出</button>

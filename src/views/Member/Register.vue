@@ -10,7 +10,7 @@
               type="text"
               v-model="nickname"
               placeholder="請輸入暱稱"
-              class="form-control"
+              class="form-control Mcontrol"
               required
             />
           </div>
@@ -20,7 +20,7 @@
               type="email"
               v-model="account"
               placeholder="請輸入Email"
-              class="form-control"
+              class="form-control Mcontrol"
               required
             />
           </div>
@@ -30,7 +30,7 @@
               type="password"
               v-model="password"
               placeholder="請輸入密碼"
-              class="form-control"
+              class="form-control Mcontrol"
               required
             />
           </div>
@@ -40,7 +40,7 @@
               type="password"
               v-model="confirmPassword"
               placeholder="請確認密碼"
-              class="form-control"
+              class="form-control Mcontrol"
               required
             />
           </div>

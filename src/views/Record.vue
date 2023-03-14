@@ -45,7 +45,11 @@ export default {
           src="../assets/userPic.png"
           alt=""
         />
-        <img v-else :src="profile.photoSticker" alt="" />
+        <img
+          v-else
+          :src="'https://localhost:7259/Images/' + profile.photoSticker"
+          alt=""
+        />
         <p class="nickName">{{ profile.nickName }}</p>
       </div>
       <div class="linklist">

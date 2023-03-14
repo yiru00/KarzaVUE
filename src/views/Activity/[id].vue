@@ -202,19 +202,31 @@
                   <div>
                     <div class="question">
                       <div class="user d-flex align-items-center">
-                        <img
-                          v-if="item.photoSticker"
-                          class="quser"
-                          :src="item.photoSticker"
-                          alt=""
-                        />
-                        <img
-                          v-else
-                          class="quser"
-                          src="../../../src/assets/userPic.png"
-                          alt=""
-                        />
-                        <p class="ms-4">{{ item.nickName }}</p>
+                        <router-link
+                          class="d-flex align-items-center"
+                          :to="
+                            '/Community/PersonalPage/' +
+                            item.memberId +
+                            '/Photos/'
+                          "
+                        >
+                          <img
+                            v-if="item.photoSticker"
+                            class="quser"
+                            :src="
+                              'https://localhost:7259/Images/' +
+                              item.photoSticker
+                            "
+                            alt=""
+                          />
+                          <img
+                            v-else
+                            class="quser"
+                            src="../../../src/assets/userPic.png"
+                            alt=""
+                          />
+                          <p class="ms-4">{{ item.nickName }}</p>
+                        </router-link>
                       </div>
 
                       <div class="qcontent">
@@ -239,19 +251,31 @@
                     <div>
                       <div class="myquestion">
                         <div class="user d-flex align-items-center">
-                          <img
-                            v-if="item.photoSticker"
-                            class="quser"
-                            :src="item.photoSticker"
-                            alt=""
-                          />
-                          <img
-                            v-else
-                            class="quser"
-                            src="../../../src/assets/userPic.png"
-                            alt=""
-                          />
-                          <p class="ms-4">{{ item.nickName }}</p>
+                          <router-link
+                            class="d-flex align-items-center"
+                            :to="
+                              '/Community/PersonalPage/' +
+                              item.memberId +
+                              '/Photos/'
+                            "
+                          >
+                            <img
+                              v-if="item.photoSticker"
+                              class="quser"
+                              :src="
+                                'https://localhost:7259/Images/' +
+                                item.photoSticker
+                              "
+                              alt=""
+                            />
+                            <img
+                              v-else
+                              class="quser"
+                              src="../../../src/assets/userPic.png"
+                              alt=""
+                            />
+                            <p class="ms-4">{{ item.nickName }}</p>
+                          </router-link>
                           <button
                             @click="deleteQ(item.qId, index)"
                             class="deleteQcontent"
@@ -918,7 +942,10 @@ h5 {
 p {
   margin: 1px;
 }
-
+a {
+  text-decoration: none;
+  color: #070707;
+}
 /* 問與答 */
 .QAlist {
   display: flex;
