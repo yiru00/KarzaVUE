@@ -442,7 +442,7 @@ a {
   width: 100%;
   height: 100%;
   opacity: 0.6;
-  background-image: url("../assets/activity/pexels-ben-mack-5326909.jpg");
+  background-image: url("../assets/activity/pexels-mati-mango-6344884.jpg");
   background-repeat: no-repeat;
   background-position: 50% 0;
   background-size: cover;
