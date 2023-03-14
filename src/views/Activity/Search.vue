@@ -200,7 +200,7 @@ export default {
     this.getMemberId();
 
     //滑到最上面
-    this.scrollToTop();
+    //  this.scrollToTop();
 
     //取得分類選單
     this.getCategory();

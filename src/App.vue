@@ -74,7 +74,7 @@ export default {
       if (token) isLogin = true;
       this.isLogin = isLogin;
     },
-   
+
     async setPhoto() {
       let id = await this.fetchMemberId();
 
@@ -91,7 +91,7 @@ export default {
             if (data.photoSticker != null)
               $(".userButton").css(
                 "background-image",
-                `url(${data.photoSticker})`
+                `url(https://localhost:7259/Images/${data.photoSticker})`
               );
           })
           .catch((error) => {
@@ -141,7 +141,11 @@ export default {
           ) {
             this.user.erromsg = response;
           } else {
-            document.cookie = `token=${response}; path=/`;
+            var d = new Date();
+            d.setTime(d.getTime() + 2 * 24 * 60 * 60 * 1000);
+            var expires = "expires=" + d.toUTCString();
+
+            document.cookie = `token=${response}; ${expires}; path=/;`;
             this.navigateTo();
           }
         })
@@ -220,8 +224,10 @@ export default {
                 >
               </li>
               <li>
-                <RouterLink to="" class="dropdown-item personalList"
-                  >社群主頁</RouterLink
+                <RouterLink
+                  to="/Community/PersonalPage"
+                  class="dropdown-item personalList"
+                  >個人主頁</RouterLink
                 >
               </li>
               <li>
@@ -265,7 +271,7 @@ export default {
               <RouterLink
                 exact
                 active-class="active1"
-                to="/"
+                to="/Community"
                 class="nav-link navLink"
                 >社群</RouterLink
               >
@@ -320,7 +326,9 @@ export default {
                   >
                 </li>
                 <li>
-                  <RouterLink to="" class="dropdown-item personalList"
+                  <RouterLink
+                    to="/personalPage"
+                    class="dropdown-item personalList"
                     >社群主頁</RouterLink
                   >
                 </li>
@@ -358,15 +366,15 @@ export default {
       aria-hidden="true"
     >
       <div class="modal-dialog modal-dialog-centered modalcenter">
-        <div class="modal-content">
+        <div class="modal-content Mcontent">
           <h3>登入會員使用更多功能！</h3>
-          <div class="modal-body">
+          <div class="modal-body Mbody">
             <div class="loginInput" @keydown.enter="userLogin">
               <div class="form-floating mb-3">
                 <input
                   v-model="user.email"
                   name="account"
-                  class="form-control"
+                  class="form-control Mcontrol"
                   id="loginEmail"
                   type="email"
                   placeholder="電子郵件"
@@ -377,7 +385,7 @@ export default {
                 <input
                   v-model="user.password"
                   name="password"
-                  class="form-control"
+                  class="form-control Mcontrol"
                   id="loginPassword"
                   type="password"
                   placeholder="密碼"
@@ -395,7 +403,11 @@ export default {
                   value="登入"
                 />
               </div>
-              <router-link to="" class="mt-3">忘記密碼？</router-link>
+              <router-link to="/ForgotPassword" class="mt-3"
+                ><span class="forgetpassword" data-bs-dismiss="modal"
+                  >忘記密碼？</span
+                ></router-link
+              >
             </div>
           </div>
 
@@ -521,7 +533,7 @@ img {
   background-color: #8991a9;
 }
 
-.modal-content {
+.Mcontent {
   background-color: #fff;
   display: flex;
   flex-direction: column;
@@ -534,7 +546,7 @@ img {
   width: 450px;
   padding: 60px 50px;
 }
-.modal-body {
+.Mbody {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -545,7 +557,7 @@ img {
   flex-direction: column;
   justify-content: space-between;
 }
-.form-control {
+.Mcontrol {
   border: 0px;
   border-radius: 0px;
   outline: 0;
@@ -553,7 +565,7 @@ img {
   color: gray;
   width: 100%;
 }
-.form-control:focus {
+.Mcontrol:focus {
   outline: none; /* 外框效果 */
   box-shadow: none;
   border-bottom: 2.5px solid #8991a9;
@@ -568,7 +580,8 @@ img {
   color: #fff;
 }
 .modal-content a,
-.rigister {
+.rigister,
+.forgetpassword {
   text-decoration: none;
   color: #8991a9;
 }

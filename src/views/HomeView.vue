@@ -140,9 +140,13 @@
             <div class="">
               <h2 class="mb-5" data-aos="fade-down">商城</h2>
             </div>
-            <h5 class="py-5 border-top border-dark" data-aos="fade-right">
-              提供攝影相關器材
-            </h5>
+            <div class="py-5 border-top border-dark" data-aos="fade-right">
+              <p>提供您最全面的相機產品和配件。</p>
+
+              <p>
+                無論您是攝影愛好者、職業攝影師還是普通用戶，我們都能為讓您輕鬆選擇符合您需求的商品。
+              </p>
+            </div>
           </div>
           <div class="col-lg-6">
             <div class="row">
@@ -180,3 +184,4 @@
   color: #040404;
 }
 </style>
+n
