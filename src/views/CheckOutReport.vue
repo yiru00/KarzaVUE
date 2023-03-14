@@ -2,8 +2,41 @@
   <div class="container row inline-block">
     <div class="">結帳結果頁</div>
     <div>
-      <div v-if="hasTakeDatas" class="col-8">
-        <div>付款編號:</div>
+      <div class="container-fluid my-5">
+        <div class="row justify-content-center">
+          <div class="col-xl-10">
+            <div class="card shadow-lg">
+              <div class="row p-2 mt-3 justify-content-between mx-sm-2">
+                <div class="col"></div>
+                <div class="col">
+                  <div class="row justify-content-start">
+                    <div class="col"><h3>結帳結果頁</h3></div>
+                  </div>
+                </div>
+                <div class="col-auto">
+                  <h4 class="irc_mi img-fluid bell" width="30" height="30">
+                    Karza!
+                  </h4>
+                </div>
+              </div>
+              <div class="row mx-auto justify-content-center text-center">
+                <div class="col-12 mt-3">
+                  <nav aria-label="breadcrumb" class="second"></nav>
+                </div>
+              </div>
+
+              <div class="row justify-content-around">
+                <div class="col-md-5">
+                  <div class="card border-0">
+                    <div class="card-header pb-0">
+                      <p class="card-text text-muted mt-4 space">訂單資訊</p>
+                      <hr class="my-0" />
+                    </div>
+                    <div class="card-body">
+                      <div class="row justify-content-between">
+                        <div class="col-auto mt-0">
+                          <p>
+                            <div>付款編號:</div>
         <div>{{ this.paymentID }}</div>
         <div>結帳日期:</div>
         <div>
@@ -13,10 +46,22 @@
         <div>{{ getOrderState }}</div>
         <div>運送地址:</div>
         <div>{{ this.paymentData.orderDetail.address }}</div>
-
-        <br /><br />
-        <div class="col-4">
-          <div>已購買商品:</div>
+                          </p>
+                        </div>
+                        <div class="col-auto"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-5">
+                  <div class="card border-0">
+                    <div class="card-header card-2">
+                      <p class="card-text text-muted mt-md-4 mb-2 space">
+                        商品明細
+                      </p>
+                      <hr class="my-2" />
+                      <small><div class="">
+          
           <div
             v-for="item in this.paymentData.orderDetail.orderItems.$values"
             :key="item.orderId"
@@ -29,14 +74,30 @@
             <div>{{ item.productPrice * item.productNumber }}</div>
             <br />
           </div>
-
           <div>原價:</div>
           <div>{{ this.paymentData.toatalBefore }}</div>
           <div>折扣金額:</div>
           <div>{{ this.paymentData.minusAmount }}</div>
           <div>總金額:</div>
           <div>{{ this.paymentData.orderDetail.total }}</div>
+        </div></small>
+
+
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <div v-if="hasTakeDatas" class="col-8">
+        
+
+       
+        
       </div>
 
       <div v-else>查無結帳資料</div>
@@ -156,4 +217,135 @@ export default {
 };
 </script>
 <style scoped>
+body {
+  background: linear-gradient(110deg, #bbdefb 60%, #42a5f5 60%);
+}
+
+.shop {
+  font-size: 10px;
+}
+
+.space {
+  letter-spacing: 0.8px !important;
+}
+
+.second a:hover {
+  color: rgb(92, 92, 92);
+}
+
+.active-2 {
+  color: rgb(92, 92, 92);
+}
+
+.breadcrumb > li + li:before {
+  content: "" !important;
+}
+
+.breadcrumb {
+  padding: 0px;
+  font-size: 10px;
+  color: #aaa !important;
+}
+
+.first {
+  background-color: white;
+}
+
+a {
+  text-decoration: none !important;
+  color: #aaa;
+}
+
+.btn-lg,
+.form-control-sm:focus,
+.form-control-sm:active,
+a:focus,
+a:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.form-control-sm:focus {
+  border: 1.5px solid #4bb8a9;
+}
+
+.btn-group-lg > .btn,
+.btn-lg {
+  padding: 0.5rem 0.1rem;
+  font-size: 1rem;
+  border-radius: 0;
+  color: white !important;
+  background-color: #4bb8a9;
+  height: 2.8rem !important;
+  border-radius: 0.2rem !important;
+}
+
+.btn-group-lg > .btn:hover,
+.btn-lg:hover {
+  background-color: #26a69a;
+}
+
+.btn-outline-primary {
+  background-color: #fff !important;
+  color: #4bb8a9 !important;
+  border-radius: 0.2rem !important;
+  border: 1px solid #4bb8a9;
+}
+
+.btn-outline-primary:hover {
+  background-color: #4bb8a9 !important;
+  color: #fff !important;
+  border: 1px solid #4bb8a9;
+}
+
+.card-2 {
+  margin-top: 40px !important;
+}
+
+.card-header {
+  background-color: #fff;
+  border-bottom: 0px solid #aaaa !important;
+}
+
+p {
+  font-size: 13px;
+}
+
+.small {
+  font-size: 9px !important;
+}
+
+.form-control-sm {
+  height: calc(2.2em + 0.5rem + 2px);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  border-radius: 0;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.boxed {
+  padding: 0px 8px 0 8px;
+  background-color: #4bb8a9;
+  color: white;
+}
+
+.boxed-1 {
+  padding: 0px 8px 0 8px;
+  color: black !important;
+  border: 1px solid #aaaa;
+}
+
+.bell {
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+@media (max-width: 767px) {
+  .breadcrumb-item + .breadcrumb-item {
+    padding-left: 0;
+  }
+}
 </style>
