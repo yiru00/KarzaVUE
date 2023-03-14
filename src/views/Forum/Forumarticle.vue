@@ -1,9 +1,11 @@
 <template>
   <div class="post" v-for="item in showArticle" :key="item.id">
     <div class="d-flex align-items-center mb-2">
-      <p class=""><i class="fa-solid fa-user"></i>作者：{{ item.nickName }}</p>
-      <p class="date ms-2">發布時間：{{ item.time }}</p>
-      <p class="ms-2">{{ item.forumName }}</p>
+      <div >
+        <p class=""><i class="fa-solid fa-user-large me-2"></i> {{ item.nickName }}</p>
+     </div>
+      <p class="date ms-3">發布時間 ： {{ item.time }}</p>
+      <p class="ms-3">看板 : {{ item.forumName }}</p>
     </div>
     <div class="borderImgsss">
       <h2 class="mb-2">

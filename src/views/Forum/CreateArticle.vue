@@ -136,9 +136,7 @@ export default {
             })
             .catch(error=> {
                 console.log(error)
-                if(error){                
-                  alert("請完整輸入") 
-                }
+                
             })
             
         },
@@ -186,7 +184,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
     h1, h2, h3, h4, h5, h6, p{
       margin: 0;
     }

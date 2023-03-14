@@ -7,6 +7,7 @@
             <p class="author">{{ objArticleDetail.nickName }}</p>
             <p class="date ms-2">發布時間：{{ objArticleDetail.time }}</p>
             <p class="author ms-2">看板{{ objArticleDetail.forumName }}</p>
+            
           </div>
           <div>
             <a href="#contentid" class="mylink">撰寫留言</a>
@@ -14,11 +15,18 @@
         </div>
         <div class="post">
           <div class="align-items-center mb-2">
-            <div>
+            <div class="d-flex justify-content-between ">
               <h2>標題 {{ objArticleDetail.title }}</h2>
+              <button
+                type="button"
+                class="btn  "
+                @click="removeArticle($event, $route.params.Articleid)"
+              >
+              <i class="fa-regular fa-trash-can fs-3 text-danger" ></i>
+            </button>
             </div>
-            <div>
-              <p class="date">文章內容 {{ objArticleDetail.content }}</p>
+            <div class="mt-3">
+              <p class="date ">文章內容 {{ objArticleDetail.content }}</p>
             </div>
             <div class="imgate">
               <img
@@ -26,9 +34,10 @@
                 alt=""
               />
             </div>
-            <div>
+            
+            <!-- <div>
               <p class="comments">共XX則留言</p>
-            </div>
+            </div> -->
           </div>
         </div>
         <p class="comment_title">留言區</p>
@@ -94,11 +103,12 @@ export default {
       // objArticleComment: {},
       createMessage: "",
       count: 0,
+      objArticleDelete:{},
     };
   },
-
   created() {
     this.callArticleDetailApi();
+    this.removeArticle();
     // this.callArticleCommentApi()
   },
 
@@ -115,6 +125,7 @@ export default {
         .then((response) => {
           console.log("新增留言成功");
           const allComment = {
+            id: response.data,
             time: new Date().toLocaleString(),
             // 是誰留言的 要登入
             nickName: "黑",
@@ -135,6 +146,18 @@ export default {
     //           console.log(error)
     //       })
     //   },
+    async removeArticle(event, articleid) {
+      await axios
+        .delete(
+          `https://localhost:7259/api/Article/DeleteArticle?articleid=${articleid}`
+        )
+        .then((response) => {
+          console.log("刪除文章成功");
+          event.target.parentNode.remove();
+          this.$router.push("/Forum")
+        });
+    },
+
 
     async removeMessage(event, id) {
       console.log(id);
@@ -183,7 +206,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .mylink {
   color: #afc7d8;
 }
@@ -280,8 +303,9 @@ a {
 .article_insert {
   margin-top: 10px;
   padding: 20px 70px 20px 70px;
-  border: 3px solid #8991a9;
+  border: 5px solid #8991a9;
   border-radius: 15px;
+  background-color: #fff;
 }
 .article_title {
   padding: 5px 20px;
@@ -332,13 +356,10 @@ a {
   border-radius: 15px;
   margin-top: 10px;
 }
-.delete_btn {
-  margin-top: 4px;
-  display: flex;
-  font-size: 14px;
-}
+
 .comment_title {
-  margin-left: 20px;
+  margin-left: 10px;
+  margin-top: 20px;
 }
 .comment {
   display: flex;

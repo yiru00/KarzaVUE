@@ -5,7 +5,7 @@
         <div class="card">
           <ul class="list-group list-group-flush">
             <li class="list-group-item forumall">
-              <a href="#">所有看板</a>
+              <a style="font-size:large;">所有看板</a>
             </li>
             <!-- 所有看板列表 -->
             <li
@@ -25,7 +25,7 @@
               v-model="inputTitle"
               type="text"
               class="article_texts"
-              placeholder="輸入文章關鍵字..."
+              placeholder="輸入文章標題關鍵字..."
               @keyup="callSearchApi"
             />
           </div>
