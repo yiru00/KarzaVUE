@@ -73,7 +73,7 @@ export default {
         address:'',
         about:'',
         selectedFile: null,
-        photoData: new URL("../../assets/userPic.png", import.meta.url)
+        photoData: {},
     };
   },
   mixins: [utility],
@@ -81,21 +81,23 @@ export default {
 
     let id = await this.fetchMemberId();
 
-    axios.get(`https://localhost:7259/api/Members/Profile?id=${id}`,
+    await axios.get(`https://localhost:7259/api/Members/Profile?id=${id}`,
        {
         headers: {
           Authorization: "Bearer " + $.cookie("token"),
         },
       })
       .then((response) => {
+        if(response.data.birthOfDate)
+        this.birthday = response.data.birthOfDate.substring(0,10);
 
         this.realname = response.data.realName;
         this.nickname = response.data.nickName;
-        this.birthday = response.data.birthOfDate.substring(0,10);
         this.mobile = response.data.mobile;
         this.address = response.data.address;
-        this.about = response.data.about,
-        this.photoData = `https://localhost:7259/Images/${response.data.photoSticker}`;
+        this.about = response.data.about;
+        if (response.data.photoSticker) this.photoData = `https://localhost:7259/Images/${response.data.photoSticker}`;
+        else this.photoData= new URL("../../assets/userPic.png", import.meta.url)
         console.log(response.data)
       })
       .catch((error) => {
