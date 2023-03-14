@@ -156,6 +156,8 @@ const photoModal = (item) => {
 // 開啟編輯照片
 const editPhoto = (item) => {
   edit.value = true;
+  editTitle.value = photoFor.value.title;
+  editCamera.value = photoFor.value.camera;
 };
 // 執行編輯相片
 const editComplete = () => {
