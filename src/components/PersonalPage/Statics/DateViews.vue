@@ -30,7 +30,9 @@ axios({
           label: "瀏覽次數",
           // Making each element take up full width, equally divided
           data: dated.dateViews,
-          backgroundColor: "rgba(233, 202, 137,0.8)",
+          backgroundColor: "rgba(175, 199, 216,0.5)",
+          borderColor: "rgba(175, 199, 216)",
+
           borderSkipped: false,
         },
       ],

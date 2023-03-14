@@ -349,6 +349,8 @@ watch(memberId, () => {
 .authorLink {
   text-decoration: none;
   color: black;
+  height: fit-content;
+  width: fit-content;
 }
 .authorLink:hover {
   color: gray;
@@ -413,6 +415,8 @@ watch(memberId, () => {
   border-radius: 50%;
   width: 60px;
   height: 60px;
+  object-fit: cover;
+  background-size: cover;
 }
 .photoModalImage img {
   object-fit: cover;
