@@ -30,8 +30,7 @@ axios({
           label: "瀏覽次數",
           // Making each element take up full width, equally divided
           data: dated.dateViews,
-          backgroundColor: "rgb(248, 226, 182,0.9)",
-          borderRadius: 15,
+          backgroundColor: "rgba(233, 202, 137,0.8)",
           borderSkipped: false,
         },
       ],
@@ -39,7 +38,7 @@ axios({
 
     let delayed;
     const config = {
-      type: "bar",
+      type: "line",
       data,
       options: {
         animation: {
