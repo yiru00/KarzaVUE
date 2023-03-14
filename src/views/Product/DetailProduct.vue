@@ -31,7 +31,7 @@
                 </tr>
                 <tr>
                   <td>品牌 :</td>
-                  <td class="td-r">{{ detail.inventory }}</td>
+                  <td class="td-r">{{ detail.brandName }}</td>
                 </tr>
                 <tr>
                   <td>庫存量 :</td>
