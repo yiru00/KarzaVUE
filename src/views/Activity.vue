@@ -281,7 +281,7 @@ export default {
     },
   },
   mounted() {
-    this.scrollToTop();
+    // this.scrollToTop();
     this.getNewActivity();
     this.getPopularActivity();
     this.getWillbeheld();

@@ -372,7 +372,7 @@ export default {
       };
       this.routes = "";
       this.initMap();
-      this.scrollToTop();
+      // this.scrollToTop();
       this.getMemberId();
       this.fetchDetails();
       this.getEnroll();
@@ -406,7 +406,7 @@ export default {
     };
   },
   created() {
-    this.scrollToTop();
+    // this.scrollToTop();
     this.getMemberId();
 
     this.fetchDetails();
