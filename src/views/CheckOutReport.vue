@@ -1,42 +1,46 @@
 <template>
-  <div>結帳結果頁</div>
-  <div v-if="hasTakeDatas">
-    <div>付款編號:</div>
-    <div>{{ this.paymentID }}</div>
-    <div>結帳日期:</div>
-    <div>{{ this.foramtDateTime(this.paymentData.orderDetail.orderDate) }}</div>
-    <div>訂單狀態:</div>
-    <div>{{ getOrderState }}</div>
-    <div>運送地址:</div>
-    <div>{{ this.paymentData.orderDetail.address }}</div>
+  <div class="container row inline-block">
+    <div class="">結帳結果頁</div>
+    <div>
+      <div v-if="hasTakeDatas" class="col-8">
+        <div>付款編號:</div>
+        <div>{{ this.paymentID }}</div>
+        <div>結帳日期:</div>
+        <div>
+          {{ this.foramtDateTime(this.paymentData.orderDetail.orderDate) }}
+        </div>
+        <div>訂單狀態:</div>
+        <div>{{ getOrderState }}</div>
+        <div>運送地址:</div>
+        <div>{{ this.paymentData.orderDetail.address }}</div>
 
-    <br /><br />
+        <br /><br />
+        <div class="col-4">
+          <div>已購買商品:</div>
+          <div
+            v-for="item in this.paymentData.orderDetail.orderItems.$values"
+            :key="item.orderId"
+          >
+            <div>名稱:</div>
+            <div>{{ item.productName }}</div>
+            <div>數量:</div>
+            <div>{{ item.productNumber }}</div>
+            <div>金額:</div>
+            <div>{{ item.productPrice * item.productNumber }}</div>
+            <br />
+          </div>
 
-    <div>已購買商品:</div>
-    <div
-      v-for="item in this.paymentData.orderDetail.orderItems.$values"
-      :key="item.orderId"
-    >
-      <div>名稱:</div>
-      <div>{{ item.productName }}</div>
-      <div>數量:</div>
-      <div>{{ item.productNumber }}</div>
-      <div>金額:</div>
-      <div>{{ item.productPrice * item.productNumber }}</div>
-      <br />
+          <div>原價:</div>
+          <div>{{ this.paymentData.toatalBefore }}</div>
+          <div>折扣金額:</div>
+          <div>{{ this.paymentData.minusAmount }}</div>
+          <div>總金額:</div>
+          <div>{{ this.paymentData.orderDetail.total }}</div>
+        </div>
+      </div>
+
+      <div v-else>查無結帳資料</div>
     </div>
-
-    <div>原價:</div>
-    <div>{{ this.paymentData.toatalBefore }}</div>
-    <div>折扣金額:</div>
-    <div>{{ this.paymentData.minusAmount }}</div>
-    <div>總金額:</div>
-    <div>{{ this.paymentData.orderDetail.total }}</div>
-  </div>
-
-
-  <div v-else>
-    查無結帳資料
   </div>
 </template>
 

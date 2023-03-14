@@ -2,7 +2,7 @@
   <div class="container cash-view mt-4 p-0">
     <div class="row px-md-4 px-2 pt-4">
       <div class="col-lg-8">
-        <p class="pb-2 fw-bold">購物車商品</p>
+        <p class="pb-2 textset">購物車商品</p>
 
         <div class="card">
           <div class="card-scroll-x">
@@ -88,7 +88,7 @@
         </div>
       </div>
       <div class="col-lg-4 payment-summary">
-        <p class="fw-bold pt-lg-0 pt-4 pb-2">購買資訊</p>
+        <p class="textset pt-lg-0 pt-4 pb-2">購買資訊</p>
         <div class="buy">
           <div class="addrText">地址:</div>
 
@@ -102,7 +102,7 @@
             <input
               v-model="adressinput"
               type="text"
-              class="buyinput"
+              class="buyinput test-input"
               placeholder="住址"
               @blur="getAdressInput"
             />
@@ -113,7 +113,7 @@
               v-model="couponinput"
               @blur.stop="getCoupon"
               type="text"
-              class="buyinput"
+              class="buyinput test-input"
               placeholder="折價券代碼"
             />
           </div>
@@ -668,13 +668,23 @@ export default {
 .cash-view .address-coustomize select {
   margin: 5px;
   padding: 0;
-  border-radius: 0.25rem;
+  border-radius: 0.5rem;
 }
+.textset {
+  font-size: 15px;
+  font-weight: bold;
+}
+
 .cash-view .address-coustomize {
   padding: 0;
 }
 </style>
 <style scoped>
+.test-input:focus {
+  border: 10px solid #05174f;
+  background: #d4d9ec;
+  transition: 0.8s;
+}
 .cash-view {
   line-height: 1rem;
   font-size: 14px;
@@ -724,10 +734,8 @@ export default {
   border-radius: 0.25rem;
   color: #444444;
 }
-
-.buyinput :focus {
-  border: 1px solid #010511;
-  color: #000;
+.buyinput input:focus {
+  border: 5px solid #010511 !important;
 }
 .cash-view .pic {
   width: 110px;

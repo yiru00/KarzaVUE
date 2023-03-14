@@ -2,22 +2,23 @@
   <div class="content">
     <h4>我的訂單</h4>
     <div class="line"></div>
-    <div class="" v-html="noorder"></div>
+    <div class="cursorpointer" v-html="noorder"></div>
     <div
       :ref="item.id"
       class="outline"
       v-for="(item, index) in orderdetail"
       :key="index"
+      v-show="!isempty && !isloading"
     >
       <div
-        class="col prooutline container-fluid p-3 mt-5"
+        class="row prooutline container-fluid p-3 mt-5"
         data-bs-toggle="collapse"
         :data-bs-target="`#index${item.id}`"
         :ref="item.id"
       >
         <i class="fa-solid fa-clipboard clickauto"></i>
         <small class="ms-4">訂單編號:{{ item.paymentId }}</small>
-        <small class="totalloca">總金額:{{ item.total }}$</small>
+        <small class="totalloca col-3">總金額:{{ item.total }}$</small>
         <br />
         <small class="ms-4">收件資訊: {{ item.address }}</small>
       </div>
@@ -27,7 +28,7 @@
         :id="`index${item.id}`"
       >
         <div
-          class="row procard"
+          class="row procard d-flex justify-content-center align-items-center"
           v-for="(orderitem, index) in item.orderItems"
           :key="index"
         >
@@ -40,13 +41,18 @@
               alt=""
             />
           </div>
-          <div class="col-3">
+          <div class="col-5">
             <small>{{ orderitem.productName }}</small>
+          </div>
+          <div class="col-2">
+            <small>${{ orderitem.productPrice }}</small>
+          </div>
+          <div class="col-2">
+            <small>數量{{ orderitem.productNumber }}</small>
           </div>
         </div>
       </div>
     </div>
-    {{ itemid }}
   </div>
 </template>
 
@@ -62,6 +68,8 @@ export default {
       showprodu: "",
       noorder: "",
       itemid: "",
+      isempty: false,
+      isloading: true,
     };
   },
 
@@ -75,12 +83,14 @@ export default {
   methods: {
     async getOD() {
       let memberId = await this.fetchMemberId();
+      this.isloading = true;
       axios
         .get(
           `https://localhost:7259/api/OrderDetail/GetMemberOrder?memberid=${memberId}`
         )
         .then((res) => {
           if (res.data.length > 0) {
+            this.isloading = false;
             console.log(res.data);
             this.orderdetail = res.data;
           } else {
@@ -108,8 +118,7 @@ export default {
   text-align: center;
 }
 .prooutline {
-  border: solid 0.8px;
-  border-color: black;
+  background-color: #8991a986;
   border-radius: 0.5rem;
   justify-content: center;
   align-items: center;
@@ -120,7 +129,7 @@ export default {
   justify-content: center;
   align-items: center;
   word-wrap: normal;
-  background-color: #fcf7f0;
+
   box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
 }
 .line {
