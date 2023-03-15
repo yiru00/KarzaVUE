@@ -1,33 +1,42 @@
 <template>
   <div class="content">
-    <h4>我的訂單</h4>
-    <div class="line"></div>
-    <div class="" v-html="noorder"></div>
+    <h4>我的訂單紀錄</h4>
+    <div class="line mb-4"></div>
+
     <div
-      :ref="item.id"
       class="outline"
       v-for="(item, index) in orderdetail"
       :key="index"
+      v-show="!isempty && !isloading"
     >
       <div
-        class="col prooutline container-fluid p-3 mt-5"
+        class="prooutline container-fluid"
         data-bs-toggle="collapse"
         :data-bs-target="`#index${item.id}`"
-        :ref="item.id"
       >
-        <i class="fa-solid fa-clipboard clickauto"></i>
-        <small class="ms-4">訂單編號:{{ item.paymentId }}</small>
-        <small class="totalloca">總金額:{{ item.total }}$</small>
-        <br />
-        <small class="ms-4">收件資訊: {{ item.address }}</small>
+        <div class="row align-items-center">
+          <div class="col-1"><i class="fa-solid fa-clipboard"></i></div>
+        </div>
+        <div class="row">
+          <div class="col-1"></div>
+          <div class="col-8">
+            <p class="">訂單編號:{{ item.paymentId }}</p>
+            <p class="">優惠券:{{ item.usedCoupon }}</p>
+
+            <p class="">收件資訊: {{ item.address }}</p>
+          </div>
+          <div class="col-3">
+            <p class="totalloca">總金額: ${{ item.total }}</p>
+          </div>
+        </div>
       </div>
 
       <div
-        class="col-11 prooutline2 container-fluid collapsing flex-column justify-content-center align-items-center"
+        class="col-10 prooutline2 container-fluid collapsing justify-content-center align-items-center"
         :id="`index${item.id}`"
       >
         <div
-          class="row procard"
+          class="row procard d-flex justify-content-center align-items-center"
           v-for="(orderitem, index) in item.orderItems"
           :key="index"
         >
@@ -40,13 +49,22 @@
               alt=""
             />
           </div>
-          <div class="col-3">
+          <div class="col-5">
             <small>{{ orderitem.productName }}</small>
+          </div>
+          <div class="col-2">
+            <small>${{ orderitem.productPrice }}</small>
+          </div>
+          <div class="col-2">
+            <small>數量{{ orderitem.productNumber }}</small>
           </div>
         </div>
       </div>
     </div>
-    {{ itemid }}
+    <div v-show="isempty && !isloading">目前沒有訂單~</div>
+    <div v-show="isloading" class="image-container">
+      <img src="../../assets/Spinner-1s-200px-2.gif" alt="" />
+    </div>
   </div>
 </template>
 
@@ -62,6 +80,8 @@ export default {
       showprodu: "",
       noorder: "",
       itemid: "",
+      isempty: false,
+      isloading: true,
     };
   },
 
@@ -75,16 +95,20 @@ export default {
   methods: {
     async getOD() {
       let memberId = await this.fetchMemberId();
+      this.isloading = true;
+      this.isempty = false;
       axios
         .get(
           `https://localhost:7259/api/OrderDetail/GetMemberOrder?memberid=${memberId}`
         )
         .then((res) => {
+          this.isloading = false;
           if (res.data.length > 0) {
             console.log(res.data);
             this.orderdetail = res.data;
           } else {
-            this.noorder = "<span>目前暫無訂單~</span>";
+            // this.noorder = "<span>目前暫無訂單~</span>";
+            this.isempty = true;
           }
         })
         .catch((err) => {});
@@ -108,8 +132,7 @@ export default {
   text-align: center;
 }
 .prooutline {
-  border: solid 0.8px;
-  border-color: black;
+  background-color: #b9c9d61d;
   border-radius: 0.5rem;
   justify-content: center;
   align-items: center;
@@ -120,27 +143,25 @@ export default {
   justify-content: center;
   align-items: center;
   word-wrap: normal;
-  background-color: #fcf7f0;
+
   box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
 }
 .line {
   height: 1px;
   background-color: #a3a3a3;
 }
+.image-container {
+  position: absolute;
+  top: 20%;
+  left: 52%;
+  /* transform: translate(-50%, -50%); */
+}
+.image-container img {
+  width: 80%;
+  height: auto;
+  max-height: 80%;
+}
 .content {
   padding: 20px 50px;
-}
-.prooutline .totalloca {
-  margin-left: 85%;
-  margin-top: 10px;
-  display: inline-block;
-}
-
-.vshowDetail {
-  border: solid 0.8px;
-  border-color: black;
-  border-radius: 0.5rem;
-  justify-content: center;
-  align-items: center;
 }
 </style>
