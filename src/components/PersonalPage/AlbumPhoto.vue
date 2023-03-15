@@ -1,8 +1,7 @@
 <template>
   <!-- 呈現內容 component使用-->
-
   <div class="col-12 d-flex justify-content-between">
-    <h3>{{ albumName }}</h3>
+    <h3 class="titleAni">{{ albumName }}</h3>
     <div>
       <div class="dropdown" v-if="loginMemberId == memberId">
         <button
@@ -32,35 +31,44 @@
       </div>
     </div>
   </div>
-  <div
-    class="col-12 col-sm-6 col-md-4 col-lg-3"
-    v-for="item in allPhotos"
-    :key="item.id"
-    @click="photoModal(item)"
-  >
-    <div class="card cardSize">
-      <img
-        :src="`https://localhost:7259/Images/${item.source}`"
-        class="card-img-top rounded-bottom"
-        data-bs-toggle="modal"
-        data-bs-target="#photoModal"
-        :alt="item.source"
-      />
-      <button
-        class="bookMarkBtn"
-        v-if="!token"
-        data-bs-toggle="modal"
-        data-bs-target="#loginModal"
-      >
-        <i class="fa-solid fa-bookmark text-light" v-if="item.isCollection"></i>
-        <i class="fa-regular fa-bookmark text-light" v-else></i>
-      </button>
-      <button class="bookMarkBtn" v-else @click.stop="collectPhoto(item)">
-        <i class="fa-solid fa-bookmark text-light" v-if="item.isCollection"></i>
-        <i class="fa-regular fa-bookmark text-light" v-else></i>
-      </button>
+
+  <TransitionGroup name="list">
+    <div
+      class="col-12 col-sm-6 col-md-4 col-lg-3"
+      v-for="item in allPhotos"
+      :key="item.id"
+      @click="photoModal(item)"
+    >
+      <div class="card cardSize">
+        <img
+          :src="`https://localhost:7259/Images/${item.source}`"
+          class="card-img-top rounded-bottom"
+          data-bs-toggle="modal"
+          data-bs-target="#photoModal"
+          :alt="item.source"
+        />
+        <button
+          class="bookMarkBtn"
+          v-if="!token"
+          data-bs-toggle="modal"
+          data-bs-target="#loginModal"
+        >
+          <i
+            class="fa-solid fa-bookmark text-light"
+            v-if="item.isCollection"
+          ></i>
+          <i class="fa-regular fa-bookmark text-light" v-else></i>
+        </button>
+        <button class="bookMarkBtn" v-else @click.stop="collectPhoto(item)">
+          <i
+            class="fa-solid fa-bookmark text-light"
+            v-if="item.isCollection"
+          ></i>
+          <i class="fa-regular fa-bookmark text-light" v-else></i>
+        </button>
+      </div>
     </div>
-  </div>
+  </TransitionGroup>
 
   <!-- 相片詳細頁面modal -->
   <div
@@ -485,6 +493,28 @@ watch(editAlbumReload, () => {
 </script>
 
 <style scoped>
+.titleAni {
+  animation: fade 0.5s;
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
+}
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}
 .editMoreUl {
   min-width: 50px;
   padding: 0;
