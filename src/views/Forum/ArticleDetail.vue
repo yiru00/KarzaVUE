@@ -4,10 +4,9 @@
       <div class="article_insert">
         <div class="card-header d-flex justify-content-between article_title">
           <div class="d-flex align-items-center mb-2">
-            <p class="author">{{ objArticleDetail.nickName }}</p>
-            <p class="date ms-2">發布時間：{{ objArticleDetail.time }}</p>
-            <p class="author ms-2">看板{{ objArticleDetail.forumName }}</p>
-            
+            <p class="m-0">{{ objArticleDetail.nickName }}</p>
+            <p class="ms-2">{{ objArticleDetail.time.replace('T', ' ').slice(0, 16)   }}</p>
+            <p class="ms-2 foremName">{{ objArticleDetail.forumName }}</p>
           </div>
           <div>
             <a href="#contentid" class="mylink">撰寫留言</a>
@@ -16,8 +15,9 @@
         <div class="post">
           <div class="align-items-center mb-2">
             <div class="d-flex justify-content-between ">
-              <h2>標題 {{ objArticleDetail.title }}</h2>
-              <button
+              <h2>{{ objArticleDetail.title }}</h2>
+              <!-- 刪除文章 -->
+              <button v-if="this.userMemberId===this.objArticleDetail.memberId"
                 type="button"
                 class="btn  "
                 @click="removeArticle($event, $route.params.Articleid)"
@@ -26,7 +26,7 @@
             </button>
             </div>
             <div class="mt-3">
-              <p class="date ">文章內容 {{ objArticleDetail.content }}</p>
+              <p class="m-0">{{ objArticleDetail.content }}</p>
             </div>
             <div class="imgate">
               <img
@@ -49,19 +49,23 @@
           :key="item.id"
         >
           <div class="comment">
-            <div class="ms-3 d-flex">
-              <p class="me-1">{{ item.nickName }} :</p>
-              <p>{{ item.content }}</p>
-              <p>{{ item.time }}</p>
+            <div class="ms-3">
+                <p class="me-1">{{ item.nickName }} :</p>
+                <p class="m-0 commentContent">{{ item.content }}</p>
             </div>
-            <!-- v-if="memberid==item.memberId"  登入的人是留言者，就可以刪除這則留言 -->
-            <button
-              type="button"
-              class="btn btn-danger delete_btn"
-              @click="removeMessage($event, item.id)"
-            >
-              刪除
-            </button>
+
+            <div class="d-flex align-items-center">
+              <!-- v-if="memberid==item.memberId"  登入的人是留言者，就可以刪除這則留言 -->
+              <button v-if="this.userMemberId === item.memberId || this.userMemberId === this.objArticleDetail.memberId"
+                type="button"
+                class="btn btn-primary"
+                
+                @click="removeMessage($event, item.id)"
+              >
+                刪除
+              </button>
+              <p class="ms-3">{{ item.time.replace('T', ' ').slice(0, 16)  }}</p>
+            </div>
           </div>
           <!-- Insert -->
           <!-- <div class="comment">
@@ -73,20 +77,33 @@
             </div> -->
         </div>
         <div class="comment_contents" id="contentid">
-          <div class="content_img">
-            <img src="" alt="" />
+          <div>
+            <img  class="content_img" :src="`https://localhost:7259/Images/${userSticker}`" alt="" />
           </div>
           <input
-            class="comment_contents_input"
+            v-if="!token" 
+            data-bs-toggle="modal" 
+            data-bs-target="#loginModal"
+            class="comment_contents_input form-control"
             type="text"
             placeholder="留言..."
             v-model="createMessage"
           />
-          <div class="btnbox">
-            <button type="button" class="btn btn_submit" @click="clickMessage">
+          <input
+            v-else
+            class="comment_contents_input form-control"
+            type="text"
+            placeholder="留言..."
+            v-model="createMessage"
+          />
+          <div class="btnbox ">
+            <button v-if="!token" data-bs-toggle="modal" data-bs-target="#loginModal" type="button" class="btn btn_submit " >
               送出
             </button>
-          </div>
+            <button v-else type="button" class="btn btn_submit " @click="clickMessage">
+              送出
+            </button>
+          </div> 
         </div>
       </div>
     </div>
@@ -104,22 +121,64 @@ export default {
       createMessage: "",
       count: 0,
       objArticleDelete:{},
+      objMembers: {},
+      userSticker: "",
+      userNickname:"",
+      userMemberId:"",
     };
   },
   created() {
     this.callArticleDetailApi();
-    this.removeArticle();
+    this.callMembersProfileApi();
     // this.callArticleCommentApi()
+    this.getMemberProfile()
   },
 
   methods: {
+    async getMemberProfile(){
+          await axios.get(`https://localhost:7259/api/Members/Read`, {
+              headers: {
+                Authorization: `Bearer ${this.token}`,
+              },
+            })
+          .then(response=> {
+              console.log(response.data)
+              this.userMemberId = response.data
+          })
+          .catch(error=> {
+              console.log(error)
+              console.log("沒登入")
+
+          })
+
+          await axios.get(`https://localhost:7259/api/Members/Profile?id=${this.userMemberId}`, {
+              headers: {
+                Authorization: `Bearer ${this.token}`,
+              },
+            })
+          .then(response=> {
+              console.log(response.data)
+              this.userSticker = response.data.photoSticker
+              this.userNickname = response.data.nickName
+          })
+          .catch(error=> {
+              console.log(error)
+              console.log("沒登入")
+
+          })
+      },
+
+    async callMembersProfileApi(){
+
+      },
+
     async clickMessage() {
       console.log(this.createMessage);
       await axios
         .post(`https://localhost:7259/api/Message/CreateComment`, {
           content: this.createMessage,
           // 是誰留言的 要登入
-          memberId: 1,
+          memberId: this.userMemberId,
           articleId: this.objArticleDetail.articleId,
         })
         .then((response) => {
@@ -127,8 +186,8 @@ export default {
           const allComment = {
             id: response.data,
             time: new Date().toLocaleString(),
-            // 是誰留言的 要登入
-            nickName: "黑",
+            memberId: this.userMemberId,
+            nickName: this.userNickname,
             content: this.createMessage,
           };
           this.objArticleDetail.messageComment.push(allComment);
@@ -167,7 +226,7 @@ export default {
         )
         .then((response) => {
           console.log("刪除留言成功");
-          event.target.parentNode.remove();
+          event.target.parentNode.parentNode.remove();
         });
     },
 
@@ -192,7 +251,11 @@ export default {
     async callArticleDetailApi() {
       await axios
         .get(
-          `https://localhost:7259/api/Article/ArticleDetails?ArticleId=${this.Articleid}`
+          `https://localhost:7259/api/Article/ArticleDetails?ArticleId=${this.Articleid}`,{
+              headers: {
+                Authorization: `Bearer ${this.token}`,
+              },
+            }
         )
         .then((response) => {
           console.log(response.data);
@@ -203,12 +266,35 @@ export default {
         });
     },
   },
+
+  computed: {
+      token() {
+        return $.cookie("token")
+      }
+    } 
 };
 </script>
 
 <style scoped>
+.foremName{
+  margin: 0;
+  background-color: #f6f6f6;
+  padding: 5px;
+  border-radius: 10px;
+  font-size: 15px;
+}
+.commentContent{
+  word-break: break-all;
+}
+
+.btn-primary {
+  background-color: #D39899;
+  border: 0;
+  height: 40px;
+}
+
 .mylink {
-  color: #afc7d8;
+  color: #8991A9;
 }
 
 .imgate img {
@@ -266,7 +352,6 @@ main {
 
 .post {
   padding: 20px 20px 10px 20px;
-  border-bottom: 1px solid #aaa;
   box-shadow: 0px 0px 5;
 }
 .post p {
@@ -275,91 +360,32 @@ main {
 a {
   text-decoration-line: none;
 }
-.forum {
-  margin: 0 auto;
-  padding: 20px;
-  display: flex;
-  margin-top: 25px;
-}
+
 .article_bannerss {
   margin-top: 10px;
   padding: 0px;
 }
-.contents {
-  display: flex;
-}
-.forumall {
-  text-align: center;
-  padding: 20px 50px;
-  border-bottom: solid;
-}
-.forumother {
-  text-align: center;
-  border-bottom: none;
-}
 .contents_area {
   margin-top: 30px;
 }
-.article_insert {
+.article_insert{
   margin-top: 10px;
   padding: 20px 70px 20px 70px;
-  border: 5px solid #8991a9;
+  background-color: white;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  border: 1px solid #c7cad6;
   border-radius: 15px;
-  background-color: #fff;
 }
 .article_title {
   padding: 5px 20px;
   background: none;
-  border-bottom: 1px solid #000;
-}
-.article_change {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 50px;
-}
-.article_category {
-  padding: 3px 10px;
-}
-.article_create {
-  border-radius: 15px;
-  margin-left: 600px;
-}
-.choice {
-  margin-top: 20px;
-}
-.articl_search {
-  display: flex;
-}
-.article_text {
-  background: blue;
-  padding: 5px 50px;
-  border-radius: 10px;
-}
-.article_text p {
-  margin: 0;
-}
-.insert {
-  border: none;
-}
-.insert_title {
-  width: 100%;
-  height: 50px;
-  border: none;
-}
-.insert_content {
-  width: 100%;
-  height: 400px;
-}
-.insert_photos {
-  margin-left: 20px;
-  border-radius: 15px;
-  margin-top: 10px;
-}
+  border-bottom: 1px solid #d8d8d8;
 
+}
 .comment_title {
-  margin-left: 10px;
-  margin-top: 20px;
+  padding: 15px;
+  background-color: rgba(175, 199, 216,0.3);
+  border-radius: 15px;
 }
 .comment {
   display: flex;
@@ -378,25 +404,24 @@ a {
   width: 80%;
   height: 45px;
   border-radius: 15px;
-  border: 1px solid #000;
   padding-left: 15px;
 }
 .content_img {
-  margin-right: 10px;
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   border-radius: 50px;
-  border: 1px solid #000;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  border: 1px solid white;
 }
 .btnbox {
   margin-left: 10px;
 }
 .btn_submit {
-  background: green;
+  background: #A6B6B0;
   padding: 7px 13px;
   border-radius: 5px;
   border: none;
-  font-size: 14px;
+  font-size: 17px;
   color: #fff;
   height: 40px;
 }

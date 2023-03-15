@@ -1,28 +1,23 @@
 <template>
   <div class="post" v-for="item in showArticle" :key="item.id">
-    <div class="d-flex align-items-center mb-2">
-      <div >
-        <p class=""><i class="fa-solid fa-user-large me-2"></i> {{ item.nickName }}</p>
-     </div>
-      <p class="date ms-3">發布時間 ： {{ item.time }}</p>
-      <p class="ms-3">看板 : {{ item.forumName }}</p>
+    <div class="d-flex align-items-center mb-2 justify-content-between">
+      <div class="d-flex align-items-center justify-content-center">
+        <p class="m-0 me-2"><i class="fa-solid fa-user-large me-2 userHead"></i> {{ item.nickName }}</p>
+      </div>
+      <p class="m-0 ms-3">{{ item.time.replace('T', ' ').slice(0, 16) }}</p>
     </div>
-    <div class="borderImgsss">
-      <h2 class="mb-2">
-        <router-link
+       <router-link
           :to="`/Forum/ArticleDetail/${item.articleId}`"
-          class="wordss"
-          >{{ item.title }}</router-link
-        >
-      </h2>
-      <div class="imgsss">
+          class="detailLink fs-4"
+          >{{ item.title }}
+        
         <img
-          class=""
+          class="imgsss"
           :src="`https://localhost:7259/Images/${item.articlePhoto}`"
           alt=""
         />
-      </div>
-    </div>
+      </router-link>
+    <span class="foremName">{{ item.forumName }}</span>
     <p class="content mb-2">{{ item.content }}</p>
     <!-- <p class="">留言數：{{ item }}</p> -->
   </div>
@@ -46,15 +41,24 @@ export default {
 </script>
 
 <style scoped>
-.wordss {
+.foremName{
+  margin: 0;
+  background-color: #f6f6f6;
+  padding: 5px;
+  border-radius: 10px;
+  font-size: 15px;
+}
+.userHead{
+  color: #AFC7D8;
+}
+.detailLink {
   color: #444444;
   font-weight: bold;
-}
-.borderImgsss {
   display: flex;
   justify-content: space-between;
+  align-content: center;
 }
-.imgsss img {
+.imgsss{
   width: 200px;
 }
 
@@ -69,8 +73,15 @@ p {
 }
 .post {
   padding: 20px 20px 10px 20px;
-  border-bottom: 1px solid #aaa;
+  border-bottom: 0.1px solid #f6f6f6;
   box-shadow: 0px 0px 5;
+}
+.post:hover{
+  background-color: rgba(175, 199, 216,0.2);
+  border-radius: 8px;
+  transition: ease-in-out .3s;
+  border-bottom: 0.1px solid transparent;
+
 }
 .post p {
   margin-bottom: 5px;

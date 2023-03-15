@@ -1,11 +1,11 @@
 <template>
   <div class="container article_bannero">
-    <div class="contents row">
+    <div class="d-flex row">
       <div class="forum col-2">
-        <div class="card">
+        <div class="card forumRoll">
           <ul class="list-group list-group-flush">
             <li class="list-group-item forumall">
-              <a style="font-size:large;">所有看板</a>
+              <a class="fs-5 text-black">所有看板</a>
             </li>
             <!-- 所有看板列表 -->
             <li
@@ -13,49 +13,39 @@
               :key="item.id"
               class="list-group-item forumother"
             >
-              <a href="#" @click="callForumOnceApi(item.id)">{{ item.name }}</a>
+              <a href="#" class="forumLink" @click="callForumOnceApi(item.id)">{{ item.name }}</a>
             </li>
           </ul>
         </div>
       </div>
       <div class="col-10">
-        <div class="articl_search">
-          <div>
-            <input
-              v-model="inputTitle"
-              type="text"
-              class="article_texts"
-              placeholder="輸入文章標題關鍵字..."
-              @keyup="callSearchApi"
-            />
-          </div>
-        </div>
+        
         <div class="article">
-          <div class="card-header d-flex justify-content-between article_title">
-            <a
-              class="nav-link active"
-              aria-current="true"
-              style="cursor: pointer"
-              @click.prevent="callPopularArticleApi"
-            >
-              全部文章
-            </a>
-            <div>
-              <router-link to="/Forum/Create"
-                ><button class="article_create">新增文章</button></router-link
-              >
-            </div>
-            <div class="article_change">
-              <p class="m-0 me-3">文章篩選 :</p>
-              <select
-                class="article_category"
-                v-model="changeArticle"
-                @change="changeNewOld"
-              >
+          <div class="card-header article_title">
+            <div class="d-flex justify-content-between align-items-center ">
+              <a class="nav-link active fs-3 me-3" aria-current="true" @click.prevent="callPopularArticleApi" style="cursor: pointer;">全部文章</a>
+              <select class="article_category form-select" v-model="changeArticle" @change="changeNewOld">
                 <option value="" class="choice" disabled>未選擇</option>
                 <option class="choice">熱門</option>
                 <option class="choice">最新</option>
               </select>
+              <div class="articl_search">
+                <input
+                  v-model="inputTitle"
+                  type="text"
+                  class="article_texts form-control"
+                  placeholder="輸入文章標題關鍵字..."
+                  @keyup="callSearchApi"
+                />
+              </div>
+            </div>
+            <div class="article_change">
+              
+
+              <button class="article_create btn" v-if="!token" data-bs-toggle="modal" data-bs-target="#loginModal">新增文章</button>
+            <router-link to="/Forum/Create"  v-else>
+              <button class="article_create btn" @click="btncreateArticle">新增文章</button>
+            </router-link>
             </div>
           </div>
           <!-- 內容在這 -->
@@ -98,6 +88,11 @@ export default {
     this.callSearchApi();
   },
   methods: {
+    
+    btncreateArticle() {
+      
+    },
+
     //全部看板
     async callForumallApi() {
       await axios
@@ -178,10 +173,27 @@ export default {
   components: {
     Forumarticle,
   },
+
+  computed: {
+      token() {
+        return $.cookie("token")
+      }
+    } 
 };
 </script>
 
 <style scoped>
+.forumLink{
+  color: black;
+  width: 100%;
+  height: 100%;
+}
+.forumRoll{
+  background-color: white;
+  border-radius: 15px;
+  border: 0;
+  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
 h1,
 h2,
 h3,
@@ -191,11 +203,7 @@ h6,
 p {
   margin: 0;
 }
-body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-}
+
 header {
   background-color: #000001;
   color: #fff;
@@ -206,60 +214,78 @@ a {
 }
 .forum {
   margin: 0 auto;
-  padding: 20px;
   display: flex;
   margin-top: 25px;
+  margin-bottom: 20px;
+
 }
 .article_bannero {
   margin-top: 10px;
 }
-.contents {
-  display: flex;
-}
+
 .forumall {
   text-align: center;
-  padding: 20px 50px;
-  border-bottom: solid;
+  padding: 37px 50px;
+  border-bottom: 1px solid #d8d8d8;
+  border-radius: 15px 15px 0 0;
+  
 }
 .forumother {
   text-align: center;
   border-bottom: none;
+  font-size: 18px;
+  padding: 20px 0;
+}
+.forumother:hover {
+  background-color: rgba(175, 199, 216,0.5);
+  transition: ease-in-out .3s;
 }
 .article {
-  margin-top: 10px;
+  margin-top: 25px;
+  margin-bottom: 20px;
   padding: 20px;
-  border: 3px solid #8991a9;
+  background-color: white;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
   border-radius: 15px;
 }
 .article_title {
-  padding: 5px 20px;
+  padding: 20px;
   background: none;
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid #d8d8d8;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .article_change {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 50px;
 }
 .article_category {
-  padding: 3px 10px;
+  width: 100px;
+  padding: 5px 5px;
+  margin-right: 20px;
 }
-.article_create {
-  border-radius: 15px;
-  margin-left: 500px;
-}
-.choice {
+
+/* .choice {
   margin-top: 20px;
-}
+} */
 .articl_search {
   display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .article_texts {
-  padding: 5px 50px;
-  border-radius: 10px;
+  width: 500px;
 }
-.article_texts p {
-  margin: 0;
+
+.article_create {
+  border-radius: 15px;
+  width: 100px;
+  margin-right: 5px;
+  background: #A6B6B0;
+  border-radius: 5px;
+  border: none;
+  color: #fff;
 }
 </style>
