@@ -13,6 +13,7 @@
         data-bs-toggle="modal"
         data-bs-target="#photoModal"
         :alt="item.source"
+        @click="addView(item.id)"
       />
       <button
         class="bookMarkBtn"
@@ -203,6 +204,28 @@ const photoModal = (item) => {
   edit.value = false;
   console.log("傳給modal");
   photoFor.value = item;
+};
+
+// 增加瀏覽次數
+const addView = (photoId) => {
+  axios
+    .put(
+      `https://localhost:7259/api/Statistic/AddView`,
+      {
+        photoId: photoId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+        },
+      }
+    )
+    .then((response) => {
+      console.log(response.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 // 開啟編輯照片

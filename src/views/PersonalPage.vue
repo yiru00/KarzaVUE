@@ -23,7 +23,7 @@
                 <img
                   v-if="memberProfile.source != null"
                   class="imgPhoto mb-3 mb-sm-3 me-md-3 me-xl-0 mb-lg-2"
-                  :src="memberProfile.source"
+                  :src="`https://localhost:7259/Images/${memberProfile.source}`"
                   :alt="memberProfile.source"
                 />
                 <img
