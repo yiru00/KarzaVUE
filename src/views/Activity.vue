@@ -347,12 +347,12 @@ export default {
 
 /* 輪播圖 start*/
 .newActivityCarousel {
-  height: 90vh;
+  height: 80vh;
 }
 
 .carouselImg img {
   width: 100%;
-  height: 90vh;
+  height: 80vh;
   object-fit: cover;
 }
 

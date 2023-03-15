@@ -580,7 +580,7 @@ img {
   background: #afc7d8;
   color: #fff;
 }
-.modal-content a,
+.Mcontent a,
 .rigister,
 .forgetpassword {
   text-decoration: none;

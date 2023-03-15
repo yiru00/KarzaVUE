@@ -123,7 +123,7 @@
         <div class="row justify-content-center m-4">
           <div class="col-12 col-md-6">
             <h5>活動說明</h5>
-            <div id="description">
+            <div id="description" class="description">
               {{ details.activityDescription }}
             </div>
           </div>
@@ -1039,7 +1039,6 @@ a {
   background-color: #fcf0f0;
   white-space: pre-wrap;
   word-wrap: break-word;
-  white-space: pre-wrap;
 }
 .qerromsg {
   color: #d39899;
@@ -1074,7 +1073,7 @@ a {
   object-fit: cover;
 }
 .instructorCard {
-  width: 300px;
+  width: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1086,6 +1085,11 @@ a {
   font-size: 20px;
   color: #8991a9;
   margin-bottom: 20px;
+}
+.instructorDes,
+.description {
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 /* 活動圖、活動資訊 */
