@@ -4,85 +4,75 @@
       <div class="col-lg-8">
         <p class="pb-2 textset">購物車商品</p>
 
-        <div class="card">
-          <div class="card-scroll-x">
-            <div class="table-responsive px-md-4 px-2 pt-3">
-              <table class="table table-borderless">
-                <tbody>
-                  <!-- testtttt -->
-                  <div
-                    v-for="(item, i) in cartsSelect"
-                    :key="item.Id"
-                    class="row justify-content-center align-items-center"
-                  >
-                    <div class="col-6">
-                      <div class="d-flex align-items-center">
-                        <div class="">
-                          <img class="pic" :src="item.Cover" alt="" />
-                        </div>
-                        <div class="ps-3 d-flex flex-column">
-                          <p class="fw-bold ps-1">
-                            {{ item.Name }}
-                          </p>
-                        </div>
+        <div class="">
+          <div class="px-4">
+            <div>
+              <!-- testtttt -->
+              <div v-for="(item, i) in cartsSelect" :key="item.Id" class="row">
+                <div
+                  class="row justify-content-center align-items-center mb-3 carset"
+                >
+                  <div class="col-6">
+                    <div class="d-flex align-items-center">
+                      <div class="">
+                        <img class="pic" :src="item.Cover" alt="" />
                       </div>
-                    </div>
-
-                    <div class="col-4">
-                      <div class="d-flex align-items-center">
-                        <span class="pe-2 text-muted">數量</span>
-
-                        <button class="btn btn-link px-2 pointer">
-                          <i
-                            class="fa-solid fa-minus"
-                            @click.stop="
-                              addToCart(item, 1, `.count-input-${i}`)
-                            "
-                          ></i>
-                        </button>
-
-                        <span class="px-3">
-                          <input
-                            class="qtyinput text-center"
-                            :class="`count-input-${i}`"
-                            v-model="item.Qty"
-                            type="input"
-                            @blur.stop="addToCart(item, 2, `.count-input-${i}`)"
-                          />
-                        </span>
-
-                        <button class="btn btn-link px-2">
-                          <i
-                            class="fa-solid fa-plus pointer"
-                            @click.stop="
-                              addToCart(item, 0, `.count-input-${i}`)
-                            "
-                          ></i>
-                        </button>
-
-                        <div class="ms-4 pointer">
-                          <a
-                            class="text-dark"
-                            @click.stop="removeCartItem(item)"
-                          >
-                            <i class="fa-solid fa-trash-can"></i>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-2">
-                      <div class="d-flex align-items-center">
-                        <a> ${{ item.Price }} </a>
+                      <div class="ps-3 d-flex flex-column">
+                        <p class="fw-bold ps-1">
+                          {{ item.Name }}
+                        </p>
                       </div>
                     </div>
                   </div>
 
-                  <tr v-show="cartsSelect.length == 0">
-                    <td class="text-center">購物車無商品</td>
-                  </tr>
-                  <!-- testtttt -->
-                </tbody>
-              </table>
+                  <div class="col-4">
+                    <div class="row align-items-center justify-content-between">
+                      <span class="text-muted col-3">數量</span>
+
+                      <button class="btn btn-link pointer col-2">
+                        <i
+                          class="fa-solid fa-minus"
+                          @click.stop="addToCart(item, 1, `.count-input-${i}`)"
+                        ></i>
+                      </button>
+
+                      <div
+                        class="col-3 align-items-center justify-content-center"
+                      >
+                        <input
+                          class="qtyinput text-center"
+                          :class="`count-input-${i}`"
+                          v-model="item.Qty"
+                          type="input"
+                          @blur.stop="addToCart(item, 2, `.count-input-${i}`)"
+                        />
+                      </div>
+
+                      <button class="btn btn-link col-2">
+                        <i
+                          class="fa-solid fa-plus pointer"
+                          @click.stop="addToCart(item, 0, `.count-input-${i}`)"
+                        ></i>
+                      </button>
+
+                      <div class="pointer col-2">
+                        <a class="text-dark" @click.stop="removeCartItem(item)">
+                          <i class="fa-solid fa-trash-can"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-2">
+                    <div class="d-flex align-items-center ms-3">
+                      <p>${{ item.Price }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div v-show="cartsSelect.length == 0">
+                <div class="text-center">購物車無商品</div>
+              </div>
+              <!-- testtttt -->
             </div>
           </div>
         </div>
@@ -102,7 +92,7 @@
             <input
               v-model="adressinput"
               type="text"
-              class="buyinput test-input"
+              class="buyinput"
               placeholder="住址"
               @blur="getAdressInput"
             />
@@ -113,7 +103,7 @@
               v-model="couponinput"
               @blur.stop="getCoupon"
               type="text"
-              class="buyinput test-input"
+              class="buyinput"
               placeholder="折價券代碼"
             />
           </div>
@@ -670,6 +660,7 @@ export default {
   padding: 0;
   border-radius: 0.5rem;
 }
+
 .textset {
   font-size: 15px;
   font-weight: bold;
@@ -680,10 +671,16 @@ export default {
 }
 </style>
 <style scoped>
-.test-input:focus {
+.carset {
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+  background-color: #fff;
+  padding: 10px;
+}
+.buyinput:focus {
   border: 10px solid #05174f;
   background: #d4d9ec;
-  transition: 0.8s;
+  transition: 0.5s;
 }
 .cash-view {
   line-height: 1rem;
@@ -694,30 +691,19 @@ export default {
 
   background-color: #f8e4e4;
 }
-.prozone {
-  min-width: 380px;
-}
-.numzone {
-  min-width: 200px;
-}
-.pricezone {
-  min-width: 60px;
-}
-.card {
-  position: relative;
 
-  background: #fff;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-}
 .addrText {
   white-space: nowrap;
+}
+.qtyinput {
+  width: 100%;
 }
 .buy {
   padding: 15px;
   position: relative;
   background: #fff;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
+  border-radius: 0.5rem;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -731,16 +717,12 @@ export default {
   border: 1px solid #8991a9;
   opacity: 0.8;
 
-  border-radius: 0.25rem;
+  border-radius: 0.5rem;
   color: #444444;
-}
-.buyinput input:focus {
-  border: 5px solid #010511 !important;
 }
 .cash-view .pic {
   width: 110px;
   height: 90px;
-  margin-right: 20px;
 }
 .cash-view td {
   vertical-align: middle;
@@ -804,10 +786,6 @@ export default {
 }
 
 /* 自己設最小高度 */
-.cash-view .card-scroll-x {
-  max-height: 500px;
-  overflow-y: auto;
-}
 
 .cash-view .adressinput {
   font-size: 14px;
