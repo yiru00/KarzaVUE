@@ -69,7 +69,7 @@
               </RouterLink>
             </div>
           </div>
-          <div v-if="loginMemberId == memberId">
+          <div v-if="loginMemberId == photoFor.authorId">
             <!-- 選項 編輯/刪除相片 v-if="memberId==memberId" -->
             <div class="dropdown dropdown-center" v-if="!edit">
               <button
