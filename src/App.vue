@@ -272,6 +272,15 @@ export default {
               <RouterLink
                 exact
                 active-class="active1"
+                to="/Product"
+                class="nav-link navLink"
+                >商城</RouterLink
+              >
+            </li>
+            <li class="nav-item">
+              <RouterLink
+                exact
+                active-class="active1"
                 to="/Community"
                 class="nav-link navLink"
                 >社群</RouterLink
@@ -282,9 +291,9 @@ export default {
               <RouterLink
                 exact
                 active-class="active1"
-                to="/Product"
+                to="/forum"
                 class="nav-link navLink"
-                >商城</RouterLink
+                >論壇</RouterLink
               >
             </li>
           </ul>

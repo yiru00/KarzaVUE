@@ -21,6 +21,18 @@ const router = createRouter({
       component: HomeView,
     },
     {
+      path: "/Product",
+      name: "Product",
+      //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
+      component: () => import("../views/Show-product.vue"),
+    },
+    {
+      path: "/Product/:id",
+      name: "DetailProduct",
+      //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
+      component: () => import("../views/Product/DetailProduct.vue"),
+    },
+    {
       path: "/ShoppingCart",
       name: "ShoppingCart",
       //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
@@ -63,26 +75,33 @@ const router = createRouter({
       //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
       component: () => import("../views/Member/EditPassword.vue"),
     },
+
+    {
+      path: "/Forum",
+      name: "Forum",
+      //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
+      component: () => import("../views/Forum.vue"),
+    },
+
+    {
+      path: "/Forum/Create",
+      name: "Create",
+      component: () => import("../views/Forum/CreateArticle.vue"),
+    },
+
+    {
+      path: "/Forum/ArticleDetail/:Articleid",
+      name: "Detail",
+      component: () => import("../views/Forum/ArticleDetail.vue"),
+      props: true,
+    },
+
     {
       path: "/Activity",
       name: "Activity",
       //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
       component: () => import("../views/Activity.vue"),
     },
-    
-    {
-      path: "/Product",
-      name: "Product",
-      //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
-      component: () => import("../views/Show-product.vue"),
-    },
-    {
-      path: "/Product/:id",
-      name: "DetailProduct",
-      //動態載入（有進到這裡才會載入資源，適合有串接api的元件）
-      component: () => import("../views/Product/DetailProduct.vue"),
-    },
-
     //活動詳細頁面(動態router
     {
       path: "/Activity/:id",
@@ -186,30 +205,7 @@ const router = createRouter({
         },
       ],
     },
-    //我的紀錄
-    // {
-    //   path: "/Record",
-    //   name: "Record",
-    //   component: () => import("../views/Record.vue"),
-    //   children: [
-    //     //預設顯示活動收藏
-    //     {
-    //       path: "",
-    //       name: "ActivitySaveRecord",
-    //       component: import("../views/Record/ActivitySaved.vue"),
-    //     },
-    //     {
-    //       path: "/ActivitySaved",
-    //       name: "ActivitySaveRecord",
-    //       component: import("../views/Record/ActivitySaved.vue"),
-    //     },
-    //     {
-    //       path: "/ActivityEnrolled",
-    //       name: "ActivityEnrolledRecord",
-    //       component: import("../views/Record/ActivityEnrolled.vue"),
-    //     },
-    //   ],
-    // },
+
     //要在最後一個(可能被動態router攔截)
     // 網址錯誤會跑到404那頁
     {
