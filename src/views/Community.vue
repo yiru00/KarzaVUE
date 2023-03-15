@@ -40,7 +40,7 @@
               <img
                 v-if="item.source != null"
                 class="imgPhoto"
-                :src="item.source"
+                :src="`https://localhost:7259/Images/${item.source}`"
                 alt=""
               />
               <img v-else class="imgPhoto" src="../assets/userPic.png" alt="" />
@@ -85,6 +85,7 @@ axios
 <style scoped>
 .karzaFS {
   font-size: 80px;
+  color: #808080;
 }
 .user {
   max-width: 360px;

@@ -8,9 +8,11 @@
 
 <script setup>
 import { useRoute } from "vue-router";
+
 const route = useRoute();
 const memberId = route.params.memberId;
 let dated;
+
 axios({
   method: "POST",
   url: "https://localhost:7259/api/Statistic/TopViews",

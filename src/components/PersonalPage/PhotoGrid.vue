@@ -1,13 +1,5 @@
 <template>
   <!-- 呈現內容 component使用-->
-  <button
-    data-bs-toggle="modal"
-    data-bs-target="#loginModal"
-    type="button"
-    class="loginBtn"
-  >
-    登入
-  </button>
   <div
     class="col-12 col-sm-6 col-md-4 col-lg-3"
     v-for="item in allPhotos"
@@ -21,8 +13,18 @@
         data-bs-toggle="modal"
         data-bs-target="#photoModal"
         :alt="item.source"
+        @click="addView(item.id)"
       />
-      <button class="bookMarkBtn" @click.stop="collectPhoto(item)">
+      <button
+        class="bookMarkBtn"
+        v-if="!token"
+        data-bs-toggle="modal"
+        data-bs-target="#loginModal"
+      >
+        <i class="fa-solid fa-bookmark text-light" v-if="item.isCollection"></i>
+        <i class="fa-regular fa-bookmark text-light" v-else></i>
+      </button>
+      <button class="bookMarkBtn" v-else @click.stop="collectPhoto(item)">
         <i class="fa-solid fa-bookmark text-light" v-if="item.isCollection"></i>
         <i class="fa-regular fa-bookmark text-light" v-else></i>
       </button>
@@ -67,7 +69,7 @@
               </RouterLink>
             </div>
           </div>
-          <div v-if="loginMemberId == memberId">
+          <div v-if="loginMemberId == photoFor.authorId">
             <!-- 選項 編輯/刪除相片 v-if="memberId==memberId" -->
             <div class="dropdown dropdown-center" v-if="!edit">
               <button
@@ -109,7 +111,23 @@
               class="card-img-top rounded-0"
               :alt="photoFor.source"
             />
-            <button class="bookMarkBtn" @click.stop="collectPhoto(photoFor)">
+            <button
+              class="bookMarkBtn"
+              v-if="!token"
+              data-bs-toggle="modal"
+              data-bs-target="#loginModal"
+            >
+              <i
+                class="fa-solid fa-bookmark text-light"
+                v-if="photoFor.isCollection"
+              ></i>
+              <i class="fa-regular fa-bookmark text-light" v-else></i>
+            </button>
+            <button
+              class="bookMarkBtn"
+              v-else
+              @click.stop="collectPhoto(photoFor)"
+            >
               <i
                 class="fa-solid fa-bookmark text-light"
                 v-if="photoFor.isCollection"
@@ -163,6 +181,7 @@ const memberId = computed(() => route.params.memberId);
 
 //token
 const token = ref($.cookie("token"));
+
 const loginMemberId = ref("");
 //判斷登入者的id
 axios
@@ -187,9 +206,33 @@ const photoModal = (item) => {
   photoFor.value = item;
 };
 
+// 增加瀏覽次數
+const addView = (photoId) => {
+  axios
+    .put(
+      `https://localhost:7259/api/Statistic/AddView`,
+      {
+        photoId: photoId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+        },
+      }
+    )
+    .then((response) => {
+      console.log(response.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
 // 開啟編輯照片
 const editPhoto = (item) => {
   edit.value = true;
+  editTitle.value = photoFor.value.title;
+  editCamera.value = photoFor.value.camera;
 };
 // 執行編輯相片
 const editComplete = () => {
@@ -329,6 +372,8 @@ watch(memberId, () => {
 .authorLink {
   text-decoration: none;
   color: black;
+  height: fit-content;
+  width: fit-content;
 }
 .authorLink:hover {
   color: gray;
@@ -393,6 +438,8 @@ watch(memberId, () => {
   border-radius: 50%;
   width: 60px;
   height: 60px;
+  object-fit: cover;
+  background-size: cover;
 }
 .photoModalImage img {
   object-fit: cover;

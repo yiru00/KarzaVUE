@@ -59,34 +59,38 @@
               </RouterLink>
             </div>
           </div>
-          <!-- 選項 編輯/刪除相片 v-if="memberId==memberId" -->
-          <div class="dropdown dropdown-center" v-if="!edit">
-            <button
-              type="button"
-              class="photoModalMoreBtn"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <i class="fa-solid fa-ellipsis fs-3"></i>
+          <div v-if="loginMemberId == photoFor.authorId">
+            <!-- 選項 編輯/刪除相片 v-if="memberId==memberId" -->
+            <div class="dropdown dropdown-center" v-if="!edit">
+              <button
+                type="button"
+                class="photoModalMoreBtn"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i class="fa-solid fa-ellipsis fs-3"></i>
+              </button>
+              <ul class="dropdown-menu moreUl">
+                <li
+                  data-bs-dismiss="modal"
+                  class="w-100 h-100 d-flex justify-content-center deleteLi"
+                  @click="deletePhoto(photoFor.id)"
+                >
+                  刪除
+                </li>
+                <li
+                  class="w-100 h-100 d-flex justify-content-center editLi"
+                  @click="editPhoto(photoFor)"
+                >
+                  編輯
+                </li>
+              </ul>
+            </div>
+            <!-- 修改按鈕 -->
+            <button v-else class="editConfirm" @click="editComplete">
+              修改
             </button>
-            <ul class="dropdown-menu moreUl">
-              <li
-                data-bs-dismiss="modal"
-                class="w-100 h-100 d-flex justify-content-center deleteLi"
-                @click="deletePhoto(photoFor.id)"
-              >
-                刪除
-              </li>
-              <li
-                class="w-100 h-100 d-flex justify-content-center editLi"
-                @click="editPhoto(photoFor)"
-              >
-                編輯
-              </li>
-            </ul>
           </div>
-          <!-- 修改按鈕 -->
-          <button v-else class="editConfirm" @click="editComplete">修改</button>
         </div>
         <div
           class="modal-body d-flex justify-content-center flex-column align-items-center p-0"
@@ -146,7 +150,25 @@ const edit = ref(false);
 const editTitle = ref("");
 const editCamera = ref("");
 const memberId = computed(() => route.params.memberId);
+//token
 const token = ref($.cookie("token"));
+const loginMemberId = ref("");
+//判斷登入者的id
+axios
+  .get("https://localhost:7259/api/Members/Read", {
+    headers: {
+      Authorization: `Bearer ${token.value}`,
+    },
+  })
+  .then((response) => {
+    loginMemberId.value = response.data;
+    console.log("登入ID");
+    console.log(loginMemberId.value);
+    console.log(memberId);
+  })
+  .catch((error) => {
+    console.log("MY未登入");
+  });
 
 // modal資料
 const photoModal = (item) => {
@@ -156,6 +178,8 @@ const photoModal = (item) => {
 // 開啟編輯照片
 const editPhoto = (item) => {
   edit.value = true;
+  editTitle.value = photoFor.value.title;
+  editCamera.value = photoFor.value.camera;
 };
 // 執行編輯相片
 const editComplete = () => {

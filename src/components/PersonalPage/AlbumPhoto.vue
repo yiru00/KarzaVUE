@@ -46,7 +46,16 @@
         data-bs-target="#photoModal"
         :alt="item.source"
       />
-      <button class="bookMarkBtn" @click.stop="collectPhoto(item)">
+      <button
+        class="bookMarkBtn"
+        v-if="!token"
+        data-bs-toggle="modal"
+        data-bs-target="#loginModal"
+      >
+        <i class="fa-solid fa-bookmark text-light" v-if="item.isCollection"></i>
+        <i class="fa-regular fa-bookmark text-light" v-else></i>
+      </button>
+      <button class="bookMarkBtn" v-else @click.stop="collectPhoto(item)">
         <i class="fa-solid fa-bookmark text-light" v-if="item.isCollection"></i>
         <i class="fa-regular fa-bookmark text-light" v-else></i>
       </button>
@@ -91,7 +100,7 @@
               </RouterLink>
             </div>
           </div>
-          <div v-if="loginMemberId == memberId">
+          <div v-if="loginMemberId == photoFor.authorId">
             <!-- 選項 編輯相片/移出相簿 v-if="memberId==memberId" -->
             <div class="dropdown dropdown-center" v-if="!edit">
               <button
@@ -133,7 +142,23 @@
               class="card-img-top rounded-0"
               :alt="photoFor.source"
             />
-            <button class="bookMarkBtn" @click.stop="collectPhoto(photoFor)">
+            <button
+              class="bookMarkBtn"
+              v-if="!token"
+              data-bs-toggle="modal"
+              data-bs-target="#loginModal"
+            >
+              <i
+                class="fa-solid fa-bookmark text-light"
+                v-if="photoFor.isCollection"
+              ></i>
+              <i class="fa-regular fa-bookmark text-light" v-else></i>
+            </button>
+            <button
+              class="bookMarkBtn"
+              v-else
+              @click.stop="collectPhoto(photoFor)"
+            >
               <i
                 class="fa-solid fa-bookmark text-light"
                 v-if="photoFor.isCollection"
@@ -297,6 +322,8 @@ const deleteAlbum = () => {
 // 開啟編輯照片
 const editPhoto = (item) => {
   edit.value = true;
+  editTitle.value = photoFor.value.title;
+  editCamera.value = photoFor.value.camera;
 };
 // 執行編輯相片
 const editComplete = () => {
@@ -372,6 +399,7 @@ watch(deleteReload, () => {
       .then((response) => {
         allPhotos.value = response.data;
         deleteReload.value = false;
+        if (allPhotos.value[0].source == null) allPhotos.value = [];
       })
       .catch((error) => console.log(error));
   }
@@ -390,11 +418,13 @@ axios
   .then((response) => {
     allPhotos.value = response.data;
     albumName.value = allPhotos.value[0].albumName;
+    if (allPhotos.value[0].source == null) allPhotos.value = [];
   })
   .catch((error) => console.log(error));
 
 // 編輯相簿撈所有照片
 const albumGetPhotos = () => {
+  albumEditTitle.value = albumName.value;
   axios
     .get(
       `https://localhost:7259/api/Photo/AllPhotos?memberId=${memberId.value}`,
