@@ -2,8 +2,8 @@
     <div class="container article_banners">
       <div class="row justify-content-center">
           <div class="article_insert col-md-10" >
-              <div class="card-header d-flex justify-content-between article_title">
-                  <a class="nav-link active fs-3" aria-current="true">
+              <div class="card-header d-flex justify-content-between article_title" >
+                  <a class="nav-link active fs-3" aria-current="true" @click="showinput" >
                   創建文章
                   </a>
               </div>
@@ -23,7 +23,7 @@
               </div>
               <div class=" d-flex flex-column align-items-center justify-content-center">
                   <div class="insert mb-2">
-                      <textarea class="form-control textareaColor" v-model="title" name="" id="" cols="102" rows="0" placeholder="標題..."></textarea>
+                      <textarea class="form-control textareaColor" v-model="title"  name="" id="" cols="102" rows="0" placeholder="標題..."></textarea>
                   </div>
                   <div>
                       <textarea class="form-control textareaColor" v-model="message" name="" id="" cols="102" rows="10" placeholder="內文..."></textarea>
@@ -37,7 +37,10 @@
                           <img :src="photoData" alt="error" v-show="photoshow">
                       </div>
                   </div>
+                  <div class="alertmessage">{{alertmess}}</div>
+
                   <div class="insert_check">
+
                       <div>
                           <button type="button" class="btn bottomBtn" @click="createnow" >新增</button>
                       </div> 
@@ -62,7 +65,7 @@ export default {
         return {
             photoData: "",
             photoshow: false,
-            photofile: {},
+            photofile: {},          
 
 
             objArticleforumall: [],
@@ -70,6 +73,7 @@ export default {
             title:"",
             message:"",
             objArticleforumallid:"",
+            alertmess:"",
         }
     },
 
@@ -102,7 +106,7 @@ export default {
             console.log(this.title);
             console.log(this.description);
 
-            const formData = new FormData();
+            const formData = new FormData();           
             formData.append("Id", 2);
             formData.append("File", this.photofile);
             formData.append("Title", this.title);
@@ -117,18 +121,30 @@ export default {
             })
         },
 
+        showinput(){
+          this.title="旅行最大的好處，是走著走著，在一個際遇下，突然重新認識了自己。"
+          this.message=`每次旅行中，
+          我會刻意讓自己有一個獨處的時空，
+          企圖找回那個自我的存在感。旅行這種事大多是相當累人的。
+          不過有些知識是疲累之後才能親自學到的。
+          有些喜悅是筋疲力盡後才能獲得的。
+          這是我繼續旅行所得到的真理。`
+        },
+
 
         async callCreateArticleApi(articlesave){
             console.log(this.token)
+           
             await axios.post(`https://localhost:7259/api/Article/CreateArticle`, articlesave, {
               headers: {
                 Authorization: `Bearer ${this.token}`,
               },
             }
             )
-            .then(()=> {
-                console.log("成功")
+            .then(()=> {             
+              console.log("成功")
                 this.$router.push("/Forum")
+                
             })
             .catch(error=> {
                 console.log(error)
@@ -149,9 +165,16 @@ export default {
         },
 
         async createnow() {
-            let id = await this.fetchMemberId();
 
+          if(!this.photofile||!this.message||!this.title||!this.objArticleforumallid)
+              {
+                this.alertmess="請正確填寫";
+                return;
+              }
+
+            let id = await this.fetchMemberId();
             console.log(Number(this.objArticleforumallid))
+            
 
             const formData = new FormData();
             formData.append("MemberId", id);
@@ -197,6 +220,13 @@ export default {
 </script>
 
 <style scoped>
+
+.alertmessage{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #D39899;
+}
 .textareaColor{
   background-color: rgba(175, 199, 216,0.1);
   border: 0;

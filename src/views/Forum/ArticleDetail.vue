@@ -4,9 +4,13 @@
       <div class="article_insert">
         <div class="card-header d-flex justify-content-between article_title">
           <div class="d-flex align-items-center mb-2">
-            <p class="m-0">{{ objArticleDetail.nickName }}</p>
+              <img
+              class="content_img"
+              :src="`https://localhost:7259/Images/${objArticleDetail.photoSticker}`"
+              alt="" >
+            <p class="m-0 ms-3">{{ objArticleDetail.nickName }}</p>
             <p class="ms-2">
-              {{ objArticleDetail.time.replace("T", " ").slice(0, 16) }}
+              {{ objArticleDetail.time.replace("T", " ").slice(0, 18) }}
             </p>
             <p class="ms-2 foremName">{{ objArticleDetail.forumName }}</p>
           </div>
@@ -28,8 +32,9 @@
                 <i class="fa-regular fa-trash-can fs-3 text-danger"></i>
               </button>
             </div>
-            <div class="mt-3">
-              <p class="m-0">{{ objArticleDetail.content }}</p>
+            
+            <div class="mt-3 " >
+              <p class="m-0 changerow">{{ objArticleDetail.content }}</p>
             </div>
             <div class="imgate">
               <img
@@ -52,8 +57,13 @@
           :key="item.id"
         >
           <div class="comment">
-            <div class="ms-3">
-              <p class="me-1">{{ item.nickName }} :</p>
+            <div class="ms-3 d-flex align-items-center">
+              <img
+              class="contentmessage_img"
+              :src="`https://localhost:7259/Images/${item.photoSticker}`"
+              alt=""
+            />
+              <p class="ms-3 me-1">{{ item.nickName }} :</p>
               <p class="m-0 commentContent">{{ item.content }}</p>
             </div>
 
@@ -65,12 +75,12 @@
                   this.userMemberId === this.objArticleDetail.memberId
                 "
                 type="button"
-                class="btn btn-primary"
+                class="btn btndelete"
                 @click="removeMessage($event, item.id)"
               >
                 刪除
               </button>
-              <p class="ms-3">{{ item.time.replace("T", " ").slice(0, 16) }}</p>
+              <p class="ms-3">{{ item.time.replace("T", " ").slice(0, 18) }}</p>
             </div>
           </div>
           <!-- Insert -->
@@ -205,15 +215,33 @@ export default {
         })
         .then((response) => {
           console.log("新增留言成功");
-          const allComment = {
-            id: response.data,
-            time: new Date().toLocaleString(),
-            memberId: this.userMemberId,
-            nickName: this.userNickname,
-            content: this.createMessage,
-          };
-          this.objArticleDetail.messageComment.push(allComment);
+          // const allComment = {
+          //   id: response.data,
+          //   time: new Date().toLocaleString(),
+          //   memberId: this.userMemberId,
+          //   nickName: this.userNickname,
+          //   content: this.createMessage,
+          // };
+          // this.objArticleDetail.messageComment.push(allComment);
+
           this.createMessage = "";
+        });
+
+        await axios
+        .get(
+          `https://localhost:7259/api/Article/ArticleDetails?ArticleId=${this.Articleid}`,
+          {
+            headers: {
+              Authorization: `Bearer ${this.token}`,
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response.data);
+          this.objArticleDetail = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
         });
     },
 
@@ -298,6 +326,21 @@ export default {
 </script>
 
 <style scoped>
+
+.changerow{
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.btndelete{
+  background-color: #d39899;
+  border-radius: 5px;
+  padding: 7px 13px;
+  height: 40px;
+  font-size: 17px;
+  border: none;
+  color: white;
+}
 .foremName {
   margin: 0;
   background-color: #f6f6f6;
@@ -401,7 +444,7 @@ a {
 .article_title {
   padding: 5px 20px;
   background: none;
-  border-bottom: 1px solid #d8d8d8;
+  /* border-bottom: 1px solid #d8d8d8; */
 }
 .comment_title {
   padding: 15px;
@@ -427,12 +470,22 @@ a {
   border-radius: 15px;
   padding-left: 15px;
 }
+
+.contentmessage_img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  border: 1px solid white;
+  object-fit: cover;
+}
 .content_img {
   width: 60px;
   height: 60px;
   border-radius: 50px;
   box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
   border: 1px solid white;
+  object-fit: cover;
 }
 .btnbox {
   margin-left: 10px;
