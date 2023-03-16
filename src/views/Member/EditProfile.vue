@@ -93,6 +93,7 @@ export default {
         },
       })
       .then((response) => {
+
         if(response.data.birthOfDate)
         this.birthday = response.data.birthOfDate.substring(0,10);
 
@@ -127,15 +128,11 @@ export default {
     },
     async submitForm() {
       if (
-        !this.selectedFile ||
         !this.realname ||
         !this.nickname ||
-        !this.birthday ||
-        !this.mobile ||
-        !this.address ||
-        !this.about
+        !this.mobile
       ) {
-        this.showAlert("填完所有資料開始最好體驗");
+        this.showAlert("填完姓名跟手機號碼，才能正常使用所有功能喔~");
         return;
       }
 
@@ -198,9 +195,6 @@ export default {
   justify-content: space-around;
   align-items: center;
 }
-/* .edit_profile_left{
-
-        } */
 .edit_profile_left img {
   width: 250px;
   height: 250px;
@@ -230,7 +224,8 @@ export default {
   align-items: end;
 }
 .edit_profile_right_info input {
-  /* margin-left: 20px; */
+  margin-right: 25px;
+  width: 220px;
   height: 30px;
   background: none;
   border: none;
