@@ -1,5 +1,5 @@
 <template>
-  <div class="container cash-view mt-4 p-0">
+  <div class="container cash-view mt-4 p-0" data-aos="fade-up">
     <div class="row px-md-4 px-2 pt-4">
       <div class="col-lg-8">
         <p class="pb-2 textset">購物車商品</p>
@@ -297,6 +297,8 @@ export default {
       } else {
         this.coupondiscountdata = "";
         this.couponmessage = "";
+        this.countedPrice = 0;
+        this.showdiscountprice = "$0";
       }
     },
 

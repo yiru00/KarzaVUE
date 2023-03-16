@@ -2,11 +2,11 @@
   <div class="container">
     <div class="searchPage">
       <h4 class="align-self-center mt-4">活動總覽</h4>
-      <form class="row inputSearch">
+      <div class="row inputSearch">
         <div class="col-lg-3 col-md-4 col-12">
           <input
             v-model="input.activityName"
-            @keydown.enter="fetchActivityData"
+            @change="fetchActivityData"
             class="inputName"
             name="activityName"
             id="activityName"
@@ -81,7 +81,7 @@
 
           之後的活動
         </div>
-      </form>
+      </div>
 
       <div v-show="!isempty && !isloading" class="row" id="resultCard">
         <div
