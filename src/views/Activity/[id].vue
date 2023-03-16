@@ -991,6 +991,7 @@ a {
   height: 40px;
   border-radius: 50%;
   background-size: cover;
+  object-fit: cover;
 }
 .qcontent {
   display: inline-block;

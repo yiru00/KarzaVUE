@@ -281,14 +281,14 @@ export default {
             if (res.status == 204 || res.status == 200) {
               //折扣數
               this.coupondiscountdata = res.data.data.discount;
-              this.couponmessage = `<span class="text-success">${res.data.messsage}<\/span>`;
+              this.couponmessage = `<span style="color: #8991a9;">${res.data.messsage}<\/span>`;
               this.couponID = res.data.data.id;
               this.countedPrice = this.totalOrigin - this.getTotal;
               // alert(`${this.couponID}`);
             }
           })
           .catch((err) => {
-            this.couponmessage = `<span class="text-danger">${err.response.data.messsage}<\/span>`;
+            this.couponmessage = `<span style="color: #d39899;">${err.response.data.messsage}<\/span>`;
             this.coupondiscountdata = "";
             this.couponinput = "";
             this.countedPrice = 0;
@@ -722,6 +722,7 @@ export default {
   border-radius: 0.5rem;
   color: #444444;
 }
+
 .cash-view .pic {
   width: 110px;
   height: 90px;
