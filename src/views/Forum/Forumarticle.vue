@@ -7,12 +7,13 @@
           {{ item.nickName }}
         </p>
       </div>
-      <p class="m-0 ms-3">{{ item.time.replace("T", " ").slice(0, 16) }}</p>
+      <p class="m-0 ms-3">{{ item.time.replace("T", " ").slice(0, 18) }}</p>
     </div>
     <router-link
       :to="`/Forum/ArticleDetail/${item.articleId}`"
       class="detailLink fs-4"
       >{{ item.title }}
+      
 
       <img
         class="imgsss"
