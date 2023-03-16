@@ -441,7 +441,6 @@ export default {
     </footer>
   </div>
 </template>
-
 <style>
 * {
   font-family: "Noto Serif TC", serif;
@@ -451,6 +450,9 @@ body {
   background-color: #fcf7f0;
   /* height: 300vh; */
 }
+</style>
+
+<style scoped>
 main {
   min-height: 100vh;
   padding-bottom: 70px;
