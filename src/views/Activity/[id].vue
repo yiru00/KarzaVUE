@@ -158,7 +158,7 @@
 
         <div class="row justify-content-center m-4">
           <div class="col">
-            <h5>查看路線</h5>
+            <h5 @click="demoMap">查看路線</h5>
             <div class="panel" id="floating-panel">
               <label for="mode">交通方式： </label>
               <select v-model="map.selectedMode" id="mode" class="mode">
@@ -188,7 +188,7 @@
 
         <div class="row justify-content-center m-4">
           <div class="col">
-            <h5>問與答</h5>
+            <h5 @click="demoQ">問與答</h5>
 
             <div v-if="QandA.length > 0">
               <div
@@ -901,6 +901,16 @@ export default {
               });
           }
         });
+    },
+    //#endregion
+
+    //#region demo用
+    demoQ() {
+      this.askContent = "你好\n請問有提供借用器材嗎";
+    },
+    demoMap() {
+      this.map.origin = "聖德基督學院";
+      this.initMap();
     },
     //#endregion
   },
