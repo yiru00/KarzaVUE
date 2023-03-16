@@ -71,7 +71,6 @@ import axios from "axios";
 export default {
   data() {
     return {
-
         realname:'',
         nickname:'',
         birthday:'',
@@ -94,14 +93,18 @@ export default {
       })
       .then((response) => {
 
-        if(response.data.birthOfDate)
-        this.birthday = response.data.birthOfDate.substring(0,10);
+        if(response.data.birthOfDate) this.birthday = response.data.birthOfDate.substring(0,10);
 
         this.realname = response.data.realName;
         this.nickname = response.data.nickName;
         this.mobile = response.data.mobile;
-        this.address = response.data.address;
-        this.about = response.data.about;
+
+        if (response.data.address === null) this.address = ''
+        else this.address = response.data.address;
+
+        if (response.data.about === null) this.about = ''
+        else this.about = response.data.about;
+        
         if (response.data.photoSticker) this.photoData = `https://localhost:7259/Images/${response.data.photoSticker}`;
         else this.photoData= new URL("../../assets/userPic.png", import.meta.url)
         console.log(response.data)
@@ -198,6 +201,7 @@ export default {
 .edit_profile_left img {
   width: 250px;
   height: 250px;
+  object-fit: cover;
   border-radius: 50%;
   border: 1px solid #000;
 }
