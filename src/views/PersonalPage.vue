@@ -98,7 +98,7 @@
                   <li>
                     <RouterLink
                       :to="`/Community/PersonalPage/${memberId}/Statics/DateViews`"
-                      >7天總瀏覽</RouterLink
+                      >7天相片瀏覽</RouterLink
                     >
                   </li>
                   <li>
@@ -110,7 +110,7 @@
                   <li>
                     <RouterLink
                       :to="`/Community/PersonalPage/${memberId}/Statics/TopPhotoViews`"
-                      >最高瀏覽照片</RouterLink
+                      >照片排名</RouterLink
                     >
                   </li>
                 </ul>
@@ -477,9 +477,13 @@ watch(memberId, () => {
 }
 
 .imgPhoto {
+  border: 3px solid #fff;
+  box-shadow: 0 1px 5px rgba(25, 25, 25, 0.15);
   border-radius: 50%;
   width: 110px;
   height: 110px;
+  margin-bottom: 20px;
+  object-fit: cover;
 }
 
 .about {

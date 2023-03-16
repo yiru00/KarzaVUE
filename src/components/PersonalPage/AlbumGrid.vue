@@ -83,7 +83,7 @@ axios
 
 .cardSize {
   overflow: hidden;
-  height: 100%;
+  height: 250px;
   width: 100%;
   position: relative;
   float: left;
