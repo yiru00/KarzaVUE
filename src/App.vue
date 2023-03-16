@@ -441,6 +441,7 @@ export default {
     </footer>
   </div>
 </template>
+
 <style>
 * {
   font-family: "Noto Serif TC", serif;
@@ -450,9 +451,17 @@ body {
   background-color: #fcf7f0;
   /* height: 300vh; */
 }
-</style>
-
-<style scoped>
+.btn,
+.nav-link.collapsed,
+.navbar,
+.navbar-collapse.collapse.show,
+.navbar-collapse.collapsing,
+.scrolled,
+.shadow,
+a,
+img {
+  transition: all 0s ease-in-out 0s;
+}
 main {
   min-height: 100vh;
   padding-bottom: 70px;
@@ -527,17 +536,7 @@ main {
   color: #fff;
   /* transition: transform 0.01s; */
 }
-.btn,
-.nav-link.collapsed,
-.navbar,
-.navbar-collapse.collapse.show,
-.navbar-collapse.collapsing,
-.scrolled,
-.shadow,
-a,
-img {
-  transition: all 0s ease-in-out 0s;
-}
+
 .footer {
   position: relative;
   height: 100px;
