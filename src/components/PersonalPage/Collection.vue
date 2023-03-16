@@ -412,6 +412,7 @@ watch(memberId, () => {
   border-radius: 50%;
   width: 60px;
   height: 60px;
+  object-fit: cover;
 }
 .photoModalImage img {
   object-fit: cover;
@@ -448,7 +449,7 @@ watch(memberId, () => {
 
 .cardSize {
   overflow: hidden;
-  height: 100%;
+  height: 250px;
   width: 100%;
   position: relative;
   float: left;
