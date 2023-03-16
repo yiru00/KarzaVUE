@@ -72,7 +72,7 @@ axios({
         plugins: {
           title: {
             display: true,
-            text: "最高瀏覽次數照片",
+            text: "前五名瀏覽次數照片",
           },
           // Accessing labels and making them images
           labels: {
