@@ -15,9 +15,10 @@
               集合地點：<span id="destination">{{ details.address }}</span>
             </p>
             <p>
-              活動名額：{{ details.memberLimit }}人 || 剩餘{{
-                details.memberLimit - details.numOfEnrolment
-              }}人
+              活動名額：{{ details.memberLimit }}人 || 剩餘<span
+                style="color: #d39899"
+                >{{ details.memberLimit - details.numOfEnrolment }}</span
+              >人
             </p>
             <p>報名截止日：{{ details.deadline }}</p>
             <div class="buttonList mt-2">
@@ -906,10 +907,10 @@ export default {
 
     //#region demo用
     demoQ() {
-      this.askContent = "你好\n請問有提供借用器材嗎";
+      this.askContent = "你好\n請問有提供借用器材嗎？";
     },
     demoMap() {
-      this.map.origin = "聖德基督學院";
+      this.map.origin = "台北火車站";
       this.initMap();
     },
     //#endregion
