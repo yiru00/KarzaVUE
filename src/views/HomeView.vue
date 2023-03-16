@@ -74,7 +74,7 @@
         <div class="row d-flex justify-content-between align-items-center">
           <div class="col-lg-4">
             <h2 class="py-5 border-top border-dark" data-aos="fade-right">
-              社群
+              社群&論壇
             </h2>
             <div data-aos="fade-right" data-aos-delay="200">
               <p class="p-0 m-0">分享自己的攝影作品、紀錄生活。</p>
@@ -86,7 +86,7 @@
 
             <p>
               <router-link
-                to="/"
+                to="/Community"
                 class="link-fancy link-dark mt-3"
                 data-aos="fade-right"
                 data-aos-delay="400"

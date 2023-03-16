@@ -32,7 +32,7 @@
       </div>
 
       <div
-        class="col-10 prooutline2 container-fluid collapsing justify-content-center align-items-center"
+        class="col prooutline2 container-fluid collapsing justify-content-center align-items-center"
         :id="`index${item.id}`"
       >
         <div
@@ -50,13 +50,13 @@
             />
           </div>
           <div class="col-5">
-            <small>{{ orderitem.productName }}</small>
+            <p class="text-start">{{ orderitem.productName }}</p>
           </div>
           <div class="col-2">
-            <small>${{ orderitem.productPrice }}</small>
+            <p>數量:{{ orderitem.productNumber }}</p>
           </div>
           <div class="col-2">
-            <small>數量{{ orderitem.productNumber }}</small>
+            <p>${{ orderitem.productPrice }}</p>
           </div>
         </div>
       </div>
@@ -137,14 +137,15 @@ export default {
   justify-content: center;
   align-items: center;
   word-wrap: normal;
+  cursor: pointer;
+  margin-bottom: 10px;
 }
 .prooutline2 {
   border-radius: 0.5rem;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
   word-wrap: normal;
-
-  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.073);
 }
 .line {
   height: 1px;

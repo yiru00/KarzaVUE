@@ -156,10 +156,10 @@ axios
   border: 3px solid #fff;
   box-shadow: 0 1px 5px rgba(25, 25, 25, 0.15);
   border-radius: 50%;
-  height: 100%;
   width: 110px;
   height: 110px;
   margin-bottom: 20px;
+  object-fit: cover;
 }
 .personlink {
   height: 100%;
