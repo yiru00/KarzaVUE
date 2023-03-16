@@ -852,6 +852,7 @@ export default {
                 if (data.result) {
                   this.enrollStatus.statusId = 5;
                   this.enrollStatus.deleteId = data.deleteId;
+                  this.details.numOfEnrolment++;
                   this.showAlert(data.message);
                 } else {
                   this.showAlert(data.message);
@@ -889,6 +890,7 @@ export default {
                 if (data.result) {
                   this.enrollStatus.statusId = 4;
                   this.enrollStatus.deleteId = 0;
+                  this.details.numOfEnrolment--;
                   this.showAlert(data.message);
                 } else {
                   this.showAlert(data.message);
