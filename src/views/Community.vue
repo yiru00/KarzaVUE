@@ -1,7 +1,7 @@
 <template>
   <div class="container mt-4">
     <!-- 搜尋 -->
-    <div class="row">
+    <div class="row fadeAni">
       <div class="col-12 d-flex justify-content-center align-items-center">
         <div class="col-3">
           <p class="karzaFS">KARZA!</p>
@@ -25,30 +25,37 @@
     </div>
     <div class="row gy-4 mb-4">
       <!-- 1張 -->
-      <div
-        class="col-12 col-sm-6 col-md-4 col-lg-3 user"
-        v-for="item in allProfile"
-        :key="item.id"
-      >
-        <RouterLink
-          :to="`/Community/PersonalPage/${item.id}/Photos`"
-          class="personlink"
+      <TransitionGroup name="list">
+        <div
+          class="col-12 col-sm-6 col-md-4 col-lg-3 user"
+          v-for="item in allProfile"
+          :key="item.id"
         >
-          <div class="rounded-3 p-5 userInfo">
-            <!-- Personal information goes here -->
-            <div class="userProfile">
-              <img
-                v-if="item.source != null"
-                class="imgPhoto"
-                :src="`https://localhost:7259/Images/${item.source}`"
-                alt=""
-              />
-              <img v-else class="imgPhoto" src="../assets/userPic.png" alt="" />
-              <h5>{{ item.name }}</h5>
+          <RouterLink
+            :to="`/Community/PersonalPage/${item.id}/Photos`"
+            class="personlink"
+          >
+            <div class="rounded-3 p-5 userInfo">
+              <!-- Personal information goes here -->
+              <div class="userProfile">
+                <img
+                  v-if="item.source != null"
+                  class="imgPhoto"
+                  :src="`https://localhost:7259/Images/${item.source}`"
+                  alt=""
+                />
+                <img
+                  v-else
+                  class="imgPhoto"
+                  src="../assets/userPic.png"
+                  alt=""
+                />
+                <h5>{{ item.name }}</h5>
+              </div>
             </div>
-          </div>
-        </RouterLink>
-      </div>
+          </RouterLink>
+        </div>
+      </TransitionGroup>
     </div>
   </div>
 </template>
@@ -83,6 +90,33 @@ axios
 </script>
 
 <style scoped>
+.fadeAni {
+  animation: fade 0.5s;
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transition: all 0.5s ease;
+  }
+}
+.list-move,
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
+}
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.list-leave-active {
+  position: absolute;
+}
+
 .karzaFS {
   font-size: 80px;
   color: #808080;

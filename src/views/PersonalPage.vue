@@ -3,8 +3,8 @@
   <div class="bag">
     <!-- Personal information overlay -->
     <div class="about">
-      <h4 class="text-light">關於</h4>
-      <p class="text-light">
+      <h4 class="text-light titleAni">關於</h4>
+      <p class="text-light titleAni">
         {{ memberProfile.about }}
       </p>
     </div>
@@ -15,7 +15,7 @@
     <div class="d-flex justify-content-center">
       <div class="p-4 content">
         <!-- 人 -->
-        <div class="col-xl-3 col-lg-12 user">
+        <div class="col-xl-3 col-lg-12 user titleAni">
           <div class="userInfo">
             <!-- Personal information goes here -->
             <div class="userText">
@@ -64,7 +64,7 @@
         <div class="col-xl-9 gy-4 col-lg-12 photoGrid">
           <div class="row gy-4">
             <!-- 選單 切換component-->
-            <div class="col-12 userLinkGroup">
+            <div class="col-12 userLinkGroup titleAni">
               <RouterLink
                 :to="`/Community/PersonalPage/${memberId}/Photos`"
                 class="userLink"
@@ -421,6 +421,19 @@ watch(memberId, () => {
 </script>
 
 <style scoped>
+.titleAni {
+  animation: fade 0.5s;
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
+  }
+  to {
+    opacity: 1;
+  }
+}
 .albumCheckbox {
   width: 20px;
   height: 20px;
@@ -494,7 +507,7 @@ watch(memberId, () => {
 }
 
 .uploadAlbumBtn {
-  margin-top: 10px;
+  margin-top: 12px;
   transition: 0.3s;
   border-radius: 50px;
   width: 130px;
@@ -533,7 +546,7 @@ watch(memberId, () => {
 .userInfo {
   height: 100%;
   background-color: #f6fafcf1;
-  height: 481px;
+  height: 430px;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -550,12 +563,19 @@ watch(memberId, () => {
   text-align: center;
 }
 
-.userProfile,
+.userProfile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .userBtn {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-top: 55px;
 }
 
 .userLink {
@@ -670,6 +690,7 @@ watch(memberId, () => {
   .userBtn {
     display: flex;
     flex-direction: row;
+    margin-top: 0;
   }
 
   .userLinkGroup {

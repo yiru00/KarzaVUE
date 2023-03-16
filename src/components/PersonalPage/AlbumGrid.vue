@@ -1,24 +1,26 @@
 <template>
   <!-- 呈現內容 component使用-->
-  <div
-    class="col-12 col-sm-6 col-md-4 col-lg-3"
-    v-for="item in allAlbums"
-    :key="item.albumId"
-  >
-    <div class="card cardSize">
-      <RouterLink
-        :to="`/Community/PersonalPage/${memberId}/Albums/${item.albumId}`"
-        class="w-100 h-100"
-      >
-        <img
-          :src="`https://localhost:7259/Images/${item.coverImg}`"
-          class="card-img-top rounded-bottom"
-          :alt="item.source"
-        />
-        <div class="albumTitle">{{ item.albumName }}</div>
-      </RouterLink>
+  <TransitionGroup name="list">
+    <div
+      class="col-12 col-sm-6 col-md-4 col-lg-3"
+      v-for="item in allAlbums"
+      :key="item.albumId"
+    >
+      <div class="card cardSize">
+        <RouterLink
+          :to="`/Community/PersonalPage/${memberId}/Albums/${item.albumId}`"
+          class="w-100 h-100"
+        >
+          <img
+            :src="`https://localhost:7259/Images/${item.coverImg}`"
+            class="card-img-top rounded-bottom"
+            :alt="item.source"
+          />
+          <div class="albumTitle">{{ item.albumName }}</div>
+        </RouterLink>
+      </div>
     </div>
-  </div>
+  </TransitionGroup>
 </template>
 
 <script setup>
@@ -54,6 +56,15 @@ axios
 </script>
 
 <style scoped>
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
+}
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
 .photoGrid {
   margin-top: 230px;
   margin-left: 26px;
