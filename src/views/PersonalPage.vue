@@ -239,7 +239,7 @@
             <button
               @click="goAlbumSubmit"
               type="button"
-              class="btn btn-secondary"
+              class="btn btn-secondary mt-3"
               data-bs-dismiss="modal"
             >
               送出
