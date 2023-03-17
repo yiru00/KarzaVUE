@@ -59,7 +59,7 @@
           </div>
         </div>
         <div class="mt-2">
-          <div class="ms-3">
+          <div class="mt-3">
             <button @click="openfile" class="btn_submit">新增照片</button>
             <input
               type="file"
@@ -268,7 +268,7 @@ export default {
 }
 .bottomBtn {
   background-color: rgba(175, 199, 216);
-  padding: 6px 12px;
+  padding: 6px 16px;
   border-radius: 15px;
   border: none;
   /* font-size: 17px; */
@@ -277,7 +277,7 @@ export default {
 }
 .cancelBtn {
   background-color: #d39899;
-  padding: 6px 12px;
+  padding: 6px 16px;
   border-radius: 15px;
   border: none;
   /* font-size: 17px; */
