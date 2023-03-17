@@ -4,30 +4,24 @@
       <div class="content col-9">
         <h1 class="titleColor m-0">個人資訊</h1>
         <div class="profile_header">
-          <div class="col-5">
-            <img :src="showPhoto" alt="" class="profileImg" />
-          </div>
-          <div class="col-6">
-            <div class="mt-5 info">
-              <p>姓名 : {{ users.realName }}</p>
-              <p>暱稱 : {{ users.nickName }}</p>
-              <p>帳號 : {{ users.emailAccount }}</p>
-              <p>
-                密碼 :
-                <RouterLink to="/EditPassword" class="btn edit_password_btn"
-                  ><i class="fa-solid fa-pencil text-light"> </i>
-                  變更</RouterLink
-                >
-                *****
-              </p>
+          <img :src="showPhoto" alt="" class="profileImg" />
+          <div class="info">
+            <p>姓名 : {{ users.realName }}</p>
+            <p>暱稱 : {{ users.nickName }}</p>
+            <p>帳號 : {{ users.emailAccount }}</p>
+            <p>
+              密碼 : ．．．
+              <RouterLink to="/EditPassword" class="btn edit_password_btn"
+                ><i class="fa-solid fa-pencil text-light"> </i> 變更</RouterLink
+              >
+            </p>
 
-              <p>手機 : {{ users.mobile }}</p>
-              <p>生日 : {{ users.birthOfDate }}</p>
-              <p>地址 : {{ users.address }}</p>
-              <p>關於 : <br />{{ users.about }}</p>
-            </div>
-            <div class="d-flex justify-content-end mt-3">
-              <RouterLink to="/EditProfile" class="profile_edit_btn"
+            <p>手機 : {{ users.mobile }}</p>
+            <p>生日 : {{ users.birthOfDate }}</p>
+            <p>地址 : {{ users.address }}</p>
+            <p>關於 : <br />{{ users.about }}</p>
+            <div class="d-flex justify-content-end">
+              <RouterLink to="/EditProfile" class="btn profile_edit_btn"
                 >編輯資料</RouterLink
               >
             </div>
@@ -76,7 +70,9 @@ export default {
 <style scoped>
 .info {
   font-size: 18.5px;
-  line-height: 45px;
+  line-height: 50px;
+  margin-top: 50px;
+  margin-left: 60px;
 }
 p {
   margin: 0;
@@ -85,7 +81,6 @@ p {
   color: #8991a9;
 }
 .content {
-  /* height: 70vh; */
   height: fit-content;
   border-radius: 15px;
   background-color: white;
@@ -96,7 +91,7 @@ p {
 }
 .profile_header {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 }
 .profile_edit_btn {
@@ -104,7 +99,6 @@ p {
   border: none;
   background: #afc7d8;
   border-radius: 5px;
-  padding: 8px 15px;
   color: #ffffff;
 }
 
@@ -117,9 +111,12 @@ p {
   border-radius: 50%;
 }
 .edit_password_btn {
-  background: #afc7d8;
+  background: rgba(211, 152, 153, 0.8);
   border: none;
   border-radius: 5px;
   color: #ffffff;
+  height: 30px;
+  text-align: center;
+  padding: 5px;
 }
 </style>
