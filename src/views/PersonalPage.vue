@@ -190,19 +190,19 @@
 
   <!-- 上傳相簿的modal -->
   <div class="modal fade" tabindex="-1" id="uploadAlbumModal">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
       <div class="modal-content">
-        <div class="modal-header border-bottom-0">
-          <h5 class="modal-title">上傳相簿</h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body">
-          <div class="form-floating mb-3">
+        <div class="modal-header border-bottom-0 d-block modalHeader">
+          <div class="d-flex justify-content-between">
+            <h5 class="modal-title mb-3">新增相簿</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="form-floating mb-3 d-flex">
             <input
               type="text"
               class="form-control"
@@ -212,7 +212,8 @@
             />
             <label for="floatingAlbumTitle">相簿標題</label>
           </div>
-
+        </div>
+        <div class="modal-body">
           <div class="row gy-3 gx-3">
             <div
               class="col-12 col-sm-6 col-md-4 col-lg-3"
@@ -234,17 +235,16 @@
               </div>
             </div>
           </div>
-
-          <div class="d-flex justify-content-end">
-            <button
-              @click="goAlbumSubmit"
-              type="button"
-              class="btn btn-secondary mt-3"
-              data-bs-dismiss="modal"
-            >
-              送出
-            </button>
-          </div>
+        </div>
+        <div class="modal-footer border-top-0 p-2">
+          <button
+            @click="goAlbumSubmit"
+            type="button"
+            class="btn btn-secondary mt-3"
+            data-bs-dismiss="modal"
+          >
+            送出
+          </button>
         </div>
       </div>
     </div>
@@ -421,6 +421,9 @@ watch(memberId, () => {
 </script>
 
 <style scoped>
+.modalHeader {
+  padding: 20px 15px 0 15px;
+}
 .cardSize {
   height: 150px;
   width: 100%;

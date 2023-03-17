@@ -203,19 +203,19 @@
 
   <!-- 編輯相簿的modal -->
   <div class="modal fade" tabindex="-1" id="editAlbumModal">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
       <div class="modal-content">
-        <div class="modal-header border-bottom-0">
-          <h5 class="modal-title">編輯相簿</h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body">
-          <div class="form-floating mb-3">
+        <div class="modal-header border-bottom-0 d-block modalHeader">
+          <div class="d-flex justify-content-between">
+            <h5 class="modal-title mb-3">編輯相簿</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="form-floating mb-3 d-flex">
             <input
               type="text"
               class="form-control"
@@ -225,14 +225,15 @@
             />
             <label for="floatingEditAlbumTitle">相簿標題</label>
           </div>
-
+        </div>
+        <div class="modal-body">
           <div class="row gy-3 gx-3">
             <div
               class="col-12 col-sm-6 col-md-4 col-lg-3"
               v-for="item in albumEditPhoto"
               :key="item.id"
             >
-              <div class="card border-0">
+              <div class="card border-0 uploadGrid">
                 <img
                   :src="`https://localhost:7259/Images/${item.source}`"
                   class="card-img-top rounded-bottom"
@@ -247,17 +248,16 @@
               </div>
             </div>
           </div>
-
-          <div class="d-flex justify-content-end">
-            <button
-              @click="editAlbumSubmit"
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              送出
-            </button>
-          </div>
+        </div>
+        <div class="modal-footer border-top-0 p-2">
+          <button
+            @click="editAlbumSubmit"
+            type="button"
+            class="btn btn-secondary mt-3"
+            data-bs-dismiss="modal"
+          >
+            送出
+          </button>
         </div>
       </div>
     </div>
@@ -493,6 +493,19 @@ watch(editAlbumReload, () => {
 </script>
 
 <style scoped>
+.modalHeader {
+  padding: 20px 15px 0 15px;
+}
+.uploadGrid {
+  height: 150px;
+  width: 100%;
+}
+
+.uploadGrid img {
+  object-fit: cover;
+  height: 100%;
+}
+
 .titleAni {
   animation: fade 0.5s;
 }
