@@ -468,8 +468,15 @@ export default {
   padding: 10px;
   background-color: #fff;
   border-radius: 10px;
-  box-shadow: 0 2px 15px #0000001c;
+  /* border: 0px; */
+  border: 0.5px solid #44444446;
   /* height: 300px; */
+}
+.card:hover {
+  margin-top: 5px;
+  border: 2px solid #8991a947;
+  transition: all 0.2s ease-out;
+  /* transform: 2s; */
 }
 .card-header {
   width: 100%;

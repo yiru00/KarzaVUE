@@ -128,7 +128,10 @@
         >
           <swiper-slide v-for="(item, index) in popular" :key="index"
             ><div class="popularCard">
-              <div class="popularCardBody">
+              <router-link
+                :to="`/Activity/${item.activityId}`"
+                class="popularCardBody"
+              >
                 <div class="info">
                   <img :src="item.coverImage" alt="" />
                   <div class="content">
@@ -138,14 +141,16 @@
                     </p>
                   </div>
                 </div>
-                <div class="progressBar">
-                  <div :style="{ width: item.enrolmentRate + '%' }"></div>
-                  <!-- <div></div> -->
-                </div>
-              </div>
-              <router-link :to="`/Activity/${item.activityId}`">
-                <div class="arrow">
-                  <i class="fa-solid fa-arrow-right-to-bracket fs-4"></i>
+                <div class="d-flex align-items-center">
+                  <div class="progressBar">
+                    <div :style="{ width: item.enrolmentRate + '%' }"></div>
+                    <!-- <div></div> -->
+                  </div>
+
+                  <i
+                    class="fa-solid fa-people-pulling fs-5"
+                    style="color: #8991a9"
+                  ></i>
                 </div>
               </router-link></div
           ></swiper-slide>
@@ -169,7 +174,10 @@
         >
           <swiper-slide v-for="(item, index) in willbeheld" :key="index"
             ><div class="popularCard">
-              <div class="popularCardBody">
+              <router-link
+                :to="`/Activity/${item.activityId}`"
+                class="popularCardBody"
+              >
                 <div class="info">
                   <img :src="item.coverImage" alt="" />
                   <div class="content">
@@ -179,16 +187,9 @@
                     </p>
                   </div>
                 </div>
-                <!-- <div class="progressBar">
-                  <div :style="{ width: item.enrolmentRate + '%' }"></div>
-                </div> -->
-              </div>
-              <router-link :to="`/Activity/${item.activityId}`">
-                <div class="arrow">
-                  <i class="fa-solid fa-arrow-right-to-bracket fs-4"></i>
-                </div>
-              </router-link></div
-          ></swiper-slide>
+              </router-link>
+            </div></swiper-slide
+          >
         </swiper>
       </div>
     </div>
@@ -366,27 +367,21 @@ export default {
   padding: 20px;
   display: flex;
   justify-content: space-between;
-
+  border: 0.5px solid #44444427;
   align-items: center;
+}
+.popularCard:hover {
+  border: 2px solid #8991a947;
+  transition: all 0.2s ease-out;
 }
 .popularCardBody {
   display: flex;
   flex-direction: column;
-  width: 90%;
-}
-.arrow {
-  height: 170px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-decoration: none;
+  width: 100%;
 }
 
 a {
   text-decoration: none;
-}
-.arrow i {
-  color: #444;
 }
 
 .info {
@@ -414,11 +409,11 @@ a {
   font-size: 14px;
 }
 .progressBar {
-  background-color: #8991a930;
+  background-color: #8991a947;
   height: 8px;
   border-radius: 5px;
-  width: 100%;
-  margin: 10px 0px;
+  width: 95%;
+  margin: 10px 10px 10px 0px;
 }
 .progressBar div {
   background-color: #8991a9;
