@@ -95,6 +95,13 @@
                 報名活動
               </button>
 
+              <button v-else-if="this.enrollLoading" class="enrollBtn">
+                <img
+                  style="height: 100%; object-fit: cover"
+                  src="../../assets/activity/Ellipsis-1s-200px.gif"
+                  alt=""
+                />
+              </button>
               <!-- 活動可報名有登入 -->
               <button
                 v-else-if="
@@ -402,7 +409,6 @@ export default {
       this.fetchDetails();
       this.getEnroll();
       this.getSave();
-
       this.getQandA();
       this.getSameCategory();
 
@@ -411,6 +417,7 @@ export default {
   },
   data() {
     return {
+      enrollLoading: false,
       details: {},
       saveStatus: {},
       enrollStatus: {},
@@ -840,6 +847,7 @@ export default {
         })
         .then((result) => {
           if (result.isConfirmed) {
+            this.enrollLoading = true;
             fetch("https://localhost:7259/api/ActivtiyEnroll/Enroll", {
               method: "POST",
               headers: {
@@ -850,6 +858,7 @@ export default {
               .then((response) => response.json())
               .then((data) => {
                 console.log("Success:", data);
+                this.enrollLoading = false;
                 if (data.result) {
                   this.enrollStatus.statusId = 5;
                   this.enrollStatus.deleteId = data.deleteId;
