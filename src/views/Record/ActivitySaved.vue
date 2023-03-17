@@ -85,7 +85,7 @@ export default {
     },
   },
   mounted() {
-    this.scrollToTop();
+    // this.scrollToTop();
     this.getActivitySaved();
   },
   methods: {

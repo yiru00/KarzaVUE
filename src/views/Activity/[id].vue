@@ -935,6 +935,7 @@ export default {
   min-height: 100vh;
   background-color: #fff;
   width: 95%;
+  /* box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1); */
   border-radius: 15px;
   margin-bottom: 20px;
   margin-top: 20px;
@@ -1089,18 +1090,19 @@ a {
 }
 /* 講師card */
 .instructorPhoto img {
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
-  border: 1px solid #fcf7f0;
+  border: 3px solid #fcf7f0;
   object-fit: cover;
+  padding: 3px;
 }
 .instructorCard {
   width: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 2px solid #fcf7f0;
+  border: 3px solid #fcf7f0;
   border-radius: 10px;
   padding: 15px;
 }

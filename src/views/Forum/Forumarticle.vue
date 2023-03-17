@@ -13,7 +13,6 @@
       :to="`/Forum/ArticleDetail/${item.articleId}`"
       class="detailLink fs-4"
       >{{ item.title }}
-      
 
       <img
         class="imgsss"

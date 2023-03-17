@@ -113,7 +113,7 @@
     </div>
 
     <!-- ｓｗｉｐｅｒ -->
-    <div class="swiperDiv">
+    <div class="swiperDiv" data-aos="fade-up">
       <div class="container">
         <h4 class="h4">熱門活動</h4>
         <!-- @swiper="onSwiper"
@@ -159,7 +159,7 @@
     </div>
 
     <!-- ｓｗｉｐｅｒ -->
-    <div class="swiperDiv">
+    <div class="swiperDiv" data-aos="fade-up">
       <div class="container">
         <h4 class="h4">即將舉辦</h4>
         <!-- @swiper="onSwiper"

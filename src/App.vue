@@ -504,7 +504,7 @@ main {
   #mainNav.is-visible {
     /* 變化滑動方向時顯示出navbar */
 
-    background-color: #ffffffa5;
+    background-color: #ffffffc0;
     transform: translate3d(0, 100%, 0);
   }
   .active1 {

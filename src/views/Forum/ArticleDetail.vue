@@ -4,10 +4,11 @@
       <div class="article_insert">
         <div class="card-header d-flex justify-content-between article_title">
           <div class="d-flex align-items-center mb-2">
-              <img
+            <img
               class="content_img"
               :src="`https://localhost:7259/Images/${objArticleDetail.photoSticker}`"
-              alt="" >
+              alt=""
+            />
             <p class="m-0 ms-3">{{ objArticleDetail.nickName }}</p>
             <p class="ms-2">
               {{ objArticleDetail.time.replace("T", " ").slice(0, 18) }}
@@ -29,11 +30,11 @@
                 class="btn"
                 @click="removeArticle($event, $route.params.Articleid)"
               >
-                <i class="fa-regular fa-trash-can fs-3 text-danger"></i>
+                <i class="fa-solid fa-trash fs-3" style="color: #d39899"></i>
               </button>
             </div>
-            
-            <div class="mt-3 " >
+
+            <div class="mt-3">
               <p class="m-0 changerow">{{ objArticleDetail.content }}</p>
             </div>
             <div class="imgate">
@@ -59,10 +60,10 @@
           <div class="comment">
             <div class="ms-3 d-flex align-items-center">
               <img
-              class="contentmessage_img"
-              :src="`https://localhost:7259/Images/${item.photoSticker}`"
-              alt=""
-            />
+                class="contentmessage_img"
+                :src="`https://localhost:7259/Images/${item.photoSticker}`"
+                alt=""
+              />
               <p class="ms-3 me-1">{{ item.nickName }} :</p>
               <p class="m-0 commentContent">{{ item.content }}</p>
             </div>
@@ -75,7 +76,7 @@
                   this.userMemberId === this.objArticleDetail.memberId
                 "
                 type="button"
-                class="btn btndelete"
+                class="btndelete"
                 @click="removeMessage($event, item.id)"
               >
                 刪除
@@ -122,14 +123,14 @@
               data-bs-toggle="modal"
               data-bs-target="#loginModal"
               type="button"
-              class="btn btn_submit"
+              class="btn_submit"
             >
               送出
             </button>
             <button
               v-else
               type="button"
-              class="btn btn_submit"
+              class="btn_submit"
               @click="clickMessage"
             >
               送出
@@ -227,7 +228,7 @@ export default {
           this.createMessage = "";
         });
 
-        await axios
+      await axios
         .get(
           `https://localhost:7259/api/Article/ArticleDetails?ArticleId=${this.Articleid}`,
           {
@@ -326,20 +327,19 @@ export default {
 </script>
 
 <style scoped>
-
-.changerow{
+.changerow {
   white-space: pre-wrap;
   word-wrap: break-word;
 }
 
-.btndelete{
+.btndelete {
   background-color: #d39899;
-  border-radius: 5px;
-  padding: 7px 13px;
-  height: 40px;
-  font-size: 17px;
+  padding: 6px 12px;
+  border-radius: 15px;
   border: none;
-  color: white;
+  /* font-size: 17px; */
+  color: #fff;
+  height: 45px;
 }
 .foremName {
   margin: 0;
@@ -350,12 +350,6 @@ export default {
 }
 .commentContent {
   word-break: break-all;
-}
-
-.btn-primary {
-  background-color: #d39899;
-  border: 0;
-  height: 40px;
 }
 
 .mylink {
@@ -437,8 +431,8 @@ a {
   margin: 10px 0px;
   padding: 20px 70px 20px 70px;
   background-color: white;
-  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
-  border: 1px solid #c7cad6;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1);
+  border: 0.5px solid #c7cad6;
   border-radius: 15px;
 }
 .article_title {
@@ -465,7 +459,7 @@ a {
   align-items: center;
 }
 .comment_contents_input {
-  width: 80%;
+  width: 85%;
   height: 45px;
   border-radius: 15px;
   padding-left: 15px;
@@ -492,11 +486,11 @@ a {
 }
 .btn_submit {
   background: #a6b6b0;
-  padding: 7px 13px;
-  border-radius: 5px;
+  padding: 6px 12px;
+  border-radius: 15px;
   border: none;
-  font-size: 17px;
+  /* font-size: 17px; */
   color: #fff;
-  height: 40px;
+  height: 45px;
 }
 </style>

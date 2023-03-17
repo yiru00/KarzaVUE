@@ -14,7 +14,7 @@ import VueTwZipCodeSelector from "@andy922200/vue-tw-zip-code-selector";
 import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 const options = {
-  confirmButtonColor: "#8991a9",
+  confirmButtonColor: "#afc7d8",
   cancelButtonColor: "#D39899",
   confirmButtonText: "確定",
   cancelButtonText: "取消",

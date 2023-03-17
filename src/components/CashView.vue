@@ -1,86 +1,73 @@
 <template>
-  <div class="container cash-view mt-4 p-0" data-aos="fade-up">
-    <div class="row px-md-4 px-2 pt-4">
-      <div class="col-lg-8">
-        <p class="pb-2 textset">購物車商品</p>
+  <div class="container cash-view my-4 p-0">
+    <div class="row p-4">
+      <div class="col-8">
+        <h5 class="pb-2">購物車商品</h5>
 
-        <div class="">
-          <div class="px-4">
-            <div>
-              <!-- testtttt -->
-              <div v-for="(item, i) in cartsSelect" :key="item.Id" class="row">
-                <div
-                  class="row justify-content-center align-items-center mb-3 carset"
-                >
-                  <div class="col-6">
-                    <div class="d-flex align-items-center">
-                      <div class="">
-                        <img class="pic" :src="item.Cover" alt="" />
-                      </div>
-                      <div class="ps-3 d-flex flex-column">
-                        <p class="fw-bold ps-1">
-                          {{ item.Name }}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="col-4">
-                    <div class="row align-items-center justify-content-between">
-                      <span class="text-muted col-3">數量</span>
-
-                      <button class="btn btn-link pointer col-2">
-                        <i
-                          class="fa-solid fa-minus"
-                          @click.stop="addToCart(item, 1, `.count-input-${i}`)"
-                        ></i>
-                      </button>
-
-                      <div
-                        class="col-3 align-items-center justify-content-center"
-                      >
-                        <input
-                          class="qtyinput text-center"
-                          :class="`count-input-${i}`"
-                          v-model="item.Qty"
-                          type="input"
-                          @blur.stop="addToCart(item, 2, `.count-input-${i}`)"
-                        />
-                      </div>
-
-                      <button class="btn btn-link col-2">
-                        <i
-                          class="fa-solid fa-plus pointer"
-                          @click.stop="addToCart(item, 0, `.count-input-${i}`)"
-                        ></i>
-                      </button>
-
-                      <div class="pointer col-2">
-                        <a class="text-dark" @click.stop="removeCartItem(item)">
-                          <i class="fa-solid fa-trash-can"></i>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-2">
-                    <div class="d-flex align-items-center ms-3">
-                      <p>${{ item.Price }}</p>
-                    </div>
-                  </div>
+        <div class="px-3" data-aos="fade-up">
+          <!-- testtttt -->
+          <div v-for="(item, i) in cartsSelect" :key="item.Id">
+            <div class="row align-items-center mb-3 carset">
+              <div class="col-6 d-flex align-items-center">
+                <img class="pic me-3" :src="item.Cover" alt="" />
+                <p class="fw-bold">
+                  {{ item.Name }}
+                </p>
+              </div>
+              <div class="col-2">
+                <div class="d-flex align-items-center">
+                  <p>${{ item.Price }}</p>
                 </div>
               </div>
-              <div v-show="cartsSelect.length == 0">
-                <div class="text-center">購物車無商品</div>
+              <div class="col-3">
+                <div
+                  class="row align-items-center justify-content-evenly qtyField"
+                >
+                  <button
+                    class="p-0 border-0 bg-transparent col-3 align-items-center justify-content-center"
+                  >
+                    <i
+                      class="fa-solid fa-minus text-center"
+                      @click.stop="addToCart(item, 1, `.count-input-${i}`)"
+                    ></i>
+                  </button>
+
+                  <div class="col-6 align-items-center justify-content-center">
+                    <input
+                      class="qtyinput text-center"
+                      :class="`count-input-${i}`"
+                      v-model="item.Qty"
+                      type="input"
+                      @blur.stop="addToCart(item, 2, `.count-input-${i}`)"
+                    />
+                  </div>
+
+                  <button
+                    class="p-0 border-0 bg-transparent col-3 align-items-center justify-content-center"
+                  >
+                    <i
+                      class="fa-solid fa-plus"
+                      @click.stop="addToCart(item, 0, `.count-input-${i}`)"
+                    ></i>
+                  </button>
+                </div>
               </div>
-              <!-- testtttt -->
+
+              <a class="col-1" @click.stop="removeCartItem(item)">
+                <i class="fa-solid fa-trash" style="color: #d39899"></i>
+              </a>
             </div>
           </div>
+          <div v-show="cartsSelect.length == 0">
+            <div class="text-center">購物車無商品</div>
+          </div>
+          <!-- testtttt -->
         </div>
       </div>
-      <div class="col-lg-4 payment-summary">
-        <p class="textset pt-lg-0 pt-4 pb-2">購買資訊</p>
-        <div class="buy">
-          <div class="addrText">地址:</div>
+      <div class="col-4">
+        <h5 class="pb-2">購買資訊</h5>
+        <div class="buy row">
+          <div>地址</div>
 
           <div>
             <VueTwZipCodeSelector
@@ -97,44 +84,43 @@
               @blur="getAdressInput"
             />
           </div>
-          <div class="">優惠券:</div>
+          <div class="mt-3">優惠券</div>
           <div class="">
             <input
               v-model="couponinput"
               @blur.stop="getCoupon"
               type="text"
               class="buyinput"
-              placeholder="折價券代碼"
+              placeholder="優惠券代碼"
             />
           </div>
           <div class="" v-html="couponmessage"></div>
         </div>
 
-        <div class="d-flex flex-column b-bottom">
-          <div class="d-flex justify-content-between py-3">
-            <p class="text-muted">折價券折扣</p>
-            <p>{{ showdiscountprice }}</p>
+        <div class="col b-bottom">
+          <div class="row my-3 align-items-center justify-content-between">
+            <p class="col-5">優惠券折扣</p>
+            <p class="col-3">
+              {{ showdiscountprice }}
+            </p>
           </div>
-          <div class="d-flex justify-content-between pb-3">
-            <p class="text-muted">已折扣金額</p>
-            <p>${{ countedPrice }}</p>
+          <div class="row align-items-center justify-content-between mb-3">
+            <p class="col-5">已折扣金額</p>
+            <p class="col-3">${{ countedPrice }}</p>
           </div>
-          <div class="d-flex justify-content-between">
-            <p class="text-muted">總金額</p>
-            <p>${{ this.getTotal }}</p>
+          <div class="row align-items-center justify-content-between">
+            <p class="col-5">總金額</p>
+            <p class="col-3">${{ this.getTotal }}</p>
           </div>
         </div>
-        <div class="my-3">
-          <span>
-            <button
-              type="button"
-              class="p-1 col-12 buybutton"
-              @click.stop="cartSubmit"
-            >
-              購買
-            </button>
-          </span>
-        </div>
+
+        <button
+          type="button"
+          class="w-100 my-3 buybutton"
+          @click.stop="cartSubmit"
+        >
+          購買
+        </button>
       </div>
     </div>
   </div>
@@ -169,23 +155,27 @@ export default {
       loading: false,
       // sweet alert訊息
       delSweetConfirm: {
-        title: "要刪除此項目嗎",
+        text: "要刪除此項目嗎",
         showCancelButton: true,
         confirmButtonText: "刪除",
+        width: "220px",
       },
       buySweetConfirm: {
-        title: "確定要購買嗎",
+        text: "確定要購買嗎",
         showCancelButton: true,
         confirmButtonText: "購買",
         cancelButtonText: "取消",
+        width: "220px",
       },
       successSweetAlert: {
         title: "成功",
-
+        width: "220px",
+        showConfirmButton: false,
         // timer: 2000,
       },
       errSweetAlert: {
         title: "錯誤",
+        width: "220px",
 
         // timer: 2000,
       },
@@ -658,14 +648,22 @@ export default {
 
 <style>
 .cash-view .address-coustomize select {
-  margin: 5px;
-  padding: 0;
-  border-radius: 0.5rem;
+  height: 40px;
+  outline: none;
+  box-shadow: none;
+  background-color: transparent;
+  border: 1px solid #44444462;
+  margin: 0px;
+  border-radius: 10px;
+  color: #444444;
+  width: 50%;
+  padding: 5px;
 }
-
-.textset {
-  font-size: 15px;
-  font-weight: bold;
+.cash-view .address-coustomize select:nth-of-type(1) {
+  margin-right: 15px;
+}
+.cash-view .address-coustomize select:focus {
+  border: 2px solid #afc7d8;
 }
 
 .cash-view .address-coustomize {
@@ -673,136 +671,87 @@ export default {
 }
 </style>
 <style scoped>
-.carset {
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  border-radius: 0.5rem;
-  background-color: #fff;
-  padding: 10px;
-}
-.buyinput:focus {
-  border: 10px solid #05174f;
-  background: #d4d9ec;
-  transition: 0.5s;
-}
 .cash-view {
-  line-height: 1rem;
-  font-size: 14px;
+  /* line-height: 1rem; */
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1);
   padding: 10px;
-
-  border-radius: 25px;
-
-  background-color: #f8e4e4;
+  border-radius: 15px;
+  background-color: #ffffff;
 }
-
-.addrText {
-  white-space: nowrap;
+.cash-view .pic {
+  width: 110px;
+  height: 90px;
+  object-fit: cover;
 }
+.qtyField {
+  border: 1px solid #44444462;
+  border-radius: 10px;
+  height: 40px;
+  margin: 10px;
+}
+/* 數量 */
 .qtyinput {
   width: 100%;
+  padding: 0;
+  margin: 0;
+  outline: none;
+  box-shadow: none;
+  background-color: transparent;
+  border: 0;
 }
+
+.carset {
+  /* box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); */
+  border-radius: 15px;
+  /* border: 0.4px solid #44444462; */
+  background-color: #fff;
+  padding: 20px;
+}
+.carset:hover {
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+/* 購買資訊卡片 */
 .buy {
   padding: 15px;
   position: relative;
   background: #fff;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  border-radius: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
+  border-radius: 15px;
   height: 300px;
+  width: 100%;
 }
 .buyinput {
   height: 40px;
+  width: 100%;
   outline: none;
   box-shadow: none;
   background-color: transparent;
-  border: 1px solid #8991a9;
-  opacity: 0.8;
-
-  border-radius: 0.5rem;
+  border: 1px solid #44444462;
+  /* opacity: 0.8; */
+  border-radius: 10px;
   color: #444444;
 }
+.buyinput:focus,
+.qtyinput:focus {
+  border: 2px solid #afc7d8;
+}
 
-.cash-view .pic {
-  width: 110px;
-  height: 90px;
-}
-.cash-view td {
-  vertical-align: middle;
-}
-.cash-view .red {
-  color: #fd1c1c;
-  font-weight: 600;
-}
-.cash-view .b-bottom {
-  border-bottom: 1px solid #8991a9;
+.b-bottom {
+  border-bottom: 1px solid #afc7d8;
   padding-bottom: 20px;
 }
 .cash-view p {
   margin: 0px;
 }
-.cash-view table input {
-  width: 50px;
-  border: 1px solid #66b3ff;
-  border-radius: 0.25rem;
-}
-.cash-view input:focus {
-  border: 1px solid #eee;
-  outline: none;
-}
-.cash-view .round {
-  background-color: #eee;
-  height: 40px;
-  width: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.cash-view .payment-summary .unregistered {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  justify-content: start;
-}
-.cash-view .payment-summary input {
-  width: 100%;
-  margin-right: 20px;
-}
-.cash-view .payment-summary .sale {
-  width: 100%;
-  background-color: #e9b3b3;
-  text-transform: uppercase;
-  font-size: 12px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 5px 0;
-}
-.cash-view .red {
-  color: #fd1c1c;
-}
 
-.cash-view .delivery .card {
-  padding: 10px 5px;
-}
-
-/* 自己設最小高度 */
-
-.cash-view .adressinput {
-  font-size: 14px;
-}
 .buybutton {
   background: #afc7d8;
   border: 0cm;
-  border-radius: 0.25rem;
+  border-radius: 15px;
   padding: 10px;
   height: 2.5rem;
-}
-.buybutton:hover {
-  opacity: 0.7;
-  transition: 0.6s;
+  color: #fff;
 }
 
 /* 更改地址 */

@@ -449,9 +449,9 @@ export default {
 }
 
 .image-container img {
-  width: 80%; /* 可根据需要进行调整 */
+  width: 80%;
   height: auto;
-  max-height: 80%; /* 可根据需要进行调整 */
+  max-height: 80%;
 }
 .nothingPage {
   height: 100%;
@@ -468,15 +468,14 @@ export default {
   padding: 10px;
   background-color: #fff;
   border-radius: 10px;
-  /* border: 0px; */
-  border: 0.5px solid #44444446;
+  border: 0px;
+  box-shadow: 0;
+  border: 1px solid #8991a947;
   /* height: 300px; */
 }
 .card:hover {
-  margin-top: 5px;
-  border: 2px solid #8991a947;
-  transition: all 0.2s ease-out;
-  /* transform: 2s; */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease-out;
 }
 .card-header {
   width: 100%;
@@ -553,13 +552,13 @@ i {
 .inputSearch {
   border-radius: 10px;
   border: 1px solid #fcf7f0;
-  background-color: #ffffffd7;
+  background-color: #ffffffe2;
   max-width: 780px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 30px auto;
-  min-height: 50px;
+  min-height: 60px;
 }
 .inputName,
 .inputCategory,

@@ -55,7 +55,7 @@
             </div>
             <div class="article_change">
               <button
-                class="article_create btn"
+                class="article_create"
                 v-if="!token"
                 data-bs-toggle="modal"
                 data-bs-target="#loginModal"
@@ -63,7 +63,7 @@
                 新增文章
               </button>
               <router-link to="/Forum/Create" v-else>
-                <button class="article_create btn" @click="btncreateArticle">
+                <button class="article_create" @click="btncreateArticle">
                   新增文章
                 </button>
               </router-link>
@@ -252,7 +252,7 @@ a {
   margin-bottom: 20px;
   padding: 20px;
   background-color: white;
-  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1);
   border-radius: 15px;
 }
 .article_title {
@@ -287,12 +287,12 @@ a {
 }
 
 .article_create {
-  border-radius: 15px;
-  width: 100px;
+  border-radius: 0.375rem;
+  width: 80px;
   margin-right: 5px;
   background: #a6b6b0;
-  border-radius: 5px;
-  border: none;
+  height: 35px;
+  border: 0;
   color: #fff;
 }
 </style>
