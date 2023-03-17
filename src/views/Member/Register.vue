@@ -1,57 +1,56 @@
 <template>
-  <section>
-    <div class="container">
-      <div class="content">
-        <div class="insert_register">
-          <div class="register_user">註冊會員</div>
-          <div class="flex_middle">
-            <label for="" class="register_text">暱稱 :　</label>
-            <input
-              type="text"
-              v-model="nickname"
-              placeholder="請輸入暱稱"
-              class="form-control Mcontrol"
-              required
-            />
-          </div>
-          <div class="flex_middle">
-            <label for="" class="register_text">帳號 :　</label>
-            <input
-              type="email"
-              v-model="account"
-              placeholder="請輸入Email"
-              class="form-control Mcontrol"
-              required
-            />
-          </div>
-          <div class="flex_middle">
-            <label for="" class="register_text">密碼 :　</label>
-            <input
-              type="password"
-              v-model="password"
-              placeholder="請輸入密碼"
-              class="form-control Mcontrol"
-              required
-            />
-          </div>
-          <div class="flex_middle">
-            <label for="" class="register_text">確認密碼 :　</label>
-            <input
-              type="password"
-              v-model="confirmPassword"
-              placeholder="請確認密碼"
-              class="form-control Mcontrol"
-              required
-            />
-          </div>
-
-          <div class="register_btn">
-            <button @click="register">註冊</button>
-          </div>
+  <div class="container">
+    <div class="content">
+      <div class="insert_register">
+        <div class="register_user">註冊會員</div>
+        <div class="flex_middle">
+          <label for="nickName" class="me-1">暱稱 :　</label>
+          <input
+            id="nickName"
+            type="text"
+            v-model="nickname"
+            placeholder="請輸入暱稱"
+            class="form-control"
+            required
+          />
         </div>
+        <div class="flex_middle">
+          <label for="account" class="me-1">帳號 :　</label>
+          <input
+            id="account"
+            type="email"
+            v-model="account"
+            placeholder="請輸入Email"
+            class="form-control"
+            required
+          />
+        </div>
+        <div class="flex_middle">
+          <label for="password" class="me-1">密碼 :　</label>
+          <input
+            id="password"
+            type="password"
+            v-model="password"
+            placeholder="請輸入密碼"
+            class="form-control"
+            required
+          />
+        </div>
+        <div class="flex_middle">
+          <label for="passwordConfirm" class="me-1">確認密碼</label>
+          <input
+            id="passwordConfirm"
+            type="password"
+            v-model="confirmPassword"
+            placeholder="請確認密碼"
+            class="form-control"
+            required
+          />
+        </div>
+        <button @click="register" class="btn register_btn">註冊</button>
       </div>
     </div>
-  </section>
+  </div>
 </template>
 
 <script>
@@ -105,23 +104,25 @@ export default {
 .content {
   margin: 69px auto;
   width: 450px;
+  border-radius: 15px;
+  background-color: white;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  border: 1px solid #c7cad6;
 }
 .insert_register {
   padding: 40px 60px 50px;
-  border: 5px solid #afc7d8;
   border-radius: 20px;
 }
 .register_user {
   text-align: center;
   font-size: 30px;
   margin-bottom: 35px;
-  font-weight: bold;
   letter-spacing: 1.5px;
-  color: #8991a9;
 }
 .flex_middle {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
   margin: 20px 0;
 }
@@ -129,32 +130,12 @@ export default {
   width: 100px;
   letter-spacing: 1px;
 }
-.register_text {
-  font-size: 16px;
-  font-weight: bolder;
-  color: #8991a9;
-}
-.flex_middle input {
-  width: 200px;
-  padding: 5px 10px;
-  border: none;
-  border-bottom: 1px solid #8991a9;
-  letter-spacing: 1.5px;
-  background: none;
-  color: #8991a9;
-}
 .register_btn {
-  display: flex;
-  justify-content: center;
+  width: 100%;
   height: 40px;
   border-radius: 10px;
-  border: 0px;
   background: #afc7d8;
-  margin-top: 30px;
-}
-.register_btn button {
-  border: none;
-  background: none;
-  color: #fff;
+  color: white;
+  margin-top: 10px;
 }
 </style>
