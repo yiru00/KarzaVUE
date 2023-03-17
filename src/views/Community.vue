@@ -2,10 +2,10 @@
   <div class="container mt-4">
     <!-- 搜尋 -->
     <div class="row fadeAni">
-      <div class="col-12 d-flex justify-content-center align-items-center">
-        <div class="col-3">
-          <p class="karzaFS">KARZA!</p>
-        </div>
+      <div
+        class="col-12 d-flex justify-content-center align-items-center karzaFS"
+      >
+        KARZA!
       </div>
       <div class="col-12 searchBar">
         <div class="form-floating searchText">
