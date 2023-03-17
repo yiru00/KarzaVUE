@@ -219,7 +219,7 @@
               v-for="item in allPhotos"
               :key="item.id"
             >
-              <div class="card border-0">
+              <div class="card border-0 cardSize">
                 <img
                   :src="`https://localhost:7259/Images/${item.source}`"
                   class="card-img-top rounded-bottom"
@@ -239,7 +239,7 @@
             <button
               @click="goAlbumSubmit"
               type="button"
-              class="btn btn-secondary"
+              class="btn btn-secondary mt-3"
               data-bs-dismiss="modal"
             >
               送出
@@ -421,6 +421,16 @@ watch(memberId, () => {
 </script>
 
 <style scoped>
+.cardSize {
+  height: 150px;
+  width: 100%;
+}
+
+.cardSize img {
+  object-fit: cover;
+  height: 100%;
+}
+
 .titleAni {
   animation: fade 0.5s;
 }
