@@ -4,7 +4,7 @@
       <div class="insert_register">
         <div class="register_user">註冊會員</div>
         <div class="flex_middle">
-          <label for="nickName" class="me-1">暱稱 :　</label>
+          <label for="nickName" class="me-3">暱稱 :　</label>
           <input
             id="nickName"
             type="text"
@@ -15,7 +15,7 @@
           />
         </div>
         <div class="flex_middle">
-          <label for="account" class="me-1">帳號 :　</label>
+          <label for="account" class="me-3">帳號 :　</label>
           <input
             id="account"
             type="email"
@@ -26,7 +26,7 @@
           />
         </div>
         <div class="flex_middle">
-          <label for="password" class="me-1">密碼 :　</label>
+          <label for="password" class="me-3">密碼 :　</label>
           <input
             id="password"
             type="password"
@@ -37,7 +37,9 @@
           />
         </div>
         <div class="flex_middle">
-          <label for="passwordConfirm" class="me-1">確認密碼</label>
+          <label for="passwordConfirm" class="text-nowrap me-1"
+            >確認密碼：</label
+          >
           <input
             id="passwordConfirm"
             type="password"
@@ -106,7 +108,7 @@ export default {
   width: 450px;
   border-radius: 15px;
   background-color: white;
-  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1);
   border: 1px solid #c7cad6;
 }
 .insert_register {

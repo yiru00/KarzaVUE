@@ -111,7 +111,7 @@ export default {
   width: 450px;
   border-radius: 15px;
   background-color: white;
-  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1);
   border: 1px solid #c7cad6;
 }
 .insert_editpassword {

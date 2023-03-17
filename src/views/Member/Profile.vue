@@ -84,7 +84,7 @@ p {
   height: fit-content;
   border-radius: 15px;
   background-color: white;
-  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1);
   border: 1px solid #c7cad6;
   margin: 50px 0px;
   padding: 50px 50px 50px 50px;
