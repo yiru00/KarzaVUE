@@ -1,36 +1,41 @@
 <template>
-  <section>
-    <div class="container">
-      <div class="content">
+  <div class="container">
+    <div class="row d-flex justify-content-center align-items-center w-100">
+      <div class="content col-9">
+        <h1 class="titleColor m-0">個人資訊</h1>
         <div class="profile_header">
-          <h1>個人資訊</h1>
-          <RouterLink to="/EditProfile" class="profile_edit_btn"
-            >編輯資料</RouterLink
-          >
-        </div>
-        <div class="profile row">
-          <div class="profile_left col-md-6">
-            <img :src="showPhoto" alt="" />
+          <div class="col-5">
+            <img :src="showPhoto" alt="" class="profileImg" />
           </div>
-          <div class="profile_right col-md-6">
-            <p>帳號: {{ users.emailAccount }}</p>
-            <p>姓名: {{ users.realName }}</p>
-            <p>暱稱: {{ users.nickName }}</p>
-            <p>生日: {{ users.birthOfDate }}</p>
-            <p>手機: {{ users.mobile }}</p>
-            <p>地址: {{ users.address }}</p>
-            <p>關於: {{ users.about }}</p>
-            <div class="edit_password">
-              <p>密碼:</p>
-              <RouterLink to="/EditPassword" class="btn edit_password_btn"
-                >編輯密碼</RouterLink
+          <div class="col-6">
+            <div class="mt-5 info">
+              <p>姓名 : {{ users.realName }}</p>
+              <p>暱稱 : {{ users.nickName }}</p>
+              <p>帳號 : {{ users.emailAccount }}</p>
+              <p>
+                密碼 :
+                <RouterLink to="/EditPassword" class="btn edit_password_btn"
+                  ><i class="fa-solid fa-pencil text-light"> </i>
+                  變更</RouterLink
+                >
+                *****
+              </p>
+
+              <p>手機 : {{ users.mobile }}</p>
+              <p>生日 : {{ users.birthOfDate }}</p>
+              <p>地址 : {{ users.address }}</p>
+              <p>關於 : <br />{{ users.about }}</p>
+            </div>
+            <div class="d-flex justify-content-end mt-3">
+              <RouterLink to="/EditProfile" class="profile_edit_btn"
+                >編輯資料</RouterLink
               >
             </div>
           </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 </template>
 
 <script>
@@ -55,10 +60,10 @@ export default {
         },
       })
       .then((response) => {
-        console.log(response.data) 
+        console.log(response.data);
         this.users = response.data;
-        if(response.data.birthOfDate)
-        this.users.birthOfDate = this.users.birthOfDate.substring(0,10);
+        if (response.data.birthOfDate)
+          this.users.birthOfDate = this.users.birthOfDate.substring(0, 10);
         this.showPhoto = `https://localhost:7259/Images/${response.data.photoSticker}`;
       })
       .catch((error) => {
@@ -69,25 +74,29 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  width: 1440px;
-  margin: 0 auto;
+.info {
+  font-size: 18.5px;
+  line-height: 45px;
+}
+p {
+  margin: 0;
+}
+.titleColor {
+  color: #8991a9;
 }
 .content {
-  width: 800px;
-  height: 600px;
-  margin: 0 auto;
+  height: 70vh;
   border-radius: 15px;
-  padding: 50px 80px;
- ;
+  background-color: white;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  border: 1px solid #c7cad6;
+  margin-top: 50px;
+  padding: 50px 50px 0 50px;
 }
 .profile_header {
-  margin-left: 200px;
-  color: #8991a9;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding-bottom: 30px;
 }
 .profile_edit_btn {
   text-decoration: none;
@@ -96,46 +105,20 @@ export default {
   border-radius: 5px;
   padding: 8px 15px;
   color: #ffffff;
-  letter-spacing: 1px;
 }
-.profile_header h1 {
-  margin: 15px 0;
-  font-size: 35px;
-  font-weight: bolder;
-}
-.profile {
-  display: flex;
-  align-items: center;
-}
-.profile_left img {
+
+.profileImg {
+  border: 3px solid #fff;
+  box-shadow: 0 1px 5px rgba(25, 25, 25, 0.15);
   width: 250px;
   height: 250px;
   object-fit: cover;
   border-radius: 50%;
-  border: 1px solid #000;
-  margin-right: 100px;
-}
-.profile_right {
-  color: #8991a9;
-  font-size: 20px;
-  font-weight: bolder;
-  letter-spacing: 1px;
-}
-.profile_right p {
-  margin: 25px 0;
-}
-.edit_password {
-  display: flex;
-  align-items: center;
-  height: 35px;
 }
 .edit_password_btn {
-  margin-left: 5px;
   background: #afc7d8;
   border: none;
   border-radius: 5px;
-  padding: 8px 15px;
   color: #ffffff;
-  letter-spacing: 1px;
 }
 </style>
