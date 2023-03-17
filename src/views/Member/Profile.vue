@@ -85,13 +85,14 @@ p {
   color: #8991a9;
 }
 .content {
-  height: 70vh;
+  /* height: 70vh; */
+  height: fit-content;
   border-radius: 15px;
   background-color: white;
   box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
   border: 1px solid #c7cad6;
-  margin-top: 50px;
-  padding: 50px 50px 0 50px;
+  margin: 50px 0px;
+  padding: 50px 50px 50px 50px;
 }
 .profile_header {
   display: flex;
