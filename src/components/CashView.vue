@@ -699,7 +699,11 @@ export default {
   background-color: transparent;
   border: 0;
 }
-
+.qtyinput:focus {
+  border-radius: 2px;
+  background-color: #44444462;
+  color: #fff;
+}
 .carset {
   /* box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); */
   border-radius: 15px;
@@ -732,8 +736,7 @@ export default {
   border-radius: 10px;
   color: #444444;
 }
-.buyinput:focus,
-.qtyinput:focus {
+.buyinput:focus {
   border: 2px solid #afc7d8;
 }
 
