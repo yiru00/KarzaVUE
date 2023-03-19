@@ -94,7 +94,7 @@ export default {
               this.showAlert("密碼有誤");
             } else {
               this.showAlert("密碼已修改");
-              this.$router.push("/HomeVie");
+              this.$router.push("/"); 
             }
           })
           .catch((error) => {

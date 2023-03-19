@@ -69,7 +69,7 @@ export default {
             this.showAlert("資料有誤");
           } else {
             this.showAlert("請至信箱查看新密碼");
-            this.$router.push("/HomeVie");
+            this.$router.push("/");
           }
         })
         .catch((error) => {
