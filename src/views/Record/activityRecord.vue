@@ -24,23 +24,7 @@
 </template>
 
 <script>
-// export default {
-//   data() {
-//     return {
-//       showUnderline: false,
-//     };
-//   },
-//   created() {
-//     this.$router.beforeEach((to, from, next) => {
-//       if (to.path === this.$root.selectedTab) {
-//         this.showUnderline = true;
-//       } else {
-//         this.showUnderline = false;
-//       }
-//       next();
-//     });
-//   },
-// };
+
 </script>
 <style scoped>
 .content {

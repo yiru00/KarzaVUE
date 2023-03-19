@@ -137,7 +137,11 @@
                   <div class="content">
                     <p class="activityName">{{ item.activityName }}</p>
                     <p class="description">
-                      {{ item.description.slice(0, 9) }}...
+                      {{ item.description.slice(0, 15) }}...
+                    </p>
+                    <p class="date">
+                      <i class="fa-solid fa-calendar-days"></i
+                      >{{ item.gatheringTime }}
                     </p>
                   </div>
                 </div>
@@ -183,7 +187,11 @@
                   <div class="content">
                     <p class="activityName">{{ item.activityName }}</p>
                     <p class="description">
-                      {{ item.description.slice(0, 9) }}...
+                      {{ item.description.slice(0, 15) }}...
+                    </p>
+                    <p class="date">
+                      <i class="fa-solid fa-calendar-days"></i
+                      >{{ item.gatheringTime }}
                     </p>
                   </div>
                 </div>
@@ -399,15 +407,28 @@ a {
 .activityName {
   padding: 0;
   margin: 0;
-  margin-bottom: 10px;
-  font-size: 18px;
+  margin-bottom: 5px;
+  font-size: 20px;
 }
-.description {
+.description,
+.date {
   padding: 0;
   margin: 0;
   color: gray;
   font-size: 14px;
 }
+.date {
+  padding: 0;
+  margin: 0;
+  color: #444;
+  font-size: 14px;
+}
+.date i {
+  margin-right: 5px;
+  color: #444;
+  font-size: 14px;
+}
+
 .progressBar {
   background-color: #8991a947;
   height: 8px;
@@ -425,7 +446,7 @@ a {
 
 .swiperDiv {
   /* background-color: #a6b6b0; */
-  height: 400px;
+  height: 350px;
   width: 100%;
   display: flex;
   justify-content: center;
