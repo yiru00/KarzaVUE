@@ -38,8 +38,8 @@
                   <td class="td-r">{{ detail.inventory }}</td>
                 </tr>
                 <tr>
-                  <td>NTD :</td>
-                  <td class="td-r">{{ detail.price }}</td>
+                  <td>NTD$ :</td>
+                  <td class="td-r">{{ detail.price.toLocaleString() }}</td>
                 </tr>
               </tbody>
             </table>

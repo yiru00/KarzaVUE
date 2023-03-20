@@ -16,7 +16,7 @@
               </div>
               <div class="col-2">
                 <div class="d-flex align-items-center">
-                  <p>${{ item.Price }}</p>
+                  <p>${{ item.Price.toLocaleString() }}</p>
                 </div>
               </div>
               <div class="col-3">
