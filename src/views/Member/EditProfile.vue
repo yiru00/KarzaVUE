@@ -29,7 +29,7 @@
                 type="text"
                 class="form-control"
                 id="floatingInputRealname"
-                placeholder="name@example.com"
+                placeholder=""
                 v-model="realname"
               />
             </div>
@@ -39,7 +39,7 @@
                 type="text"
                 class="form-control"
                 id="floatingInputNickname"
-                placeholder="name@example.com"
+                placeholder=""
                 v-model="nickname"
               />
             </div>
@@ -49,7 +49,7 @@
                 type="text"
                 class="form-control"
                 id="floatingInputBirthday"
-                placeholder="name@example.com"
+                placeholder=""
                 v-model="birthday"
               />
             </div>
@@ -60,7 +60,7 @@
                 type="text"
                 class="form-control"
                 id="floatingInputMobile"
-                placeholder="name@example.com"
+                placeholder=""
                 v-model="mobile"
               />
             </div>
@@ -71,7 +71,7 @@
                 type="text"
                 class="form-control"
                 id="floatingInputAddress"
-                placeholder="name@example.com"
+                placeholder=""
                 v-model="address"
               />
             </div>
@@ -128,9 +128,13 @@ export default {
         if (response.data.birthOfDate)
           this.birthday = response.data.birthOfDate.substring(0, 10);
 
-        this.realname = response.data.realName;
+        if (response.data.realName === null) this.realname = "";
+        else this.realname = response.data.realName;
+        
+        if (response.data.mobile === null) this.mobile = "";
+        else this.mobile = response.data.mobile;
+
         this.nickname = response.data.nickName;
-        this.mobile = response.data.mobile;
 
         if (response.data.address === null) this.address = "";
         else this.address = response.data.address;
@@ -165,8 +169,8 @@ export default {
       };
     },
     async submitForm() {
-      if (!this.realname || !this.nickname || !this.mobile) {
-        this.showAlert("填完姓名跟手機號碼，才能正常使用所有功能喔~");
+      if (!this.nickname) {
+        this.showAlert("要有暱稱唷!");
         return;
       }
 

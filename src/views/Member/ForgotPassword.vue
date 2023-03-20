@@ -3,7 +3,7 @@
     <div class="content">
       <div class="insert_forgotpassword">
         <div class="forgotpassword_user">忘記密碼</div>
-        <div class="flex_middle">
+        <!-- <div class="flex_middle">
           <label for="name" class="forgotpassword_text">姓名 :　</label>
           <input
             id="name"
@@ -13,7 +13,7 @@
             class="form-control"
             required
           />
-        </div>
+        </div> -->
         <div class="flex_middle">
           <label for="account" class="forgotpassword_text">帳號 :　</label>
           <input
@@ -25,7 +25,7 @@
             required
           />
         </div>
-        <div class="flex_middle">
+        <!-- <div class="flex_middle">
           <label for="phone" class="forgotpassword_text">電話 :　</label>
           <input
             id="phone"
@@ -35,7 +35,7 @@
             class="form-control"
             required
           />
-        </div>
+        </div> -->
         <button @click="forgotpassword" class="btn forgotpassword_btn">
           送出
         </button>
@@ -50,9 +50,9 @@ import axios from "axios";
 export default {
   data() {
     return {
-      realname: "",
+      // realname: "",
+      // mobilenumber: "",
       account: "",
-      mobilenumber: "",
     };
   },
   mixins: [utility],
@@ -60,16 +60,17 @@ export default {
     forgotpassword() {
       axios
         .post("https://localhost:7259/api/Members/ForgotPassword", {
-          RealName: this.realname,
+          // RealName: this.realname,
+          // Mobile: this.mobilenumber,
           EmailAccount: this.account,
-          Mobile: this.mobilenumber,
+
         })
         .then((response) => {
           if (response.data === "資料有誤") {
             this.showAlert("資料有誤");
           } else {
             this.showAlert("請至信箱查看新密碼");
-            this.$router.push("/HomeVie");
+            this.$router.push("/");
           }
         })
         .catch((error) => {
