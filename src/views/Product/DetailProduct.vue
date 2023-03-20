@@ -268,7 +268,7 @@ export default {
   padding: 10% 10%;
 }
 .ProName {
-  border-bottom: 7px solid #899ea9;
+  border-bottom: 7px solid #afc7d8;
   margin-bottom: 130px;
   margin-left: 50px;
   margin-right: 50px;
@@ -294,8 +294,8 @@ p {
   margin: 20px;
 }
 .TBborder {
-  border-top: 5px solid #899ea9;
-  border-bottom: 5px solid #899ea9;
+  border-top: 5px solid #afc7d8;
+  border-bottom: 5px solid #afc7d8;
 }
 .PBack {
   background: #ffff;
@@ -317,7 +317,7 @@ p {
   padding: 50px;
   max-width: 1000px;
   align-content: center;
-  border: #899ea9 solid 5px;
+  border: #afc7d8 solid 5px;
   border-radius: 10px;
 }
 .Spec {
@@ -347,9 +347,10 @@ p {
   padding: 5px 30px 5px 30px;
   border: none;
   border-radius: 5px;
-  background: #899ea9ab;
+  background: #afc7d8;
+  color: #fff;
   font-size: 20px;
-  font-weight: 800;
+  font-weight: 700;
 }
 td {
   font-size: 18px;
@@ -369,6 +370,6 @@ td {
   font-size: 24px;
   font-weight: 800;
   padding: 20px;
-  border-bottom: 3px solid #899ea9;
+  border-bottom: 3px solid #afc7d8;
 }
 </style>

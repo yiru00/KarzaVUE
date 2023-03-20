@@ -153,20 +153,20 @@
     <div class="newproduct">
       <div v-show="priceS === 0">
         <button @click="OrderByPriceS" class="filter_btn">
-          價格 <i class="fa-solid fa-arrow-up"></i>
+          價格 <i class="fa-solid fa-arrow-up text-white"></i>
         </button>
         <button @click="OrderByPricedB" class="filter_btn">
           價格
-          <i class="fa-solid fa-arrow-down"></i>
+          <i class="fa-solid fa-arrow-down text-white"></i>
         </button>
       </div>
       <!-- <button class="filter_btn border_btn ">最新*</button> -->
       <button v-show="priceS === 1" @click="OrderByPriceS" class="filter_btn">
-        價格 <i class="fa-solid fa-arrow-up"></i>
+        價格 <i class="fa-solid fa-arrow-up text-white"></i>
       </button>
       <button v-show="priceS === 2" @click="OrderByPricedB" class="filter_btn">
         價格
-        <i class="fa-solid fa-arrow-down"></i>
+        <i class="fa-solid fa-arrow-down text-white"></i>
       </button>
     </div>
 
@@ -276,7 +276,7 @@ export default {
 .search_div {
   border-radius: 10px;
   border: 1px solid #fcf7f0;
-  background-color: #ffffffa9;
+  background-color: #ffffffbb;
   max-width: 800px;
   display: flex;
 
@@ -285,6 +285,8 @@ export default {
 }
 
 .newproduct {
+  color: #fff;
+  border-radius: 5px;
   font-size: 22px;
   padding: 5px 65px;
   font-weight: 800;
@@ -319,5 +321,6 @@ export default {
   background: none;
   padding: 3px 15px;
   font-weight: 800;
+  color: #fff;
 }
 </style>

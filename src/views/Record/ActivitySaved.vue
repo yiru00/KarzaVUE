@@ -2,7 +2,7 @@
   <div class="relative">
     <div v-show="!isempty && !isloading">
       <div class="content">
-        <h4>我的收藏活動</h4>
+        <h4>我的活動收藏</h4>
         <div class="line mb-4"></div>
         <div v-for="(items, month) in groupedSave" :key="month">
           <p class="month">{{ month }}</p>
@@ -35,7 +35,7 @@
     </div>
     <div v-show="isempty && !isloading">
       <div class="content">
-        <h4>我的收藏活動</h4>
+        <h4>我的活動收藏</h4>
         <div class="line mb-4"></div>
         沒有收藏的活動
       </div>

@@ -2,7 +2,7 @@
   <div class="container cash-view my-4 p-0">
     <div class="row p-4">
       <div class="col-8">
-        <h5 class="pb-2">購物車商品</h5>
+        <h5 @click="showdata" class="pb-2">購物車商品</h5>
 
         <div class="px-3" data-aos="fade-up">
           <!-- testtttt -->
@@ -234,6 +234,9 @@ export default {
   methods: {
     /*================================== 公用函式  =================================== */
 
+    showdata() {
+      (this.couponinput = "frg582"), (this.adressinput = "精誠路24號五樓");
+    },
     // 將物件轉JSON字串 存在指定localStorageName
     // saveName必須與data命名相同
     saveLocalStorage(saveName, val) {
