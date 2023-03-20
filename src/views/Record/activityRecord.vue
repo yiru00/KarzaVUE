@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <h4>我的活動收藏</h4>
+    <h4>我的活動報名</h4>
     <div class="line"></div>
     <div class="mt-3 mb-5">
       <RouterLink
