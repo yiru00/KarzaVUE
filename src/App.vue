@@ -69,6 +69,10 @@ export default {
   mixins: [utility],
 
   methods: {
+    demoLogin() {
+      this.user.email = "eva890706@gmail.com";
+      this.user.password = "123";
+    },
     checkToken() {
       let isLogin = false;
       let token = $.cookie("token");
@@ -377,7 +381,7 @@ export default {
     >
       <div class="modal-dialog modal-dialog-centered modalcenter">
         <div class="modal-content Mcontent">
-          <h3>登入會員使用更多功能！</h3>
+          <h3 @click="demoLogin">登入會員使用更多功能！</h3>
           <div class="modal-body Mbody">
             <div class="loginInput" @keydown.enter="userLogin">
               <div class="form-floating mb-3">
