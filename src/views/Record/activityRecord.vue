@@ -23,9 +23,7 @@
   </div>
 </template>
 
-<script>
-
-</script>
+<script></script>
 <style scoped>
 .content {
   padding: 20px 50px;
@@ -52,5 +50,4 @@ a {
   border-bottom: 2px solid #afc7d8;
   color: #070707;
 }
-
 </style>
